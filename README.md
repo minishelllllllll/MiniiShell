@@ -1,2 +1,2 @@
-# MiniiShell
+# MiniShell
 Write a shell
