@@ -21,8 +21,14 @@ typedef struct s_parsing
     struct s_parsing *next;
 }t_parsing;
 
+//parsing
 void    parsing(int ac,char **av);
 size_t	ft_strlen(const char *s);
 t_parsing *test(int ac,char *av,t_parsing *head, int i);
 int search_pipe(char *str);
+
+
+//execution
+int echo(char **args);
+
 #endif
