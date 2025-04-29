@@ -1,7 +1,8 @@
 #include "../../../includes/minishell.h"
 
+//no leak
 
-int echo(char **args)
+int ft_echo(char **args)
 {
 	int i;
 	int check;
@@ -16,7 +17,7 @@ int echo(char **args)
 	while (args[i])
 	{
 		printf("%s", args[i]);
-		if(args[i + 1])
+		if(args[i + 1]) //no space after the last arg
 			printf(" ");
 		i++;
 	}

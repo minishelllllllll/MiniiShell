@@ -12,6 +12,8 @@
 #include <readline/history.h>
 #include "libft.h"
 
+#include <errno.h>
+
 typedef struct s_parsing
 {
     int index;
@@ -29,6 +31,7 @@ int search_pipe(char *str);
 
 
 //execution
-int echo(char **args);
+int ft_echo(char **args);
+int ft_pwd();
 
 #endif

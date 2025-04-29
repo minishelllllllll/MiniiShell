@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Werror -Wextra -Wall #-fsanitize=address -g
+CFLAGS = -Werror -Wextra -Wall -fsanitize=address -g
 
 SRC := 	$(wildcard src/execution/*.c) \
 	 	$(wildcard src/execution/builtins/*.c) \

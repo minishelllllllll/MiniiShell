@@ -16,7 +16,8 @@ int main(int ac, char **av)
 {
 
 	(void)ac;
+	(void)av;
 
-	 echo(av);
+	ft_pwd();
 
 }
