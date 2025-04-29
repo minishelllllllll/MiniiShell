@@ -16,8 +16,9 @@ int main(int ac, char **av)
 {
 
 	(void)ac;
-	(void)av;
+	//(void)av;
 
-	ft_pwd();
-
+	//ft_env(av);
+	//if(ft_strncmp(av[1], "exit", 4) == 0)
+		ft_exit(av);
 }

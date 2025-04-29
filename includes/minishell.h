@@ -13,6 +13,8 @@
 #include "libft.h"
 
 #include <errno.h>
+extern char **environ;
+
 
 typedef struct s_parsing
 {
@@ -33,5 +35,8 @@ int search_pipe(char *str);
 //execution
 int ft_echo(char **args);
 int ft_pwd();
+int ft_env(char **args);
+int ft_exit(char **args);
+
 
 #endif
