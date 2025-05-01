@@ -46,8 +46,7 @@ int ft_pwd();
 int ft_env(t_env *envs);
 int ft_exit(char **args);
 int ft_cd(char *path, t_env *envs);
-int ft_unset(char **env);
-
+int ft_unset(char **args, t_env *envs);
 
 t_env  *list_envs(char **envp);
 

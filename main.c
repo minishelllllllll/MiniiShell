@@ -25,33 +25,15 @@ int main(int ac, char **av, char **envp)
 	//if(ft_strncmp(av[1], "exit", 4) == 0)
 		//ft_exit(av);
 			
-
-	/*ft_unset(av);
-	printf("\nsearch for that env\n");
-	char *var = getenv("B");
-	if(!var)
-		printf("unset B\n");
-	else
-		printf("found B : %s\n", var);
-
-
-	var = getenv("A");
-	if(!var)
-		printf("unset A\n");
-	else
-		printf("found A : %s\n", var);
-
-
-	var = getenv("Abc");
-	if(!var)
-		printf("unset Abc\n");
-	else
-		printf("found Abc : %s\n", var);*/
-
-
+	//ft_env(envs);
+	
+	ft_unset(av, envs);
 	ft_env(envs);
-	ft_cd(av[1], envs);
-	ft_env(envs);
+
+
+
+//	ft_cd(av[1], envs);
+	//ft_env(envs);
 	//list_envs();
 
 }
