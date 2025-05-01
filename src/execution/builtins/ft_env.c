@@ -1,20 +1,16 @@
 #include "../../../includes/minishell.h"
 
 
-// i think is done *_*
-
-int ft_env(char **args)
+int ft_env(t_env *envs)
 {
-	(void)args;
-	int i;
-
-	i = 0;
-	while (environ[i])
-	{
-		printf("%s\n", environ[i]);
-		i++;
-	}
 	
+	while (envs)
+	{
+		printf("%s", envs->key);
+		printf("=");
+		printf("%s\n", envs->value);
+		envs = envs->next;
+	}
 
 	return(EXIT_SUCCESS);
 }

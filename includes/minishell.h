@@ -14,6 +14,7 @@
 
 #include <errno.h>
 extern char **environ;
+#include <sys/wait.h>
 
 
 typedef struct s_parsing
@@ -33,10 +34,21 @@ int search_pipe(char *str);
 
 
 //execution
+typedef struct env
+{
+    char *key;
+    char *value;
+    struct env *next;
+} t_env;
+
 int ft_echo(char **args);
 int ft_pwd();
-int ft_env(char **args);
+int ft_env(t_env *envs);
 int ft_exit(char **args);
+int ft_cd(char *path, t_env *envs);
+int ft_unset(char **env);
 
+
+t_env  *list_envs(char **envp);
 
 #endif
