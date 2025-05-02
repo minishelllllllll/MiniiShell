@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 14:20:35 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 14:39:08 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int main()
     while(1)
     {
         str = readline("minishell :");
-        // r = check_quote(str);
         // r = check_pipe(str);
         // r = check_redirection_pipe(str);
         // r = check_redirection(str);
@@ -36,7 +35,8 @@ int main()
             printf("****************************\n");
             curr = curr->next;
         }
-        check_quote(head);
+        // check_quote(head);
+        check_pipee(head);
     }
     return(r);
 }

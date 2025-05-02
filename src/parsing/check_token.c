@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:41:28 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/01 19:43:05 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 14:43:08 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ int check_token(char *str, int i)
     else if(str[i] == '$')
         return(ENV);
     else if(str[i] == '|')
-        return(PIPE_LINE);
-    // else if(str[i] == '<' && str[i + 1] == '<')
-    //     return(HERE_DOC);
-    // else if(str[i] == '>' && str[i + 1] == '>')
-    //     return(DREDIR_OUT);                        
+        return(PIPE_LINE);                    
     else if(str[i] == '<')
         return(REDIR_OUT);
     else if(str[i] == '>')

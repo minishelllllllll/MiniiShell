@@ -51,7 +51,7 @@ t_parsing *lexer(char *str);
 t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state state);
 int check_token(char *str, int i);
 void    error_print(char *str);
-int check_pipe(char *str);
+int check_pipee(t_parsing *head);
 int check_redirection_pipe(char *str);
 int check_redirection(char *str);
 int check_redir_end(char *str);
