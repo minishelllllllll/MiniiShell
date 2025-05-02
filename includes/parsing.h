@@ -55,6 +55,6 @@ t_parsing *check_pipe(t_parsing *curr, int len);
 t_parsing *check_quote(t_parsing *curr);
 t_parsing *skip_space(t_parsing *head);
 int check_redirection_pipe(char *str);
-int check_redirection(char *str);
 int check_redir_end(char *str);
+t_parsing *check_redirection(t_parsing *curr);
 #endif

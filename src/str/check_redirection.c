@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 15:07:49 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/01 19:11:49 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:32:06 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,46 +68,46 @@ int check_redir(char *str,int i)
     }
     return(0);
 }
-int check_redirection(char *str)
-{
-    int i;
-    int r;
-    char c;
+// int check_redirection(char *str)
+// {
+//     int i;
+//     int r;
+//     char c;
 
-    i = 0;
-    r = 0;
-    while(str[i] == ' ')
-        i++;
-    while(str[i])
-    {
-        if(str[i] == '"' || str[i] == '\'')
-        {
-            c = str[i++];
-            while(str[i] != c)
-            {
-                if(!str[i])
-                    break;
-                i++;
-            }
-        }
-        if((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
-        {
-            i = i + 2;
-            r = check_redir(str,i);
-            if(r == 1)
-                return(1);
-        }
-        if(str[i] == '>' || str[i] == '<')
-        {
-            i++;
-            r = check_redir(str,i);
-            if(r == 1)
-                return(1);
-        }
-        i++;
-    }
-    return(0);
-}
+//     i = 0;
+//     r = 0;
+//     while(str[i] == ' ')
+//         i++;
+//     while(str[i])
+//     {
+//         if(str[i] == '"' || str[i] == '\'')
+//         {
+//             c = str[i++];
+//             while(str[i] != c)
+//             {
+//                 if(!str[i])
+//                     break;
+//                 i++;
+//             }
+//         }
+//         if((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
+//         {
+//             i = i + 2;
+//             r = check_redir(str,i);
+//             if(r == 1)
+//                 return(1);
+//         }
+//         if(str[i] == '>' || str[i] == '<')
+//         {
+//             i++;
+//             r = check_redir(str,i);
+//             if(r == 1)
+//                 return(1);
+//         }
+//         i++;
+//     }
+//     return(0);
+// }
 int check_redirection_pipe(char *str)
 {
     int i;

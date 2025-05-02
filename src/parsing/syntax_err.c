@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:42:31 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 17:09:49 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:51:15 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_parsing *check_quote(t_parsing *curr)
             curr = curr->next;     
         }
     }
-    return(curr);
+    return(check_redirection(curr));
 }
 
 t_parsing *check_pipe(t_parsing *curr, int len)
@@ -69,5 +69,5 @@ int syntax_err(t_parsing *head)
         len++;
         curr = curr->next;
     }
-    return(0);
+    return(1);
 }
