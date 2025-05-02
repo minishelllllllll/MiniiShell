@@ -6,13 +6,13 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:41:28 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 14:43:08 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 15:36:12 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int check_token(char *str, int i)
+enum e_type check_token(char *str, int i)
 {
     if(str[i] == '\'')
         return(QUOTE);
@@ -27,9 +27,15 @@ int check_token(char *str, int i)
     else if(str[i] == '$')
         return(ENV);
     else if(str[i] == '|')
-        return(PIPE_LINE);                    
+        return(PIPE_LINE);
+    else if(str[i] == '>' && str[i + 1] == '>')
+            return(DREDIR_OUT);             
     else if(str[i] == '<')
-        return(REDIR_OUT);
+    {
+        if(str[i + 1] == '<')
+            return(HERE_DOC);
+        return(REDIR_OUT);        
+    }
     else if(str[i] == '>')
             return(REDIR_IN);
     else

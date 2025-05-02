@@ -22,7 +22,7 @@ t_parsing *lexer(char *str)
     head = NULL;
     int i;
     int j;
-    int c;
+    enum e_type c;
     int t;
 
     i = 0;
@@ -35,7 +35,22 @@ t_parsing *lexer(char *str)
             i++;
         state = GENERAL;
         c = check_token(str,i);
-        if(c == -1)
+        if(c == DREDIR_OUT || c == HERE_DOC)
+        {
+            t = c;
+            if(c == DREDIR_OUT)
+                c = '>';
+            else
+                c = '<';
+            tmp = malloc(3);
+            tmp[0] = c;
+            tmp[1] = c;
+            tmp[2] = 0;
+            head = ft_save(tmp,head,t,0,state);
+            i += 2;
+            continue;
+        }
+        else if(c == -1)
         {
             t = c;
             tmp = malloc(len + 1);

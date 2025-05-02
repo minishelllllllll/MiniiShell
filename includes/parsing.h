@@ -17,9 +17,8 @@ enum e_type
    PIPE_LINE = '|',
    REDIR_IN = '>',
    REDIR_OUT = '<',
-   HERE_DOC ,
-   DREDIR_OUT,
-   OR,
+   HERE_DOC = -2,
+   DREDIR_OUT = -3,
    AND,
 };
 
@@ -49,11 +48,13 @@ typedef struct s_parsing
 
 t_parsing *lexer(char *str);
 t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state state);
-int check_token(char *str, int i);
+enum e_type check_token(char *str, int i);
 void    error_print(char *str);
-int check_pipee(t_parsing *head);
+int syntax_err(t_parsing *head);
+t_parsing *check_pipe(t_parsing *curr, int len);
+t_parsing *check_quote(t_parsing *curr);
+t_parsing *skip_space(t_parsing *head);
 int check_redirection_pipe(char *str);
 int check_redirection(char *str);
 int check_redir_end(char *str);
-int check_quote(t_parsing *head);
 #endif

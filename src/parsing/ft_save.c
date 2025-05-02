@@ -18,7 +18,7 @@ t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state
     t_parsing *current = NULL;
     if(!data)
         return (NULL);
-    if(c == 0)
+    if(c == 0 || c == -2 || c == -3)
         data->content = av;
     else
     {

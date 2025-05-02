@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 14:39:08 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:09:54 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int main()
             printf("****************************\n");
             curr = curr->next;
         }
-        // check_quote(head);
-        check_pipee(head);
+        syntax_err(head);
+        
     }
     return(r);
 }
