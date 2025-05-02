@@ -1,8 +1,9 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Werror -Wextra -Wall #-fsanitize=address -g
+CFLAGS = -Werror -Wextra -Wall -fsanitize=address -g
 
-SRC := 	$(wildcard src/pars/*.c) \
+SRC := 	$(wildcard src/parsing/*.c) \
+		$(wildcard src/str/*.c) \
 		$(wildcard *.c) \
 		$(wildcard libft/*.c)
 
