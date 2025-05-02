@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:42:31 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 17:51:15 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/02 19:05:16 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int syntax_err(t_parsing *head)
     while (curr)
     {
         curr = check_pipe(curr,len);
+        if(!curr)
+            return(0);
+        curr = expand(curr);
         if(!curr)
             return(0);
         len++;
