@@ -3,7 +3,7 @@
 
 int ft_env(t_env *envs)
 {
-	
+
 	while (envs)
 	{
 		printf("%s", envs->key);

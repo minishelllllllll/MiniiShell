@@ -46,8 +46,13 @@ int ft_pwd();
 int ft_env(t_env *envs);
 int ft_exit(char **args);
 int ft_cd(char *path, t_env *envs);
-int ft_unset(char **args, t_env *envs);
+int ft_unset(char **args, t_env **envs);
+int ft_export(char **args, t_env *envs);
+
+void add_env(t_env *newnode, t_env **head_list);
 
 t_env  *list_envs(char **envp);
+t_env *new_env(char *env);
+void	free_list(t_env **head_env);
 
 #endif

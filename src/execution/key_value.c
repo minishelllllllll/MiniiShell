@@ -59,11 +59,27 @@ t_env *new_env(char *env)
 	return(newnode);
 }
 
+void add_env(t_env *newnode, t_env **head_list)
+{
+	t_env *temp;
+
+	temp = (*head_list);
+	if(temp ==  0)
+	{
+		(*head_list) = newnode;
+	}
+	else
+	{
+		while (temp->next)
+			temp = temp->next;
+		temp->next = newnode;
+	}
+}
+
 t_env  *list_envs(char **envp)
 {
 	t_env	*head_env;
 	t_env	*newnode;
-	t_env	*temp;
 	int		i;
 
 	head_env = 0;
@@ -76,16 +92,7 @@ t_env  *list_envs(char **envp)
 			free_list(&head_env);
 			return(NULL);
 		}
-		if(head_env ==  0)
-		{
-			head_env = newnode;
-			temp = newnode;
-		}
-		else
-		{
-			temp->next = newnode;
-			temp = newnode;
-		}
+		add_env(newnode, &head_env);
 		i++;
 	}
 	//print_env_list(head_env);
