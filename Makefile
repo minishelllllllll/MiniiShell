@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Werror -Wextra -Wall -fsanitize=address -g
 
 SRC := 	$(wildcard src/parsing/*.c) \
-		$(wildcard src/str/*.c) \
+		$(wildcard src/execution/*.c) \
 		$(wildcard *.c) \
 		$(wildcard libft/*.c)
 

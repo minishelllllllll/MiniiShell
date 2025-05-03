@@ -6,24 +6,21 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/02 18:50:17 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/03 16:19:57 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-int main()
+int main(int ac,char **av,char **envp)
 {
     char *str;
     t_parsing *head;
-
+    (void)ac;
+    (void)av;
     while(1)
     {
         str = readline("minishell :");
-        // r = check_pipe(str);
-        // r = check_redirection_pipe(str);
-        // r = check_redirection(str);
-        // r = check_redir_end(str);
         head = lexer(str);
         t_parsing *curr = head;
         while(curr)
@@ -34,7 +31,7 @@ int main()
             printf("****************************\n");
             curr = curr->next;
         }
-        if(syntax_err(head) == 0)
+        if(syntax_err(head,envp) == 0)
             return(0);
         
     }
