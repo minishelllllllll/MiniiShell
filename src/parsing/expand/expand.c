@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/04 17:44:17 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/04 18:34:53 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,34 @@ t_parsing *expand(t_parsing *head,char **envp)
             {
                 j = i;
                 j++;
-                // if(str[j] == '(' && str[j + 1] == '(')
-                // {
-                //     j+= 2;
-                //     i = j;
-                //     while(str[j] != ')' && str[j + 1] != ')')
-                //     {
-                //         if(str[j] == 0)
-                //             return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
-                //         j++;
-                //         if(str[j] != ')' && str[j + 1] == ')')
-                //             j++;
-                //     }
-                //     while(i< j)
-                //     {
-                //         if(str[i] == ' ')
-                //             i++;
-                //         // if(str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '%')
-                //         // {
-                //         //     if(str[i] == '+' && str[i + 1] == '-')
-                //         // }
-                //         printf("%c",str[i]);
-                //         i++;
-                //     }
-                //     if(str[j] != ')' || str[j + 1] != ')')
-                //         return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
-                //     return(NULL);
-                // }
+                // if(str[j] == '(' && str[j + 1] != '(')
+                //     i++;
+                if(str[j] == '(' && str[j + 1] == '(')
+                {
+                    j+= 2;
+                    i = j;
+                    while((str[j] != ')' && str[j + 1] != ')' )|| str[j] != ')')
+                    {
+                        if(str[j] == 0)
+                            return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
+                        j++;
+                        if(str[j] != ')' && str[j + 1] == ')')
+                            j++;
+                    }
+                    while(str[i] == ' ')
+                        i++;
+                    while(i <= j)
+                    {
+                        if(str[i] == ')')
+                            break;
+                        printf("%c",str[i]);
+                        i++;
+                    }
+                    
+                    if(str[j] != ')' || str[j + 1] != ')')
+                        return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
+                    
+                }
                 if(str[j] < 'A' ||str[j] > 'Z')
                     break;
                 res = list_envs(envp);
