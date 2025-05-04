@@ -56,4 +56,5 @@ t_parsing *check_quote(t_parsing *curr);
 t_parsing *skip_space(t_parsing *head);
 t_parsing *check_redirection(t_parsing *curr);
 t_parsing *expand(t_parsing *head, char **envp);
+int is_allowed(char c);
 #endif
