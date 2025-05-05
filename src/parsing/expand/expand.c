@@ -6,11 +6,29 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/05 13:17:55 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/05 18:48:25 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+int check_operator(char c)
+{
+    if(c == '+' || c == '-' || c == '*' || c == '/' || c == '%' )
+        return(1);
+    return(0);
+}
+void operation(char *str,int i, int j)
+{
+    while(i <= j)
+    {
+        if(str[i] == '(')
+            i++;
+        if(str[i] == ')')
+            break;
+        printf("%c",str[i]);
+        i++;
+    }          
+}
 int check_parth(char *str)
 {
     int i;
@@ -64,27 +82,19 @@ t_parsing *expand(t_parsing *head,char **envp)
                 {
                     j+= 2;
                     i = j;
-                    while((str[j] != ')' && str[j + 1] != ')'))
-                    {
+                    while((str[j] != ')'))
+                    {  
+                        if(check_operator(str[j]) != 1 && !(str[j] >= '0' && str[j] <= '9') && str[j] != ' ')
+                            return(printf("0\n"),NULL);
                         if(str[j] == 0)
                             return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
                         j++;
-                        if(str[j] != ')' && str[j + 1] == ')')
-                            j++;
                     }
+                    // if(str[i] != ')' || str[i + 1] != ')')
+                    //     return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
                     while(str[i] == ' ')
                         i++;
-                    while(i <= j)
-                    {
-                        if(str[i] == '(')
-                            i++;
-                        if(str[i] == ')')
-                            break;
-                        printf("%c",str[i]);
-                        i++;
-                    }
-                    if(str[i] != ')' || str[i + 1] != ')')
-                        return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
+                    operation(str,i,j);              
                     
                 }
                 else if(str[j] == '(')
