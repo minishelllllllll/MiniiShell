@@ -40,7 +40,8 @@ typedef struct env
     char    *value;
     int     flag_exported;
     struct env *next;
-} t_env;
+}  t_env;
+
 
 int	ft_strcmp(char *s1, char *s2);
 
