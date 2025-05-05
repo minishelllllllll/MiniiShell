@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/04 19:13:03 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:17:55 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_parsing *expand(t_parsing *head,char **envp)
 {
     char *str;
     int i;
-    int j;
+    int j; 
     t_env *res;
     (void)envp;
     if(!head)
@@ -86,6 +86,28 @@ t_parsing *expand(t_parsing *head,char **envp)
                     if(str[i] != ')' || str[i + 1] != ')')
                         return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
                     
+                }
+                else if(str[j] == '(')
+                {
+                    j++;
+                    i = j;
+                    while(str[j] != ')')
+                    {
+                        if(str[j] == 0)
+                            return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
+                        j++;
+                    }
+                    while(str[i] == ' ')
+                        i++;
+                    while(i <= j)
+                    {
+                        if(str[i] == '(')
+                            i++;
+                        if(str[i] == ')')
+                            break;
+                        printf("%c",str[i]);
+                        i++;
+                    }
                 }
                 if(str[j] < 'A' ||str[j] > 'Z')
                     break;
