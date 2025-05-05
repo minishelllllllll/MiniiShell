@@ -18,7 +18,7 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_env *envs;
-	char *avv[3] = {"execut", "Abc", NULL};
+	//char *avv[3] = {"execut", "Abc", NULL};
 
 	envs = list_envs(envp);
 
@@ -30,13 +30,13 @@ int main(int ac, char **av, char **envp)
 	//ft_env(envs);
 	//printf("\n\n\n\n");
 	
-	ft_export(av, envs);
-	ft_env(envs);
+	ft_export(av, &envs);
+	//ft_env(envs);
 
-	printf("\n\n\n\n");
+	//printf("\ndone\n");
 
-	ft_unset(avv, &envs);
-	ft_env(envs);
+	//ft_unset(avv, &envs);
+	//ft_env(envs);
 	
 
 	free_list(&envs);

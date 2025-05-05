@@ -1,6 +1,5 @@
 #include "../../../includes/minishell.h"
 
-
 int	ft_strcmp(char *s1, char *s2)
 {
 	size_t	i;
@@ -35,9 +34,10 @@ int ft_unset(char **args, t_env **envs)
 				else
 					prev->next = temp->next;
 				
-				free(temp->key);  //remove the node.
+				free_node(temp);
+				/*free(temp->key);  //remove the node.
 				free(temp->value);
-				free(temp);
+				free(temp);*/
 				break;
 			}
 			prev = temp;

@@ -2,7 +2,7 @@
 
 int set_env(char *var, char *new_value, t_env *envs)
 {
-	char *new_key;
+	char *new_key; //must to be freed
 
 	while (envs)
 	{
@@ -41,8 +41,8 @@ int ft_cd(char *path, t_env *envs)
 
 	if(set_env("OLDPWD=", oldpwd, envs) == 1 || set_env("PWD=", pwd, envs) == 1)
 	{
-		printf("%s\n",strerror(errno));
-		free(oldpwd);
+		printf("%s\n",strerror(errno)); //errors in the stderror (2);
+		free(oldpwd);  
 		free(pwd);
 		return(EXIT_FAILURE);
 	}

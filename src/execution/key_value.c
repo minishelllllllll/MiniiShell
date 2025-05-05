@@ -1,7 +1,5 @@
 #include "../../includes/minishell.h"
 
-void	print_env_list(t_env *head);
-
 void free_2d(char **str)
 {
 	int i;
@@ -32,27 +30,41 @@ void	free_list(t_env **head_env)
 	(*head_env) = NULL;
 }
 
+void free_node(t_env *node)
+{
+	if(node->value != NULL)
+		free(node->value);
+	free(node->key);
+	free(node);
+}
 t_env *new_env(char *env)
 {
 	t_env	*newnode;
 	char 	*value;
 	char 	**key;
 	
-	value = ft_strchr(env, '='); // search for the fisrt (=) and return pointer to it;
-
-	key = ft_split(env, '='); // split the command with (=);
-	if(!key)
-		return(NULL);
-
 	newnode = (t_env *)malloc(sizeof(t_env));
 	if(!newnode)
-	{
-		free_2d(key);
 		return(NULL);
+	
+	if(ft_strchr(env, '=') != NULL)
+	{
+		value = ft_strchr(env, '='); // search for the fisrt (=) and return pointer to it
+		key = ft_split(env, '='); // split the command with (=);
+		if(!key)
+			return(NULL);
 	}
-
+	else
+	{
+		newnode->key = ft_strdup(env); //duplicate env 
+		newnode->value = NULL; // no value. 
+		newnode->flag_exported = 0; //if just the key (false)
+		newnode->next = 0;
+		return(newnode);
+	}
 	newnode->key = ft_strdup(key[0]); //duplicate the first argument
 	newnode->value = ft_strdup(value + 1); //dup the string, +1 to skiip (=), like (=/hind/....)
+	newnode->flag_exported = 1; //if has a value (true)
 	newnode->next = 0;
 
 	free_2d(key);
@@ -95,20 +107,7 @@ t_env  *list_envs(char **envp)
 		add_env(newnode, &head_env);
 		i++;
 	}
-	//print_env_list(head_env);
 	return(head_env);
 }
 
-
-void	print_env_list(t_env *head)
-{
-	t_env *temp;
-
-	temp = head;
-	while (temp)
-	{
-		printf("key: %s | value: %s\n", temp->key, temp->value);
-		temp = temp->next;
-	}
-}
 
