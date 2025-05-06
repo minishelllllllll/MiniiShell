@@ -50,11 +50,9 @@ t_parsing *lexer(char *str);
 t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state state);
 enum e_type check_token(char *str, int i);
 void    error_print(char *str);
-int syntax_err(t_parsing *head,char **envp);
 t_parsing *check_pipe(t_parsing *curr, int len);
 t_parsing *check_quote(t_parsing *curr);
 t_parsing *skip_space(t_parsing *head);
 t_parsing *check_redirection(t_parsing *curr);
-t_parsing *expand(t_parsing *head, char **envp);
 int is_allowed(char c);
 #endif

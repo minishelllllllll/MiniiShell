@@ -5,6 +5,7 @@ CFLAGS = -Werror -Wextra -Wall #-fsanitize=address -g
 SRC := 	$(wildcard src/parsing/*.c) \
 		$(wildcard src/parsing/expand/*.c) \
 		$(wildcard src/execution/*.c) \
+	 	$(wildcard src/execution/builtins/*.c) \
 		$(wildcard *.c) \
 		$(wildcard libft/*.c)
 
@@ -14,6 +15,9 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) -lreadline $(OBJ) -o $(NAME) 
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -f $(OBJ)

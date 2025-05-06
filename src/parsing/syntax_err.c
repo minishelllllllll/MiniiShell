@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:42:31 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/06 16:29:56 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:42:55 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_parsing *check_pipe(t_parsing *curr, int len)
     return(check_quote(curr));
 }
 
-int syntax_err(t_parsing *head,char **envp)
+int syntax_err(t_parsing *head,t_env *envp)
 {
     t_parsing *curr;
     int len;
@@ -63,10 +63,11 @@ int syntax_err(t_parsing *head,char **envp)
     curr = skip_space(head);
     while (curr)
     {
-        curr = check_pipe(curr,len);
-        if(!curr)
-            return(0);
+        // curr = check_pipe(curr,len);
+        // if(!curr)
+        //     return(0);
         curr = expand(curr,envp);
+        
         if(!curr)
             return(0);
         len++;

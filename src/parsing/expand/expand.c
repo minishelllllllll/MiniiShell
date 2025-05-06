@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/06 16:19:54 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:51:16 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,12 @@ int check_parth(char *str)
         return(0);
     return (1);
 }
-t_parsing *expand(t_parsing *head,char **envp)
+t_parsing *expand(t_parsing *head,t_env *envp)
 {
     char *str;
     int i;
-    int j; 
-    t_env *res;
-    (void)envp;
+    int j;
+
     if(!head)
         return(NULL);
     if(head->state == 2)
@@ -95,7 +94,6 @@ t_parsing *expand(t_parsing *head,char **envp)
                 }
                 if(str[j] < 'A' ||str[j] > 'Z')
                     break;
-                res = list_envs(envp);
                 i = j;
                 while(str[i])
                 {
@@ -110,14 +108,14 @@ t_parsing *expand(t_parsing *head,char **envp)
                 }
                 else
                 {
-                    while(res)
+                    while(envp)
                     {
-                        if(ft_strncmp(res->key,str + j,(i - j)) == 0)
+                        if(ft_strncmp(envp->key,str + j,(i - j)) == 0)
                         {
-                            printf("%s",res->value);
+                            printf("%s",envp->value);
                             break;
                         }
-                        res = res->next;
+                        envp = envp->next;
                     }
                     if(str[i] != 0)
                         continue;  
@@ -125,9 +123,10 @@ t_parsing *expand(t_parsing *head,char **envp)
             }
             i++;
         }
-        printf("\n");
+        // printf("\n");
     }
     if(head->state == 1)
-        return(printf("%s\n",head->content),NULL);    
+        return(printf("%s\n",head->content),NULL); 
+      
     return(head);
 }
