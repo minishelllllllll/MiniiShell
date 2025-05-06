@@ -6,75 +6,12 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/06 16:16:34 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/06 16:19:54 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-int check_operator(char c)
-{
-    if(c == '+' || c == '-' || c == '*' || c == '/' || c == '%' )
-        return(1);
-    return(0);
-}
 
-void operation(char *str, int i, int j)
-{
-    int t;
-    int count;
-    int nb;
-    int res;
-    char op;
-
-    nb = 0;
-    res = 0;
-    op = '+';
-    
-    while(i <= j)
-    {
-        while(str[i] == '(' || str[i] == ' ')
-            i++;    
-        if(str[i] == ')')
-            break;
-        if(check_operator(str[i]) == 1)
-        {
-            op = str[i];
-            i++;
-            continue;
-        }
-        
-        count = 0;
-        t = i;
-        while(t <= j && str[t] >= '0' && str[t] <= '9')
-        {
-            count++;
-            t++;
-        }
-        
-        if(count > 0)
-        {
-            nb = ft_atoi(str + i);
-            printf("nb == >%d\n", nb);
-            
-            if(op == '+')
-                res += nb;
-            else if(op == '-')
-                res -= nb;
-            else if(op == '*')
-                res *= nb;
-            else if(op == '/')
-                res /= nb;
-            else if(op == '%')
-                res %= nb;
-                
-            i += count;
-        }
-        else
-            i++;
-    }
-    
-    printf("res = >%d", res);
-}
 int check_parth(char *str)
 {
     int i;
@@ -122,26 +59,17 @@ t_parsing *expand(t_parsing *head,char **envp)
             {
                 j = i;
                 j++;
-                if(check_parth(str + i) == 0)
-                    return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
                 if(str[j] == '(' && str[j + 1] == '(')
                 {
                     j+= 2;
                     i = j;
                     while((str[j] != ')'))
                     {  
-                        if(check_operator(str[j]) != 1 && !(str[j] >= '0' && str[j] <= '9') && str[j] != ' ')
-                            return(printf("0\n"),NULL);
                         if(str[j] == 0)
                             return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
                         j++;
                     }
-                    // if(str[i] != ')' || str[i + 1] != ')')
-                    //     return(error_print("syntax error \"unclosed parentheses\"\n"),NULL);
-                    while(str[i] == ' ')
-                        i++;
-                    operation(str,i,j);              
-                    
+                    return(printf("0\n"),NULL);             
                 }
                 else if(str[j] == '(')
                 {
@@ -198,7 +126,6 @@ t_parsing *expand(t_parsing *head,char **envp)
             i++;
         }
         printf("\n");
-        // return(printf("%s\n",head->content),NULL);    
     }
     if(head->state == 1)
         return(printf("%s\n",head->content),NULL);    
