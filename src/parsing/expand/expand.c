@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:31:13 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/05 18:48:25 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:34 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,63 @@ int check_operator(char c)
         return(1);
     return(0);
 }
-void operation(char *str,int i, int j)
+
+void operation(char *str, int i, int j)
 {
+    int t;
+    int count;
+    int nb;
+    int res;
+    char op;
+
+    nb = 0;
+    res = 0;
+    op = '+';
+    
     while(i <= j)
     {
-        if(str[i] == '(')
-            i++;
+        while(str[i] == '(' || str[i] == ' ')
+            i++;    
         if(str[i] == ')')
             break;
-        printf("%c",str[i]);
-        i++;
-    }          
+        if(check_operator(str[i]) == 1)
+        {
+            op = str[i];
+            i++;
+            continue;
+        }
+        
+        count = 0;
+        t = i;
+        while(t <= j && str[t] >= '0' && str[t] <= '9')
+        {
+            count++;
+            t++;
+        }
+        
+        if(count > 0)
+        {
+            nb = ft_atoi(str + i);
+            printf("nb == >%d\n", nb);
+            
+            if(op == '+')
+                res += nb;
+            else if(op == '-')
+                res -= nb;
+            else if(op == '*')
+                res *= nb;
+            else if(op == '/')
+                res /= nb;
+            else if(op == '%')
+                res %= nb;
+                
+            i += count;
+        }
+        else
+            i++;
+    }
+    
+    printf("res = >%d", res);
 }
 int check_parth(char *str)
 {
