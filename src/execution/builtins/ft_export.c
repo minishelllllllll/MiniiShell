@@ -71,11 +71,9 @@ int ft_export(char **args, t_env **envs)
 		{
 			newnode = new_env(args[i]);
 			if(exist_env(newnode, (*envs)) == 0) //if env exit but change his value.
-			{
 				free_node(newnode);
-				return(EXIT_SUCCESS);
-			}
-		 	add_env(newnode, envs);
+			else
+		 		add_env(newnode, envs);
 		}
 		i++;
 	}
