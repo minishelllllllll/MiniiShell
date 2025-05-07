@@ -41,7 +41,7 @@ int main(int ac, char **av, char **envp)
         
     }
 
-    ft_export(str, &envs);
+    ft_export(av, &envs);
 	free_list(&envs);
 
 }

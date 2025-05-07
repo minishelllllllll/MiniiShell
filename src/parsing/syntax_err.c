@@ -54,7 +54,7 @@ t_parsing *check_pipe(t_parsing *curr, int len)
     return(check_quote(curr));
 }
 
-int syntax_err(t_parsing *head,t_env *envp)
+int  syntax_err(t_parsing *head,t_env *envp)
 {
     t_parsing *curr;
     int len;
@@ -63,9 +63,7 @@ int syntax_err(t_parsing *head,t_env *envp)
     curr = skip_space(head);
     while (curr)
     {
-        // curr = check_pipe(curr,len);
-        // if(!curr)
-        //     return(0);
+       y
         curr = expand(curr,envp);
         
         if(!curr)
