@@ -36,7 +36,7 @@ int main(int ac, char **av, char **envp)
             // printf("****************************\n");
             curr = curr->next;
         }
-        syntax_err(head,envs);
+        checker(head,envs);
             // return(0);
         
     }

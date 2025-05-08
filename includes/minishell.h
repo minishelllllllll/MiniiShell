@@ -17,6 +17,13 @@
 extern char **environ;
 #include <sys/wait.h>
 
+typedef struct s_cmd    
+{
+	int				in_file;
+	int				out_file;
+	char				**full_cmd;
+	struct s_cmd	*next;
+}					t_cmd;
 
 // typedef struct s_parsing
 // {
@@ -57,8 +64,8 @@ void free_node(t_env *newnode);
 
 //parsing
 
-int syntax_err(t_parsing *head,t_env *envp);
+int checker(t_parsing *head,t_env *envp);
 t_parsing *expand(t_parsing *head,t_env *envp);
-
-
+int ft_double(char *str, t_env *envp, int k , int m);
+int check_expand(t_parsing *head,t_env *envp);
 #endif

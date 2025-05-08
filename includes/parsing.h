@@ -55,4 +55,5 @@ t_parsing *check_quote(t_parsing *curr);
 t_parsing *skip_space(t_parsing *head);
 t_parsing *check_redirection(t_parsing *curr);
 int is_allowed(char c);
+int syntax_err(t_parsing *head);
 #endif

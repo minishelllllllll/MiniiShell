@@ -38,3 +38,4 @@ t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state
 
     return head;
 }
+

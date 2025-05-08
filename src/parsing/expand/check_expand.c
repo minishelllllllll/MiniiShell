@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_err.c                                       :+:      :+:    :+:   */
+/*   check_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 18:24:29 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/08 18:24:29 by nahilal          ###   ########.fr       */
+/*   Created: 2025/05/08 18:30:22 by nahilal           #+#    #+#             */
+/*   Updated: 2025/05/08 18:30:22 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
-int syntax_err(t_parsing *head)
+int check_expand(t_parsing *head,t_env *envp)
 {
-    int len;
-    
-    len = 0;
-    head = skip_space(head);
-    while (head)
+    while(head)
     {
-        head = check_pipe(head,len);  
+        while(head && head->type != PIPE_LINE)
+        {
+            head = expand(head,envp);
+            head = head->next;
+        }
         if(!head)
+        {
+            printf("\n");
             return(2);
-        len++;
+        }  
+        printf("|");
         head = head->next;
     }
     return(0);
