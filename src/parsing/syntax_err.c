@@ -63,12 +63,18 @@ int  syntax_err(t_parsing *head,t_env *envp)
     curr = skip_space(head);
     while (curr)
     {
-       y
-        curr = expand(curr,envp);
-        
+        curr = check_pipe(curr,len);  
         if(!curr)
             return(0);
         len++;
+        curr = curr->next;
+    }
+    curr = head;
+    while(curr)
+    {
+        curr = expand(curr,envp);  
+        if(!curr)
+            return(0);
         curr = curr->next;
     }
     return(1);

@@ -41,6 +41,7 @@ t_parsing *expand(t_parsing *head,t_env *envp)
     char *str;
     int i;
     int j;
+    t_env *tmp;
 
     if(!head)
         return(NULL);
@@ -58,6 +59,11 @@ t_parsing *expand(t_parsing *head,t_env *envp)
             {
                 j = i;
                 j++;
+                if(str[j] == '\0') 
+                {
+                    printf("$"); 
+                    break;
+                }
                 if(str[j] == '(' && str[j + 1] == '(')
                 {
                     j+= 2;
@@ -95,12 +101,12 @@ t_parsing *expand(t_parsing *head,t_env *envp)
                 if(str[j] < 'A' ||str[j] > 'Z')
                     break;
                 i = j;
-                while(str[i])
-                {
-                    if(str[i] == ' ' ||( !(str[i] >= 'A' && str[i] <= 'Z' ) && str[i] != '_'))
-                        break;   
-                    i++;
-                }
+                // while(str[i])
+                // {
+                //     if(str[i] == ' ' ||( !(str[i] >= 'A' && str[i] <= 'Z' ) && str[i] != '_'))
+                //         break;   
+                //     i++;
+                // }
                 if(is_allowed(str[i]) == 1)
                 {
                     i++;
@@ -108,22 +114,35 @@ t_parsing *expand(t_parsing *head,t_env *envp)
                 }
                 else
                 {
-                    while(envp)
+                    tmp = envp;
+                    while(tmp)
                     {
-                        if(ft_strncmp(envp->key,str + j,(i - j)) == 0)
+                        // printf("key - >%s\n",tmp->key);
+                        // printf("str - >%s\n",str + j);
+                        if(ft_strncmp(tmp->key,str + j,(ft_strlen(tmp->key) + 1)) == 0)
                         {
-                            printf("%s",envp->value);
+                            printf("%s",tmp->value);
+                            j += (int)ft_strlen(tmp->key);
+                            i = j;
                             break;
                         }
-                        envp = envp->next;
+                        tmp = tmp->next;
+                    }
+                    if(!tmp)
+                    {
+                        // printf("%c\n",str[i]);
+                        while(str[i] != ' ' && str[i])
+                            i++;
                     }
                     if(str[i] != 0)
-                        continue;  
+                        continue;
+                    else
+                        break;
                 }    
             }
             i++;
         }
-        // printf("\n");
+        printf("\n");
     }
     if(head->state == 1)
         return(printf("%s\n",head->content),NULL); 

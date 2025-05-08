@@ -30,10 +30,10 @@ int main(int ac, char **av, char **envp)
         
         while(curr)
         {
-            printf("content ==> %s\n",curr->content);
-            printf("state ==> %d\n",curr->state);
-            printf("type ==> %c\n",curr->type);
-            printf("****************************\n");
+            // printf("content ==> %s\n",curr->content);
+            // printf("state ==> %d\n",curr->state);
+            // printf("type ==> %c\n",curr->type);
+            // printf("****************************\n");
             curr = curr->next;
         }
         syntax_err(head,envs);

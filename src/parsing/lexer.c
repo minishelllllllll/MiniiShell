@@ -78,7 +78,7 @@ t_parsing *lexer(char *str)
             head = ft_save(str,head,c,str[i],state);
             i++;
             j = 0;
-            char *tmp = malloc(len + 1);
+            tmp = malloc(len + 1);
             t = c;
             if(str[i] == c)
             {
