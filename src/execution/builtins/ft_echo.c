@@ -1,6 +1,18 @@
 #include "../../../includes/minishell.h"
 
-//no leak
+int check_flag_n(char *str)
+{
+	int i;
+	
+	i = 1; // to skip the '-' cuz already check it
+ 	while (str[i])
+	{
+		if(str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int ft_echo(char **args)
 {
@@ -9,10 +21,14 @@ int ft_echo(char **args)
 
 	i = 1;
 	check = 0;
-	if(ft_strncmp(args[i], "-n", 3) == 0) // check the first arg is -n\0?
+
+	while (args[i])
 	{
+		if(args[i][0] == '-' && check_flag_n(args[i]) == 1) // check the first char is - ?
+			check = 1;
+		else
+			break;
 		i++;
-		check = 1;
 	}
 	while (args[i])
 	{

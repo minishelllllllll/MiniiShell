@@ -41,7 +41,7 @@ int	ft_strcmp(char *s1, char *s2);
 
 
 int ft_echo(char **args);
-int ft_pwd();
+int ft_pwd(t_env *envs);
 int ft_env(t_env *envs);
 int ft_exit(char **args);
 int ft_cd(char **args, t_env *envs);
@@ -55,5 +55,7 @@ t_env *new_env(char *env); //0 if a normal env //1 if exported (just the name)
 void	free_list(t_env **head_env);
 void free_node(t_env *newnode);
 char *get_env_value(char *key, t_env *envs);
+
+int check_flag_n(char *str);
 
 #endif

@@ -2,7 +2,7 @@
 
 //no leak 
 
-int ft_pwd()
+int ft_pwd(t_env *envs)
 {
 	char *working_d;
 
