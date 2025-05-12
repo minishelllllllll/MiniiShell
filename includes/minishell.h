@@ -26,12 +26,6 @@ typedef struct s_parsing
     struct s_parsing *next;
 }t_parsing;
 
-//parsing
-void    parsing(int ac,char **av);
-size_t	ft_strlen(const char *s);
-t_parsing *test(int ac,char *av,t_parsing *head, int i);
-int search_pipe(char *str);
-
 
 //execution
 typedef struct env
@@ -50,7 +44,7 @@ int ft_echo(char **args);
 int ft_pwd();
 int ft_env(t_env *envs);
 int ft_exit(char **args);
-int ft_cd(char *path, t_env *envs);
+int ft_cd(char **args, t_env *envs);
 int ft_unset(char **args, t_env **envs);
 int ft_export(char **args, t_env **envs);
 
@@ -60,5 +54,6 @@ t_env  *list_envs(char **envp);
 t_env *new_env(char *env); //0 if a normal env //1 if exported (just the name) 
 void	free_list(t_env **head_env);
 void free_node(t_env *newnode);
+char *get_env_value(char *key, t_env *envs);
 
 #endif

@@ -30,7 +30,7 @@ int main(int ac, char **av, char **envp)
 	//ft_env(envs);
 	//printf("\n\n\n\n");
 	
-	ft_export(av, &envs);
+	//ft_export(av, &envs);
 	//ft_env(envs);
 
 	//printf("\ndone\n");
@@ -39,8 +39,8 @@ int main(int ac, char **av, char **envp)
 	//ft_env(envs);
 	
 
+	ft_cd(av, envs);
 	free_list(&envs);
-//	ft_cd(av[1], envs);
 	//ft_env(envs);
 	//list_envs();
 
