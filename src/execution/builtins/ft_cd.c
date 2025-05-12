@@ -41,7 +41,7 @@ int ft_cd(char **args, t_env *envs)
 		return(EXIT_FAILURE); // exit status == 1
 	}
 	
-	oldpwd = getcwd(NULL, 0); //check if failed
+	oldpwd = get_env_value("PWD", envs);//getcwd(NULL, 0); //check if failed
 	if(oldpwd == NULL) // when getcwd failed
 		return(EXIT_FAILURE);
 
