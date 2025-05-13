@@ -57,5 +57,6 @@ void free_node(t_env *newnode);
 char *get_env_value(char *key, t_env *envs);
 
 int check_flag_n(char *str);
+int ft_builtin(char **command, t_env **envs);
 
 #endif
