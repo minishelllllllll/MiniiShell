@@ -50,20 +50,21 @@ int ft_cd(char **args, t_env *envs)
 		if(chdir(get_env_value("HOME", envs)) == -1)
 		{
 			printf("cd: HOME not set");
-			free(oldpwd);
 			return(EXIT_FAILURE);	
 		}
 	}
 	else if(chdir(args[1]) == -1) // when chdir failed
 	{
 		printf("%s\n",strerror(errno));
-		free(oldpwd);
 		return(EXIT_FAILURE);
 	}
 
 	pwd = getcwd(NULL, 0);
 	if(pwd == NULL) // when getcwd failed
+	{
+		printf("%s\n",strerror(errno));
 		return(EXIT_FAILURE);
+	}
 
 	if(set_env("OLDPWD", oldpwd, envs) == 1 || set_env("PWD", pwd, envs) == 1)
 		return(EXIT_FAILURE);
