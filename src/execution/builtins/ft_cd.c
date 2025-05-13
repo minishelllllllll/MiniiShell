@@ -4,7 +4,7 @@ int set_env(char *var, char *new_value, t_env *envs)
 {
 	while (envs)
 	{
-		if(ft_strcmp(var, envs->key) == 0)
+		if(ft_strcmp(var, envs->key) == 0 && new_value)
 		{
 			free(envs->value);
 			envs->value = ft_strdup(new_value);
@@ -41,15 +41,15 @@ int ft_cd(char **args, t_env *envs)
 		return(EXIT_FAILURE); // exit status == 1
 	}
 	
-	oldpwd = get_env_value("PWD", envs);//getcwd(NULL, 0); //check if failed
-	if(oldpwd == NULL) // when getcwd failed
-		return(EXIT_FAILURE);
+	oldpwd = get_env_value("PWD", envs);
+	if(oldpwd == NULL) 
+		oldpwd = getcwd(NULL, 0);
 
 	if(args[1] == NULL || ft_strcmp(args[1], "~") == 0)
 	{
 		if(chdir(get_env_value("HOME", envs)) == -1)
 		{
-			printf("cd: HOME not set");
+			printf("cd: HOME not set\n");
 			return(EXIT_FAILURE);	
 		}
 	}
@@ -64,11 +64,10 @@ int ft_cd(char **args, t_env *envs)
 	{
 		printf("%s\n",strerror(errno));
 		return(EXIT_FAILURE);
-	}
 
-	if(set_env("OLDPWD", oldpwd, envs) == 1 || set_env("PWD", pwd, envs) == 1)
-		return(EXIT_FAILURE);
+	}
+	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
+	set_env("PWD", pwd, envs);
 
 	return(EXIT_SUCCESS);
 }
-
