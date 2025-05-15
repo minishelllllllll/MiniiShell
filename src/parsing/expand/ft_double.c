@@ -1,141 +1,189 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_double.c                                           :+:      :+:    :+:   */
+/*   ft_double.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:35:55 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/08 18:35:55 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:30:20 by claude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int ft_double(char *str, t_env *envp, int k, int m)
+// Helper function to safely append a string to the result
+char *join_string(char *dest, const char *src)
+{
+    char *result;
+    
+    if (!src)
+        return (dest);
+    if (!dest)
+        return (ft_strdup(src)); 
+    result = ft_strjoin(dest, src);
+    free(dest);
+    return (result);
+}
+
+// Helper function to safely append a character to the result
+char *join_char(char *str, char c)
+{
+    char *result;
+    size_t len;
+    
+    if (!str)
+    {
+        result = malloc(2);
+        if (!result)
+            return (NULL);
+        result[0] = c;
+        result[1] = '\0';
+        return (result);
+    }
+    
+    len = ft_strlen(str);
+    result = malloc(len + 2);
+    if (!result)
+    {
+        free(str);
+        return (NULL);
+    }
+    ft_strlcpy(result, str, len + 1);
+    result[len] = c;
+    result[len + 1] = '\0';
+    
+    free(str);
+    return (result);
+}
+int check_parth(char *str)
 {
     int i;
-    int j;
-    t_env *tmp;
-    char **s;
+    int len;
 
-    // (void)k;
-    s = malloc((ft_strlen(str) + 1 )* sizeof(char *));
     i = 0;
-    s[k] = malloc (ft_strlen(str) + 1);
+    len = 0;
     while(str[i])
     {
-        if(str[i] != '$')
+        if(str[i] == '(')
+            len++;
+        i++;
+    }
+    i = 0;
+    while(str[i] && len >= 0)
+    {
+        if(str[i] == ')')
+            len--;
+        i++;
+    }
+    if(len != 0)
+        return(0);
+    return (2);
+}
+int ft_double(char *str, t_env *envp, t_var *data)
+{
+    t_env *tmp;
+    int len;
+    int start;
+
+    data->s1 = malloc(2);
+    if (!data->s1)
+        return (2);
+    data->s1[0] = '\0';
+    data->i = 0;
+    while (str[data->i])
+    {
+        if (str[data->i] != '$')
         {
-            s[k][m++] = str[i];
-            if(str[i + 1] == '$'|| !str[i + 1])
-            {
-                s[k][m] = 0;
-                printf("%s",s[k]);
-                k++;
-                s[k] = malloc (ft_strlen(str) + 1);
-            }
+            data->s1 = join_char(data->s1, str[data->i]);
+            if (!data->s1)
+                return (2);
         }
-        else if(str[i] == '$')
+        else if (str[data->i] == '$')
         {
-            m = 0;
-            j = i;
-            j++;
-            if(str[j] == '\0') 
+            data->j = data->i + 1;
+            if (str[data->j] == '\0')
             {
-                printf("$"); 
+                data->s1 = join_char(data->s1, '$');
+                if (!data->s1)
+                    return (2);
                 break;
             }
-            if(str[j] == '(' && str[j + 1] == '(')
+            if (str[data->j] == '(' && str[data->j + 1] == '(')
             {
-                j+= 2;
-                // i = j;
-                while((str[j] != ')'))
-                {  
-                    if(str[j] == 0)
-                        return(error_print("syntax error \"unclosed parentheses\"\n"),2);
-                    j++;
+                if(check_parth(str + data->i) == 0)
+                    return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
+                data->j += 2;
+                while (str[data->j] != ')' || str[data->j + 1] != ')')
+                {
+                    if (str[data->j] == '\0')
+                        return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
+                    data->j++;
                 }
-                i = j + 2;
-                s[k][0] = '0';
-                s[k][1] = 0;
-                printf("%s",s[k]);
-                k++;
-                s[k] = malloc (ft_strlen(str) + 1);
+                data->s1 = join_string(data->s1, "0");
+                if (!data->s1)
+                    return (2);
+                data->i = data->j + 2;
                 continue;
             }
-            else if(str[j] == '(')
+            else if (str[data->j] == '(')
             {
-                m = 0;
-                j++;
-                i = j;
-                while(str[j] != ')')
+                if(check_parth(str + data->i) == 0)
+                    return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
+                data->j++;
+                start = data->j;
+
+                while (str[data->j] != ')')
                 {
-                    if(str[j] == 0)
-                        return(error_print("syntax error \"unclosed parentheses\"\n"),2);
-                    j++;
+                    if (str[data->j] == '\0')
+                        return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
+                    data->j++;
                 }
-                while(str[i] == ' ')
-                    i++;
-                while(i <= j)
-                {
-                    if(str[i] == '(')
-                        i++;
-                    if(str[i] == ')')
-                    {
-                        s[k][m] = 0;
-                        break;
-                    }    
-                    s[k][m] = str[i];
-                    m++;
-                    i++;
-                }
-            }
-            if(s[k][m] != 0)
-                s[k][m] = 0;
-            printf("%s",s[k]);
-            k++;
-            s[k] = malloc (ft_strlen(str) + 1);
-            if(str[j] < 'A' ||str[j] > 'Z')
-                break;
-            i = j;
-            if(is_allowed(str[i]) == 1)
-            {
-                i++;
-                continue;  
+                data->s1 = join_string(data->s1, ft_substr(str, start, data->j - start));
+                if (!data->s1)
+                    return (2);
+                
+                data->i = data->j + 1;
+                continue;
             }
             else
             {
-                tmp = envp;
-                while(tmp)
+                start = data->j;
+                while (str[data->j] && (ft_isalnum(str[data->j]) || str[data->j] == '_'))
+                    data->j++;
+                len = data->j - start;
+                if (len > 0)
                 {
-                    if(ft_strncmp(tmp->key,str + j,(ft_strlen(tmp->key) + 1)) == 0)
+                    char *var_name = ft_substr(str, start, len);
+                    if (!var_name)
+                        return (2);
+                    tmp = envp;
+                    while (tmp)
                     {
-                        s[k] = malloc (ft_strlen(tmp->value) + 1);
-                        s[k] = ft_strdup(tmp->value);
-                        printf("%s",s[k]);
-                        k++;
-                        s[k] = malloc (ft_strlen(str) + 1);
-                        j += (int)ft_strlen(tmp->key);
-                        i = j;
-                        break;
+                        if (ft_strcmp(tmp->key, var_name) == 0)
+                        {
+                            data->s1 = join_string(data->s1, tmp->value ? tmp->value : "");
+                            if (!data->s1)
+                            {
+                                free(var_name);
+                                return (2);
+                            }
+                            break;
+                        }
+                        tmp = tmp->next;
                     }
-                    tmp = tmp->next;
+                    free(var_name);
+                    data->i = data->j - 1;
                 }
-                if(!tmp)
-                {
-
-                    while(str[i] != ' ' && str[i])
-                        i++;
-                }
-                if(str[i] != 0)
-                    continue;
                 else
-                    break;
-            }    
+                {
+                    data->s1 = join_char(data->s1, '$');
+                    if (!data->s1)
+                        return (2);
+                }
+            }
         }
-        i++;
+        data->i++;
     }
-    printf(" ");
-    return(0);
+    return (0);
 }

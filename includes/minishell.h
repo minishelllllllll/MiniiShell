@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -64,8 +65,8 @@ void free_node(t_env *newnode);
 
 //parsing
 
-int checker(t_parsing *head,t_env *envp);
-t_parsing *expand(t_parsing *head,t_env *envp);
-int ft_double(char *str, t_env *envp, int k , int m);
-int check_expand(t_parsing *head,t_env *envp);
+int  checker(t_parsing *head,t_env *envp, int len);
+t_parsing *expand(t_parsing *head,t_env *envp,t_var *data);
+int ft_double(char *str, t_env *envp, t_var *data);
+int check_expand(t_parsing *head,t_env *envp,int len);
 #endif

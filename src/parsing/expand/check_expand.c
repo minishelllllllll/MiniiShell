@@ -12,21 +12,23 @@
 
 #include "../../../includes/minishell.h"
 
-int check_expand(t_parsing *head,t_env *envp)
+int check_expand(t_parsing *head,t_env *envp,int len)
 {
+    t_var data;
+
+    data.s = malloc(len * sizeof(char *));
+    data.l = 0;
     while(head)
     {
-        while(head && head->type != PIPE_LINE)
+        while(head)
         {
-            head = expand(head,envp);
+            head = expand(head,envp,&data);
+            if(!head)
+                return(2);
             head = head->next;
         }
         if(!head)
-        {
-            printf("\n");
             return(2);
-        }  
-        printf("|");
         head = head->next;
     }
     return(0);

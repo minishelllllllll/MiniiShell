@@ -17,6 +17,7 @@ int main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+    (void)envp;
 	t_env *envs;
     char *str;
     t_parsing *head;
@@ -36,7 +37,7 @@ int main(int ac, char **av, char **envp)
             // printf("****************************\n");
             curr = curr->next;
         }
-        checker(head,envs);
+        checker(head,envs,ft_strlen(str));
             // return(0);
         
     }

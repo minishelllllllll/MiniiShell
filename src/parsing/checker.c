@@ -54,11 +54,11 @@ t_parsing *check_pipe(t_parsing *curr, int len)
     return(check_quote(curr));
 }
 
-int  checker(t_parsing *head,t_env *envp)
+int  checker(t_parsing *head,t_env *envp, int len)
 {    
     if(syntax_err(head) == 2)
         return(2);
-    if(check_expand(head,envp) == 2)
+    if(check_expand(head,envp,len) == 2)
         return(2);    
     return(1);
 }
