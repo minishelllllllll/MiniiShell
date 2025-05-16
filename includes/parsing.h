@@ -18,8 +18,7 @@ enum e_type
    REDIR_IN = '>',
    REDIR_OUT = '<',
    HERE_DOC = -2,
-   DREDIR_IN = -3,
-   AND,
+   DREDIR_IN = -3
 };
 
 enum e_state

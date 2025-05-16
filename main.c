@@ -11,7 +11,21 @@
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
+#include <readline/history.h>
 
+int skip_space_str(char *str)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        if(str[i] != ' ')
+            return(1);
+        i++;
+    }
+    return(0);
+}
 int main(int ac, char **av, char **envp)
 {
 
@@ -31,12 +45,14 @@ int main(int ac, char **av, char **envp)
         
         while(curr)
         {
-            // printf("content ==> %s\n",curr->content);
-            // printf("state ==> %d\n",curr->state);
-            // printf("type ==> %c\n",curr->type);
-            // printf("****************************\n");
+            printf("content ==> %s\n",curr->content);
+            printf("state ==> %d\n",curr->state);
+            printf("type ==> %c\n",curr->type);
+            printf("****************************\n");
             curr = curr->next;
         }
+        if(skip_space_str(str) == 1)
+            add_history(str);
         checker(head,envs,ft_strlen(str));
             // return(0);
         
