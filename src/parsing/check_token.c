@@ -29,7 +29,7 @@ enum e_type check_token(char *str, int i)
     else if(str[i] == '|')
         return(PIPE_LINE);
     else if(str[i] == '>' && str[i + 1] == '>')
-            return(DREDIR_OUT);             
+            return(DREDIR_IN);             
     else if(str[i] == '<')
     {
         if(str[i + 1] == '<')

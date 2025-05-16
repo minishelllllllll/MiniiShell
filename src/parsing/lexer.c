@@ -35,10 +35,10 @@ t_parsing *lexer(char *str)
             i++;
         state = GENERAL;
         c = check_token(str,i);
-        if(c == DREDIR_OUT || c == HERE_DOC)
+        if(c == DREDIR_IN || c == HERE_DOC)
         {
             t = c;
-            if(c == DREDIR_OUT)
+            if(c == DREDIR_IN)
                 c = '>';
             else
                 c = '<';

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_here_doc.c                                      :+:      :+:    :+:   */
+/*   ft_redirect_in.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,12 +12,20 @@
 
 #include "../../../includes/minishell.h"
 
-int ft_here_doc(t_parsing *head)
+int ft_redirect_in(t_parsing *head)
 {
+    int fd;
+
     if(!head)
         return(2);
     head = head->next;
-    int fd = open(head->content, O_CREAT | O_WRONLY );
+    while(head)
+    {
+        if(head->type == WORD)
+            break;
+        head = head->next;
+    }
+    fd = open(head->content, O_WRONLY | O_CREAT | O_TRUNC ,0644);
     if(fd == -1)
     {
         printf("error\n");

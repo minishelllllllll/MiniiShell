@@ -18,7 +18,7 @@ enum e_type
    REDIR_IN = '>',
    REDIR_OUT = '<',
    HERE_DOC = -2,
-   DREDIR_OUT = -3,
+   DREDIR_IN = -3,
    AND,
 };
 
@@ -70,6 +70,6 @@ t_parsing *skip_space(t_parsing *head);
 t_parsing *check_redirection(t_parsing *curr);
 int is_allowed(char c);
 int syntax_err(t_parsing *head);
-int ft_here_doc(t_parsing *head);
+int ft_redirect_in(t_parsing *head);
 int	ft_check_env(const char *s1, const char *s2, size_t n);
 #endif
