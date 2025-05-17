@@ -28,6 +28,7 @@ typedef struct s_parsing
 
 
 //execution
+
 typedef struct env
 {
     char    *key;
@@ -58,5 +59,17 @@ char *get_env_value(char *key, t_env *envs);
 
 int check_flag_n(char *str);
 int ft_builtin(char **command, t_env **envs);
+
+///// find path
+char	*executable_path(char *cmd, t_env *envs);
+char	*get_path_env(t_env *envs);
+char	*build_path(char *dirc, char *cmd);
+char	*build_path(char *dirc, char *cmd);
+void	free_arr_b(void **ptr);
+
+
+char    **envs_to_array(t_env *envs);
+char    *join_key_value(t_env *temp);
+int     len_list(t_env *temp);
 
 #endif

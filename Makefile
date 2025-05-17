@@ -4,6 +4,7 @@ CFLAGS = -Werror -Wextra -Wall #-fsanitize=address -g
 
 SRC := 	$(wildcard src/execution/*.c) \
 	 	$(wildcard src/execution/builtins/*.c) \
+	 	$(wildcard src/execution/external_cmd/*.c) \
 		$(wildcard *.c) \
 		$(wildcard libft/*.c)
 
@@ -12,7 +13,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) -lreadline $(OBJ) -o $(NAME) 
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline 
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
