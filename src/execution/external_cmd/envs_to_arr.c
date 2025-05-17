@@ -8,7 +8,6 @@ char *join_key_value(t_env *temp)
 	key = ft_strjoin(temp->key, "=");
 	if(!key)
 		return(NULL);
-	
 	if(!temp->value)
 		return(key);
 	else
