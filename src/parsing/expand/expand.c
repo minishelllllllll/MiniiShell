@@ -12,10 +12,85 @@
 
 #include "../../../includes/minishell.h"
 
-void ft_general(char *str)
+char *ft_charjoin(char *str,char c)
 {
-    printf("%s",str);
+    int len;
+    int i;
+    char *s;
+
+    if(!str)
+        return(NULL);
+    i = 0;
+    len = ft_strlen(str);
+    s = malloc(len + 2);
+    while(str[i])
+    {
+        s[i] = str[i];
+        i++;
+    }
+    s[i++] = c;
+    s[i]= 0;
+    return(s);
 }
+char *check_env_general(char *str,t_env *envp)
+{
+    int i;
+    t_env *tmp;
+    char *s;
+
+    i = 0;
+    tmp = envp;
+    s = malloc(2);
+    s[0] = 0;
+    while(str[i] && str[i] == ' ')
+        i++;
+    while(str[i])
+    {
+        if(str[i] == '$')
+        {
+            i++;
+            while(tmp)
+            {
+                if(ft_strncmp(tmp->key,str + i,ft_strlen(tmp->key)) == 0)
+                {
+                    i+= ft_strlen(tmp->key);
+                    if(ft_isalnum(str[i]) == 1)
+                    {
+                        i++;
+                        while(str[i] && str[i] != ' ')
+                        {
+                            if(str[i] == ' ')
+                                break;
+                            i++;
+                        }
+                        while(str[i] && str[i] == ' ')
+                            i++;
+                        break;
+                    }
+                    s = ft_strjoin(s,tmp->value);
+                    break;
+                }
+                tmp = tmp->next;
+            }
+            if(!tmp)
+            {
+                while(str[i])
+                {
+                    if(str[i] == ' ' || ft_isalnum(str[i]) == 0)
+                        break;
+                    i++;
+                }
+                while(str[i]&& str[i] == ' ')
+                    i++;
+            }
+            continue;
+        }
+        s = ft_charjoin(s,str[i]);
+        i++;
+    }
+    return(s);
+}
+
 
 t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
 {
@@ -24,7 +99,6 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
     // if(head->type != PIPE_LINE)
     //     return(ft_send(t_var *data))
 
-
     if(head->type == DREDIR_IN || head->type == REDIR_IN) 
     {
         if(ft_redirect_in(head) == 2)
@@ -32,6 +106,14 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
         head = head->next;
         return(head);
     } 
+    if(head->state == 3)
+    {
+        head->content = check_env_general(head->content,envp);
+        printf("%s\n",head->content);
+        if(!head->content)
+            return(NULL);
+        return(head);
+    }
     if(head->state == 0 && head->type != DQUOTE && head->type != QUOTE)
     {
         data->s[data->l] = ft_strdup(head->content);

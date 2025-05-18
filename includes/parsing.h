@@ -25,7 +25,8 @@ enum e_state
 {
     GENERAL = 0,
     INQUOTE = 1,
-    INDQUOTE = 2
+    INDQUOTE = 2,
+    ENV_STRING = 3
 };
 
 typedef struct s_lexer

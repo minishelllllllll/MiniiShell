@@ -35,6 +35,26 @@ t_parsing *lexer(char *str)
             i++;
         state = GENERAL;
         c = check_token(str,i);
+        if(c == ENV)
+        {
+            tmp = malloc(len + 1);
+            j = 0;
+            while(str[i])
+            {
+                c = check_token(str,i);
+                if(c != WHITE_SPACE && c != ESCAPE && c != ENV && c != WORD)
+                    break;
+                tmp[j] = str[i];
+                i++;
+                j++;
+            }
+            tmp[j] = 0;
+            state = ENV_STRING;
+            head = ft_save(tmp,head,t,0,state);
+            if(str[i] == 0)
+                break;
+            continue;
+        }
         if(c == DREDIR_IN || c == HERE_DOC)
         {
             t = c;

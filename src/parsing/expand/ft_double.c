@@ -162,7 +162,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                     {
                         if (ft_strcmp(tmp->key, var_name) == 0)
                         {
-                            data->s1 = join_string(data->s1, tmp->value ? tmp->value : "");
+                            data->s1 = join_string(data->s1, tmp->value);
                             if (!data->s1)
                             {
                                 free(var_name);
