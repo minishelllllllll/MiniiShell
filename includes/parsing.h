@@ -49,6 +49,8 @@ typedef struct s_parsing
 typedef struct s_var
 {
     char **s;
+    int y;
+    int z;
     char *s1;
     int in_file;
     int out_file;

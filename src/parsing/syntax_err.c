@@ -43,7 +43,13 @@ t_parsing *check_pipe(t_parsing *curr, int len)
         if(!curr )
             return(error_print("syntax error near unexpected token '|'\n"),NULL);    
         if(curr->type == '|')
-            return(error_print("syntax error near unexpected token '||'\n"),NULL);
+        {
+            curr = curr->next;
+            if(!curr )
+                return(error_print("syntax error near unexpected token '|'\n"),NULL); 
+            if(curr->type == '|')
+                return(error_print("syntax error near unexpected token '||'\n"),NULL);
+        }
         while (curr)
         {
             if(curr->type != ' ')

@@ -98,7 +98,7 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
         return(NULL);
     // if(head->type != PIPE_LINE)
     //     return(ft_send(t_var *data))
-
+    
     if(head->type == DREDIR_IN || head->type == REDIR_IN) 
     {
         if(ft_redirect_in(head) == 2)
