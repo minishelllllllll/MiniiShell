@@ -20,7 +20,7 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 {
 	if(i == 0) // first command
 	{
-		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		if(tmp_cmd->in_file != -1) // duplicate stdin with pipes or redirection,
 		{
 			dup2(tmp_cmd->in_file, STDIN_FILENO);
 			close(tmp_cmd->in_file);
@@ -36,7 +36,7 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 	}
 	else if (i < len_cmd - 1) // middle command [ .... |   | .... ]
 	{
-		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		if(tmp_cmd->in_file != -1) 
 		{
 			dup2(tmp_cmd->in_file, STDIN_FILENO);
 			close(tmp_cmd->in_file);
@@ -55,7 +55,7 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 	}
 	else if (i == len_cmd - 1)  // last command 
 	{
-		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		if(tmp_cmd->in_file != -1) 
 		{
 			dup2(tmp_cmd->in_file, STDIN_FILENO);
 			close(tmp_cmd->in_file);
