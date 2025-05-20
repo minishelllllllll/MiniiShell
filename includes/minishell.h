@@ -11,24 +11,21 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libft.h"
-
 #include <errno.h>
-extern char **environ;
 #include <sys/wait.h>
-
-
-typedef struct s_parsing
-{
-    int index;
-    char *content;
-    char *type;
-    char  *state;
-    struct s_parsing *next;
-}t_parsing;
-
 
 //execution
 
+// struct for commands (list)
+typedef struct s_cmd
+{
+	int				in_file;
+	int				out_file;
+	char			**full_cmd;
+	struct s_cmd	*next;
+}					t_cmd;
+
+// struct for envs (list)
 typedef struct env
 {
     char    *key;
@@ -40,36 +37,55 @@ typedef struct env
 
 int	ft_strcmp(char *s1, char *s2);
 
-
-int ft_echo(char **args);
+// builtins 
 int ft_pwd(t_env *envs);
 int ft_env(t_env *envs);
 int ft_exit(char **args);
 int ft_cd(char **args, t_env *envs);
 int ft_unset(char **args, t_env **envs);
 int ft_export(char **args, t_env **envs);
-
-void add_env(t_env *newnode, t_env **head_list);
-
-t_env  *list_envs(char **envp);
-t_env *new_env(char *env); //0 if a normal env //1 if exported (just the name) 
-void	free_list(t_env **head_env);
-void free_node(t_env *newnode);
-char *get_env_value(char *key, t_env *envs);
+int ft_echo(char **args);
 
 int check_flag_n(char *str);
 int ft_builtin(char **command, t_env **envs);
+int is_parent_builtin(char *cmd);
 
-///// find path
+
+// list envs
+void    add_env(t_env *newnode, t_env **head_list);
+t_env   *list_envs(char **envp);
+t_env   *new_env(char *env); //0 if a normal env //1 if exported (just the name) 
+char    *get_env_value(char *key, t_env *envs);
+
+// free memory
+void	free_list(t_env **head_env);
+void    free_node(t_env *newnode);
+void	free_arr_b(void **ptr);
+void	free_list_cmd(t_cmd **cmd_list);
+void	free_2d(char **str);
+
+// find path
 char	*executable_path(char *cmd, t_env *envs);
 char	*get_path_env(t_env *envs);
 char	*build_path(char *dirc, char *cmd);
 char	*build_path(char *dirc, char *cmd);
-void	free_arr_b(void **ptr);
 
-
+// envs to array
 char    **envs_to_array(t_env *envs);
 char    *join_key_value(t_env *temp);
 int     len_list(t_env *temp);
+
+//pipes
+int		**piping(int lines);
+void	close_pipes(int nbr_pipes, int **ends);
+void	waiting_childs(int childs);
+
+// executore
+void execute_commands(t_env *envs, t_cmd *tmp_cmd);
+void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
+
+
+// error msgs. 
+void	null_error(char *str);
 
 #endif

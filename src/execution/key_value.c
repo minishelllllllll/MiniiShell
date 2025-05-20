@@ -1,42 +1,6 @@
 #include "../../includes/minishell.h"
 
-void free_2d(char **str)
-{
-	int i;
 
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
-
-void	free_list(t_env **head_env)
-{
-	t_env	*temp;
-	t_env	*next;
-
-	temp = (*head_env);
-	while (temp != NULL)
-	{
-		next = temp->next;
-		free(temp->key);
-		free(temp->value);
-		free(temp);
-		temp = next;
-	}
-	(*head_env) = NULL;
-}
-
-void free_node(t_env *node)
-{
-	if(node->value != NULL)
-		free(node->value);
-	free(node->key);
-	free(node);
-}
 t_env *new_env(char *env)
 {
 	t_env	*newnode;

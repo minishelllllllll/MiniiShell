@@ -1,0 +1,74 @@
+#include "../../../includes/minishell.h"
+
+
+void execute_commands(t_env *envs, t_cmd *tmp_cmd)
+{
+	char *exec_path;
+	char **env_arr;
+
+	exec_path = executable_path(tmp_cmd->full_cmd[0], envs);
+	env_arr = envs_to_array(envs);
+	//print_2d_array(env_arr);
+	if(execve(exec_path, tmp_cmd->full_cmd, env_arr) == -1)
+	{
+		printf("minishell: command not found: %s\n", tmp_cmd->full_cmd[0]);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
+{
+	if(i == 0) // first command
+	{
+		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		{
+			dup2(tmp_cmd->in_file, STDIN_FILENO);
+			close(tmp_cmd->in_file);
+		}
+		if(tmp_cmd->out_file != -1)
+		{
+			dup2(tmp_cmd->out_file, STDOUT_FILENO);
+			close(tmp_cmd->out_file);
+		}
+		else
+			dup2(pipes[i][1], STDOUT_FILENO); // diplucate the stdout to write in pipe
+		close_pipes(len_cmd - 1, pipes);
+	}
+	else if (i < len_cmd - 1) // middle command [ .... |   | .... ]
+	{
+		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		{
+			dup2(tmp_cmd->in_file, STDIN_FILENO);
+			close(tmp_cmd->in_file);
+		}
+		else
+			dup2(pipes[i - 1][0], STDIN_FILENO);
+
+		if(tmp_cmd->out_file != -1)
+		{
+			dup2(tmp_cmd->out_file, STDOUT_FILENO);
+			close(tmp_cmd->out_file);
+		}
+		else
+			dup2(pipes[i][1], STDOUT_FILENO);
+		close_pipes(len_cmd - 1, pipes);
+	}
+	else if (i == len_cmd - 1)  // last command 
+	{
+		if(tmp_cmd->in_file != -1) // < file cat ndj | ..
+		{
+			dup2(tmp_cmd->in_file, STDIN_FILENO);
+			close(tmp_cmd->in_file);
+		}
+		else
+			dup2(pipes[i - 1][0], STDIN_FILENO); // diplucate the stdin to read from pipe
+
+		if(tmp_cmd->out_file != -1)
+		{
+			dup2(tmp_cmd->out_file, STDOUT_FILENO);
+			close(tmp_cmd->out_file);
+		}
+
+		close_pipes(len_cmd - 1, pipes);
+	}
+}
