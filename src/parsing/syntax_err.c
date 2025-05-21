@@ -15,7 +15,7 @@
 t_parsing *check_quote(t_parsing *curr)
 {
     char c;
-    
+
     if(curr->type == '\"' || curr->type == '\'')
     {
         c = curr->type;
@@ -32,16 +32,18 @@ t_parsing *check_quote(t_parsing *curr)
     return(check_redirection(curr));
 }
 
+
 t_parsing *check_pipe(t_parsing *curr, int len)
 {
     if(curr->type == '|' && len == 0)
         return(error_print("syntax error near unexpected token '|'\n"),NULL);
-    else if(curr->type == '|')
+
+        else if(curr->type == '|')
     {
         curr = curr->next;
         len++;
         if(!curr )
-            return(error_print("syntax error near unexpected token '|'\n"),NULL);    
+            return(error_print("syntax error near unexpected token '|'\n"),NULL)    ;    
         if(curr->type == '|')
         {
             curr = curr->next;
@@ -65,7 +67,11 @@ int syntax_err(t_parsing *head)
     int len;
     
     len = 0;
-    head = skip_space(head);
+    if(checke_quote_len(head) == 1)
+    {
+        printf("heree\n");
+        return (0);
+    }
     while (head)
     {
         head = check_pipe(head,len);  

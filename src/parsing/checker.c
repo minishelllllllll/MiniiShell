@@ -14,6 +14,8 @@
 
 int  checker(t_parsing *head,t_env *envp, int len)
 {
+    (void)len;
+    (void)envp;
     if(syntax_err(head) == 2)
         return(2);
     if(check_expand(head,envp,len) == 2)

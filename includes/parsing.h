@@ -74,4 +74,5 @@ int is_allowed(char c);
 int syntax_err(t_parsing *head);
 int ft_redirect_in(t_parsing *head);
 int	ft_check_env(const char *s1, const char *s2, size_t n);
+int checke_quote_len(t_parsing *head);
 #endif

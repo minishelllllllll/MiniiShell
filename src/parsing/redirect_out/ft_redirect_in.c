@@ -15,9 +15,12 @@
 int ft_redirect_in(t_parsing *head)
 {
     int fd;
+    // int t;
 
     if(!head)
         return(2);
+    // if(head->type == DREDIR_IN)
+    //     t = 
     head = head->next;
     while(head)
     {

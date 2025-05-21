@@ -42,7 +42,7 @@ t_parsing *lexer(char *str)
             while(str[i])
             {
                 c = check_token(str,i);
-                if(c != WHITE_SPACE && c != ESCAPE && c != ENV && c != WORD)
+                if(c != WHITE_SPACE && c != ESCAPE && c != ENV && c != WORD && (c == DQUOTE || c == QUOTE))
                     break;
                 tmp[j] = str[i];
                 i++;
@@ -50,7 +50,7 @@ t_parsing *lexer(char *str)
             }
             tmp[j] = 0;
             state = ENV_STRING;
-            head = ft_save(tmp,head,t,0,state);
+            head = ft_save(tmp,head,WORD,0,state);
             if(str[i] == 0)
                 break;
             continue;
