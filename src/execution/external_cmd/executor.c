@@ -22,7 +22,8 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 	{
 		if(tmp_cmd->in_file != -1) // duplicate stdin with pipes or redirection,
 		{
-			dup2(tmp_cmd->in_file, STDIN_FILENO);
+			if (dup2(tmp_cmd->in_file, STDIN_FILENO) == -1)
+				perror("dup2 in_file"); // errorrr handliingggg 
 			close(tmp_cmd->in_file);
 		}
 		if(tmp_cmd->out_file != -1)
@@ -30,7 +31,7 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 			dup2(tmp_cmd->out_file, STDOUT_FILENO);
 			close(tmp_cmd->out_file);
 		}
-		else
+		else if(len_cmd > 1)
 			dup2(pipes[i][1], STDOUT_FILENO); // diplucate the stdout to write in pipe
 		close_pipes(len_cmd - 1, pipes);
 	}

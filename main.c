@@ -24,7 +24,11 @@ t_cmd *create_cmd_list(char *rdl)
     {
         new_cmd = (t_cmd *)malloc(sizeof(t_cmd));
         new_cmd->full_cmd = ft_split(commands[i], 32); // 32 is ASCII for space
-        new_cmd->next = NULL;
+		
+		new_cmd->in_file = -1;
+        new_cmd->out_file = -1;
+        
+		new_cmd->next = NULL;
         if (!head_cmd)
         {
             head_cmd = new_cmd;
@@ -91,6 +95,134 @@ int	len_list_cmd(t_cmd *temp)
 	return(i);
 }
 
+t_cmd *process_redirections(t_cmd *cmd_list)
+{
+    t_cmd *current = cmd_list;
+    
+    while (current)
+    {
+        int i = 0;
+        while (current->full_cmd && current->full_cmd[i])
+        {
+            if (i + 1 < count_args(current->full_cmd))
+            {
+                // Input redirection
+                if (strcmp(current->full_cmd[i], "<") == 0)
+                {
+                    if (current->in_file != -1)
+                        close(current->in_file);
+                    current->in_file = open(current->full_cmd[i + 1], O_RDONLY);
+                    remove_args(current->full_cmd, i, 2);
+                    continue;
+                }
+                // Heredoc
+                else if (strcmp(current->full_cmd[i], "<<") == 0)
+                {
+                    if (current->in_file != -1)
+                        close(current->in_file);
+                    current->in_file = heredoce(current->full_cmd[i + 1]);
+                    remove_args(current->full_cmd, i, 2);
+                    continue;
+                }
+                // Output redirection (overwrite)
+                else if (strcmp(current->full_cmd[i], ">") == 0)
+                {
+                    if (current->out_file != -1)
+                        close(current->out_file);
+                    current->out_file = open(current->full_cmd[i + 1], 
+                                            O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    remove_args(current->full_cmd, i, 2);
+                    continue;
+                }
+                // Output redirection (append)
+                else if (strcmp(current->full_cmd[i], ">>") == 0)
+                {
+                    if (current->out_file != -1)
+                        close(current->out_file);
+                    current->out_file = open(current->full_cmd[i + 1], 
+                                            O_WRONLY | O_CREAT | O_APPEND, 0644);
+                    remove_args(current->full_cmd, i, 2);
+                    continue;
+                }
+            }
+            i++;
+        }
+        current = current->next;
+    }
+    
+    return cmd_list;
+}
+
+t_cmd *process_heredocs(t_cmd *cmd_list)
+{
+    t_cmd *current = cmd_list;
+    
+    while (current)
+    {
+        int i = 0;
+        while (current->full_cmd && current->full_cmd[i])
+        {
+            // Check for heredoc
+            if (current->full_cmd[i] && i + 1 < count_args(current->full_cmd) && 
+                strcmp(current->full_cmd[i], "<<") == 0 && current->full_cmd[i + 1])
+            {
+                // Set up heredoc
+                int heredoc_fd = heredoce(current->full_cmd[i + 1]);
+                if (heredoc_fd == -1)
+                    return NULL; // Error handling
+                
+                // If there's already an input redirection, close it
+                if (current->in_file != -1)
+                    close(current->in_file);
+                
+                current->in_file = heredoc_fd;
+                
+                // Remove "<<" and delimiter from arguments
+                remove_args(current->full_cmd, i, 2);
+                
+                // Don't increment i as we've removed elements
+                continue;
+            }
+            i++;
+        }
+        current = current->next;
+    }
+    
+    return cmd_list;
+}
+
+// Helper function to count arguments
+int count_args(char **args)
+{
+    int count = 0;
+    while (args[count])
+        count++;
+    return count;
+}
+
+// Helper function to remove elements from argument array
+void remove_args(char **args, int start, int count)
+{
+    int i = start;
+    int total = count_args(args);
+    
+    // Free the strings we're removing
+    for (int j = 0; j < count; j++)
+        if (args[start + j])
+            free(args[start + j]);
+    
+    // Shift remaining arguments
+    while (start + count + (i - start) < total)
+    {
+        args[i] = args[start + count + (i - start)];
+        i++;
+    }
+    
+    // Null-terminate
+    args[i] = NULL;
+}
+
+
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -107,24 +239,46 @@ int main(int ac, char **av, char **envp)
 	int **pipes;
 	int i;
 
+
+	int saved_stdin;
+	int saved_stdout;
+
 	envs = list_envs(envp);
+
 	while (1)
 	{
+
+		saved_stdin = dup(STDIN_FILENO);
+		saved_stdout = dup(STDOUT_FILENO);
+
 		// prompt
 		cwd = getcwd(NULL, 0);
 		if(!cwd)
 			cwd = get_env_value("PWD", envs);
 		prompt = ft_strjoin(cwd, " $> ");
+		
+		
 		rdl = readline(prompt);
+		//printf("%s\n", rdl);
+    
+		if (!rdl) // Handle Ctrl+D (EOF)
+		{
+			printf("exit\n");
+			break;
+		}
 
 		// parssing command by pipe and space
 		commads_in_out = create_cmd_list(rdl);
+		commads_in_out = process_redirections(commads_in_out);
+
 		tmp_cmd = commads_in_out;
+		//printf("infile %d \n", tmp_cmd->in_file);
+
 
 		// count len of linked list (how many command)
 		len_cmd = len_list_cmd(tmp_cmd);
-			//printf("we have %d command\n", len_cmd);
-		
+		//printf("len %d \n", len_cmd);
+
 		// allocate 2d array of pipes
 		pipes = piping(len_cmd - 1);
 
@@ -134,6 +288,7 @@ int main(int ac, char **av, char **envp)
 		{
 			if(len_cmd == 1) // if one command
 			{
+				duplication(i, len_cmd, pipes, tmp_cmd);
 				if(ft_builtin(tmp_cmd->full_cmd, &envs) == -1) // is a builtin dont fork , execute it in parent.
 				{
 					if(fork() == 0)
@@ -156,6 +311,10 @@ int main(int ac, char **av, char **envp)
 			tmp_cmd = tmp_cmd->next;
 			i++;
 		}
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
 		close_pipes(len_cmd - 1, pipes);
 		waiting_childs(len_list_cmd(commads_in_out));
 	}
@@ -169,13 +328,19 @@ handell redirections
 ( echo "$USER $PATH" > file | grep usr << limiter | wc -l < file >> out_file )
 [ < file wc -l < file > out_file ]
 
+handel heredoc ~solved~
 
-handlle appande
-handel heredoc
+split functions ~
 
-waitpid
-exit status
-signals 
+handle waitpid ~
+
+error handling, in all functions  ~ 
+
+handle exit status ~
+
+handle signals ~
+
+garbeg collectore ~
 
 */
 

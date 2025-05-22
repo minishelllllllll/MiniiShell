@@ -13,6 +13,10 @@
 #include "libft.h"
 #include <errno.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+
+
+int	heredoce(char *limiter);
 
 //execution
 
@@ -87,5 +91,12 @@ void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
 
 // error msgs. 
 void	null_error(char *str);
+
+
+
+// parssing testtt
+t_cmd *process_heredocs(t_cmd *cmd_list);
+int count_args(char **args);
+void remove_args(char **args, int start, int count);
 
 #endif
