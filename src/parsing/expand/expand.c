@@ -92,19 +92,19 @@ char *check_env_general(char *str,t_env *envp)
 }
 
 
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data,t_cmd *cmd)
+t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
 {
     if(!head)
         return(NULL);
-    if(head->type != PIPE_LINE)
-    {
-        cmd = ft_send(data,cmd);
-        head = head->next;
-        data->l = 0;
-        data->in_file = -1;   // Initialize file descriptors
-        data->out_file = -1;
-        return(head);
-    }
+    // if(head->type != PIPE_LINE)
+    // {
+    //     cmd = ft_send(data,cmd);
+    //     head = head->next;
+    //     data->l = 0;
+    //     data->in_file = -1;   // Initialize file descriptors
+    //     data->out_file = -1;
+    //     return(head);
+    // }
     if(head->type == REDIR_IN)
     {
         if(ft_redirect_in(head,data) == 2)

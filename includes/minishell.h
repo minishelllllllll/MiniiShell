@@ -65,9 +65,8 @@ void free_node(t_env *newnode);
 
 //parsing
 
-int  checker(t_parsing *head,t_env *envp, int len,t_cmd *cmd);
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data,t_cmd *cmd);
+int  checker(t_parsing *head,t_env *envp, int len);
+t_parsing *expand(t_parsing *head,t_env *envp,t_var *data);
 int ft_double(char *str, t_env *envp, t_var *data);
-int check_expand(t_parsing *head,t_env *envp,int len,t_cmd *cmd);
-t_cmd *ft_send(t_var *data, t_cmd *cmd);
+int check_expand(t_parsing *head,t_env *envp,int len);
 #endif
