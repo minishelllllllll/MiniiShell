@@ -67,11 +67,6 @@ int syntax_err(t_parsing *head)
     int len;
     
     len = 0;
-    if(checke_quote_len(head) == 1)
-    {
-        printf("heree\n");
-        return (0);
-    }
     while (head)
     {
         head = check_pipe(head,len);  

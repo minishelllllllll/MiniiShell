@@ -42,7 +42,8 @@ t_parsing *lexer(char *str)
             while(str[i])
             {
                 c = check_token(str,i);
-                if(c != WHITE_SPACE && c != ESCAPE && c != ENV && c != WORD && (c == DQUOTE || c == QUOTE))
+                if(c == PIPE_LINE ||c == DQUOTE || c == QUOTE || c == REDIR_OUT
+                    || c == REDIR_IN || c == HERE_DOC || c == DREDIR_OUT)
                     break;
                 tmp[j] = str[i];
                 i++;
@@ -55,10 +56,10 @@ t_parsing *lexer(char *str)
                 break;
             continue;
         }
-        if(c == DREDIR_IN || c == HERE_DOC)
+        if(c == DREDIR_OUT || c == HERE_DOC)
         {
             t = c;
-            if(c == DREDIR_IN)
+            if(c == DREDIR_OUT)
                 c = '>';
             else
                 c = '<';

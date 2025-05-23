@@ -19,17 +19,17 @@ t_parsing *check_redirection(t_parsing *head)
     curr = head;
     if(!curr)
         return(NULL);
-    if(curr->type == REDIR_IN || curr->type == REDIR_OUT
-        || curr->type == HERE_DOC || curr->type == DREDIR_IN)
+    if(curr->type == REDIR_OUT || curr->type == REDIR_IN
+        || curr->type == HERE_DOC || curr->type == DREDIR_OUT)
     {
-        if(curr->next && curr && curr->type == REDIR_OUT && curr->next->type == REDIR_IN)
+        if(curr->next && curr && curr->type == REDIR_IN && curr->next->type == REDIR_OUT)
             return(error_print("syntax error near unexpected token `newline'\n"),NULL);
         curr = curr->next;
         if(!curr)
             return(error_print("syntax error near unexpected token `newline'\n"),NULL);
         if(curr->type == '|')
             return(error_print("syntax error near unexpected token `|'\n"),NULL);
-        if(curr->type == REDIR_OUT|| curr->type == HERE_DOC || curr->type == DREDIR_IN)
+        if(curr->type == REDIR_IN|| curr->type == HERE_DOC || curr->type == DREDIR_OUT)
         {
             error_print("syntax error near unexpected token `");
             ft_putstr_fd(curr->content,2);
@@ -41,8 +41,8 @@ t_parsing *check_redirection(t_parsing *head)
         curr = curr->next;
         if(!curr)
             return(error_print("syntax error near unexpected token `newline'\n"),NULL);
-        else if(curr->type == REDIR_IN || curr->type == REDIR_OUT
-            || curr->type == HERE_DOC || curr->type == DREDIR_IN)
+        else if(curr->type == REDIR_OUT || curr->type == REDIR_IN
+            || curr->type == HERE_DOC || curr->type == DREDIR_OUT)
             return(error_print("syntax error near unexpected token `newline'\n"),NULL);
     }
     return(head);

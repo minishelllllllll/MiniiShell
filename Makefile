@@ -4,6 +4,7 @@ CFLAGS = -Werror -Wextra -Wall -fsanitize=address -g
 
 SRC := 	$(wildcard src/parsing/*.c) \
 		$(wildcard src/parsing/redirect_out/*.c) \
+		$(wildcard src/parsing/heredoc/*.c) \
 		$(wildcard src/parsing/expand/*.c) \
 		$(wildcard src/execution/*.c) \
 	 	$(wildcard src/execution/builtins/*.c) \

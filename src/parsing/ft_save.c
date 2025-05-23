@@ -30,7 +30,7 @@ t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state
     data->type = type;
     data->next = NULL;
     if (!head)
-        return data;
+        return (data);
     current = head;
     while (current->next)
         current = current->next;

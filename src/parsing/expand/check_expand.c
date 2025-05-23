@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-int check_expand(t_parsing *head,t_env *envp,int len)
+int check_expand(t_parsing *head,t_env *envp,int len,t_cmd *cmd)
 {
     t_var data;
 
@@ -20,15 +20,10 @@ int check_expand(t_parsing *head,t_env *envp,int len)
     data.l = 0;
     while(head)
     {
-        while(head)
-        {
-            head = expand(head,envp,&data);
-            if(!head)
-                return(2);
-            head = head->next;
-        }
+        head = expand(head,envp,&data,cmd);
         if(!head)
             return(2);
+        
         head = head->next;
     }
     return(0);

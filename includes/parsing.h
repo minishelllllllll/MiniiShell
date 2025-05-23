@@ -13,12 +13,12 @@ enum e_type
    DQUOTE = '\"',
    ESCAPE = '\\',
    ENV = '$',
-   EXIT_STATUS,
    PIPE_LINE = '|',
-   REDIR_IN = '>',
-   REDIR_OUT = '<',
+   REDIR_OUT = '>',
+   REDIR_IN = '<',
    HERE_DOC = -2,
-   DREDIR_IN = -3
+   DREDIR_OUT = -3,
+   EXIT_STATUS
 };
 
 enum e_state
@@ -72,7 +72,8 @@ t_parsing *skip_space(t_parsing *head);
 t_parsing *check_redirection(t_parsing *curr);
 int is_allowed(char c);
 int syntax_err(t_parsing *head);
-int ft_redirect_in(t_parsing *head);
+int ft_redirect_out(t_parsing *head,t_var *data);
+int ft_redirect_in(t_parsing *head , t_var *data);
+int    heredoce(char *limiter,t_var *data);
 int	ft_check_env(const char *s1, const char *s2, size_t n);
-int checke_quote_len(t_parsing *head);
 #endif

@@ -92,23 +92,49 @@ char *check_env_general(char *str,t_env *envp)
 }
 
 
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
+t_parsing *expand(t_parsing *head,t_env *envp,t_var *data,t_cmd *cmd)
 {
     if(!head)
         return(NULL);
-    // if(head->type != PIPE_LINE)
-    //     return(ft_send(t_var *data))
-    if(head->type == DREDIR_IN || head->type == REDIR_IN) 
+    if(head->type != PIPE_LINE)
     {
-        if(ft_redirect_in(head) == 2)
+        cmd = ft_send(data,cmd);
+        head = head->next;
+        data->l = 0;
+        data->in_file = -1;   // Initialize file descriptors
+        data->out_file = -1;
+        return(head);
+    }
+    if(head->type == REDIR_IN)
+    {
+        if(ft_redirect_in(head,data) == 2)
             return(NULL);
+        head = head->next;
+        return(head);
+    }
+    if(head->type == HERE_DOC)
+    {
+        head = head->next;
+        if(!head)
+            return(NULL);
+        if(heredoce(head->content,data) == 2)
+            return(NULL);
+        head = head->next;
+        return(head);
+    }
+    if(head->type == DREDIR_OUT || head->type == REDIR_OUT) 
+    {
+        if(ft_redirect_out(head,data) == 2)
+            return(NULL);
+        printf("file %d\n",data->out_file);
         head = head->next;
         return(head);
     } 
     if(head->state == 3)
     {
-        head->content = check_env_general(head->content,envp);
-        printf("%s\n",head->content);
+        data->s[data->l] = check_env_general(head->content,envp);
+        printf("%s\n",data->s[data->l]);
+        data->l++;
         if(!head->content)
             return(NULL);
         return(head);

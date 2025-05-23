@@ -29,14 +29,13 @@ int skip_space_str(char *str)
 }
 int main(int ac, char **av, char **envp)
 {
-
-	(void)ac;
-	(void)av;
-    (void)envp;
+    (void)ac;
 	t_env *envs;
     char *str;
     t_parsing *head;
+    t_cmd *cmd;
 
+    cmd = NULL;
 	envs = list_envs(envp);
     while(1)
     {
@@ -54,9 +53,26 @@ int main(int ac, char **av, char **envp)
         }
         if(skip_space_str(str) == 1)
             add_history(str);
-        checker(head,envs,ft_strlen(str));
-            // return(0);        
+        checker(head,envs,ft_strlen(str),cmd);
+            // return(0);
+        // t_cmd *curr_cmd = cmd;
+        // int i = 0;
+        // while(curr_cmd)
+        // {
+        //     i = 0;
+        //     while(curr_cmd->full_cmd)
+        //         printf("%s",curr_cmd->full_cmd[i++]);
+        //     printf("\n infile =>> %d\n",curr_cmd->in_file);
+        //     printf("outfile =>> %d\n",curr_cmd->out_file);
+        //     printf("========================\n");
+        //     curr_cmd = curr_cmd->next;
+        // }
+        
+            
     }
     ft_export(av, &envs);
 	free_list(&envs);
 }
+
+//garbege collector 
+//norrrrmineeetee waaaa
