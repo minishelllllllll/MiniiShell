@@ -1,20 +1,76 @@
 #include "../../../includes/minishell.h"
 
 
-void execute_commands(t_env *envs, t_cmd *tmp_cmd)
+int	len_list_cmd(t_cmd *temp)
+{
+	int i;
+
+	i = 0;
+	while (temp)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return(i);
+}
+
+void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 {
 	char *exec_path;
 	char **env_arr;
 
 	exec_path = executable_path(tmp_cmd->full_cmd[0], envs);
 	env_arr = envs_to_array(envs);
-	//print_2d_array(env_arr);
 	if(execve(exec_path, tmp_cmd->full_cmd, env_arr) == -1)
 	{
 		printf("minishell: command not found: %s\n", tmp_cmd->full_cmd[0]);
 		exit(EXIT_FAILURE);
 	}
 }
+
+void  execute_commands(t_env **envs, t_cmd *tmp_cmd)
+{
+	int **pipes;
+	
+	int (i), (len_cmd);
+	// count len of linked list (how many command)
+	len_cmd = len_list_cmd(tmp_cmd);
+	// allocate 2d array of pipes
+	pipes = piping(len_cmd - 1);
+	i = 0;
+	while (i < len_cmd)
+	{
+		if(len_cmd == 1) // if one command
+		{
+			duplication(i, len_cmd, pipes, tmp_cmd);
+			if(ft_builtin(tmp_cmd->full_cmd, envs) == -1) // is a builtin don't fork , execute it in parent.
+			{
+				if(fork() == 0)
+				{
+					close_pipes(len_cmd - 1, pipes);
+					ft_execve((*envs), tmp_cmd);
+				}
+			}
+		}
+		else if(fork() == 0)
+		{
+			// diplucate stdout with pipe[1] if we are in the first command(i, len_cmd, pipes)
+			duplication(i, len_cmd, pipes, tmp_cmd);
+			// execute the commands
+			if (ft_builtin(tmp_cmd->full_cmd, envs) == 0)
+			{
+				close_pipes(len_cmd - 1, pipes); // important!
+				exit(0); // child must exit after finishing the builtin
+			}
+			else
+				ft_execve((*envs), tmp_cmd);
+		}
+		tmp_cmd = tmp_cmd->next;
+		i++;
+	}
+	close_pipes(len_cmd - 1, pipes);
+}
+
 
 void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
 {

@@ -85,9 +85,10 @@ void	close_pipes(int nbr_pipes, int **ends);
 void	waiting_childs(int childs);
 
 // executore
-void execute_commands(t_env *envs, t_cmd *tmp_cmd);
+void ft_execve(t_env *envs, t_cmd *tmp_cmd);
 void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
-
+int	len_list_cmd(t_cmd *temp);
+void  execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error msgs. 
 void	null_error(char *str);
