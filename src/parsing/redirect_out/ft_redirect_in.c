@@ -40,7 +40,5 @@ int ft_redirect_out(t_parsing *head,t_var *data)
         return(2);
     }
     data->out_file = fd;
-    write(fd, "hello", 5);
-    // close(fd);
     return(0);
 }

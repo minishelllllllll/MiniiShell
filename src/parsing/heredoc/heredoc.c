@@ -15,22 +15,19 @@
 int    heredoce(char *limiter,t_var *data)
 {
     char *line;
-    int fds[2]; // array of two elements 
+    int fds[2];
 
     if(pipe(fds) == -1)
         return(2);
     while (1)
     {
         line = readline("> ");
-        //printf("%s\n", line);
-        if(!line || ft_strcmp(line, limiter) == 0) // if null(read line detect the end of file ) or limiter
+        if(!line || ft_strcmp(line, limiter) == 0)
             break;
         write(fds[1], line, ft_strlen(line));
         write(fds[1], "\n", 1);
         free(line);
     }
-    //free(line);
-    // close(fds[1]); // close the write end
     data->in_file = fds[0];
-    return(0); // return the read end
+    return(0);
 }

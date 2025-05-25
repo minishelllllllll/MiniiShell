@@ -12,18 +12,23 @@
 
 #include "../../../includes/minishell.h"
 
-int check_expand(t_parsing *head,t_env *envp,int len)
+int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
 {
     t_var data;
 
     data.s = malloc(len * sizeof(char *));
     data.l = 0;
+    data.in_file = -1;
+    data.out_file = -1;
     while(head)
     {
-        head = expand(head,envp,&data);
+        head = expand(head,envp,&data,cmd);
         if(!head)
+        {
             return(2);
+        }
         head = head->next;
     }
+    *cmd = ft_send(&data,*cmd);
     return(0);
 }

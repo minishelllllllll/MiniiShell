@@ -92,19 +92,18 @@ char *check_env_general(char *str,t_env *envp)
 }
 
 
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
+t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
 {
     if(!head)
         return(NULL);
-    // if(head->type != PIPE_LINE)
-    // {
-    //     cmd = ft_send(data,cmd);
-    //     head = head->next;
-    //     data->l = 0;
-    //     data->in_file = -1;   // Initialize file descriptors
-    //     data->out_file = -1;
-    //     return(head);
-    // }
+    if(head->type == PIPE_LINE)
+    {
+        *cmd = ft_send(data,*cmd);
+        data->l = 0;
+        data->in_file = -1;
+        data->out_file = -1;
+        return(head);
+    }
     if(head->type == REDIR_IN)
     {
         if(ft_redirect_in(head,data) == 2)
@@ -126,14 +125,12 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
     {
         if(ft_redirect_out(head,data) == 2)
             return(NULL);
-        printf("file %d\n",data->out_file);
         head = head->next;
         return(head);
     } 
     if(head->state == 3)
     {
         data->s[data->l] = check_env_general(head->content,envp);
-        printf("%s\n",data->s[data->l]);
         data->l++;
         if(!head->content)
             return(NULL);
@@ -142,7 +139,6 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
     if(head->state == 0 && head->type != DQUOTE && head->type != QUOTE)
     {
         data->s[data->l] = ft_strdup(head->content);
-        printf("%s\n",data->s[data->l]);
         data->l++;
         return(head);
     }
@@ -158,7 +154,6 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data)
     if(head->state == 1)
     {
         data->s[data->l] = ft_strdup(head->content);
-        printf("%s\n",data->s[data->l]);
         data->l++;
         return(head);
     }
