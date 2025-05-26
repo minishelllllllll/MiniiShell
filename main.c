@@ -40,16 +40,16 @@ int main(int ac, char **av, char **envp)
     {
         str = readline("minishellox :");
         head = lexer(str);
-        t_parsing *curr = head;
+        // t_parsing *curr = head;
         
-        while(curr)
-        {
-            // printf("content ==> %s\n",curr->content);
-            // printf("state ==> %d\n",curr->state);
-            // printf("type ==> %c\n",curr->type);
-            // printf("****************************\n");
-            curr = curr->next;
-        }
+        // while(curr)
+        // {
+        //     // printf("content ==> %s\n",curr->content);
+        //     // printf("state ==> %d\n",curr->state);
+        //     // printf("type ==> %c\n",curr->type);
+        //     // printf("****************************\n");
+        //     curr = curr->next;
+        // }
         if(skip_space_str(str) == 1)
             add_history(str);
         if(checker(head,envs,ft_strlen(str),&cmd) == 2)

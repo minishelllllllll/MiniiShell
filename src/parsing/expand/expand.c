@@ -100,8 +100,8 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
     {
         *cmd = ft_send(data,*cmd);
         data->l = 0;
-        data->in_file = -1;
-        data->out_file = -1;
+        data->in_file = 0;
+        data->out_file = 1;
         return(head);
     }
     if(head->type == REDIR_IN)

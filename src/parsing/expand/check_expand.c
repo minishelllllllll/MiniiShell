@@ -16,10 +16,16 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
 {
     t_var data;
 
-    data.s = malloc(len * sizeof(char *));
+    if(len == 0)
+    {
+        data.s = malloc(1 * sizeof(char *));
+        data.s[0] = NULL;
+    }
+    else
+        data.s = malloc(len * sizeof(char *));   
     data.l = 0;
-    data.in_file = -1;
-    data.out_file = -1;
+    data.in_file = 0;
+    data.out_file = 1;
     while(head)
     {
         head = expand(head,envp,&data,cmd);

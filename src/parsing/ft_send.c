@@ -20,7 +20,7 @@ t_cmd *ft_send(t_var *data, t_cmd *head)
     
     cmd = malloc(sizeof(t_cmd));
     i = 0;
-    if (!cmd)
+    if (!cmd || data->s[i] == NULL)
         return (NULL);
     
     cmd->full_cmd = malloc((data->l + 1) * sizeof(char *));
