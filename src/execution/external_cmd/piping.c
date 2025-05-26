@@ -28,14 +28,19 @@ void	close_pipes(int nbr_pipes, int **ends)
 	}
 }
 
-void	waiting_childs(int childs)
+void	 waiting_childs(t_pids *process_ids)
 {
 	int	i;
+	int status;
 
 	i = 0;
-	while (i < childs)
+	while (i < process_ids->nbr_childs)
 	{
-		wait(NULL);
+		waitpid(process_ids->pids[i], &status, 0);
+		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
+			G_EXIT_STATUS = WEXITSTATUS(status);
+		
+		// printf("waitpid -> %d /\\ exit status -> %d\n", process_ids->pids[i], G_EXIT_STATUS);
 		i++;
 	}
 }

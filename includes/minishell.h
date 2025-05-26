@@ -16,6 +16,9 @@
 #include <fcntl.h>
 
 
+extern int G_EXIT_STATUS;
+
+
 int	heredoce(char *limiter);
 
 //execution
@@ -37,6 +40,13 @@ typedef struct env
     int     flag_exported;
     struct env *next;
 }  t_env;
+
+// struct pids
+typedef struct process_id
+{
+	int *pids;
+	int nbr_childs;
+} t_pids;
 
 
 int	ft_strcmp(char *s1, char *s2);
@@ -82,13 +92,13 @@ int     len_list(t_env *temp);
 //pipes
 int		**piping(int lines);
 void	close_pipes(int nbr_pipes, int **ends);
-void	waiting_childs(int childs);
+void	waiting_childs(t_pids *pids);
 
 // executore
-void ft_execve(t_env *envs, t_cmd *tmp_cmd);
-void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
-int	len_list_cmd(t_cmd *temp);
-void  execute_commands(t_env **envs, t_cmd *tmp_cmd);
+void	ft_execve(t_env *envs, t_cmd *tmp_cmd);
+void	duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
+int		len_list_cmd(t_cmd *temp);
+t_pids		*execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error msgs. 
 void	null_error(char *str);

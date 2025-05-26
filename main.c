@@ -12,6 +12,10 @@
 
 #include "includes/minishell.h"
 
+//tells the compiler: "This variable exists, but it's defined elsewhere."
+int     G_EXIT_STATUS = 0; //actually allocates and initializes the variable.
+
+
 t_cmd *create_cmd_list(char *rdl)
 {
     char **commands;
@@ -244,12 +248,12 @@ int main(int ac, char **av, char **envp)
 	t_cmd  *tmp_cmd;
 
     int *arr_in_out;
+    t_pids *pids; // struct of process ids 
 
 	envs = list_envs(envp);
 
 	while (1)
 	{
-
         arr_in_out = saved_stdin_out();
 
 		rdl = readline(shell_prompt(envs));
@@ -267,15 +271,24 @@ int main(int ac, char **av, char **envp)
 		tmp_cmd = commads_in_out;
 
         //execution
-		execute_commands(&envs, tmp_cmd);
+		pids = execute_commands(&envs, tmp_cmd);
+
+        /*printf("nbr childs executed-> %d\n", pids->nbr_childs);
+        int i = 0 ;
+        while (i < pids->nbr_childs) // pids[0] == nmbre of childs forked
+        {
+            printf("main -> %d\n", pids->pids[i]);
+            i++;
+        } */
 
         restore_stdin_out(arr_in_out);
-
-        waiting_childs(len_list_cmd(commads_in_out));
+        waiting_childs(pids);
 	}
 	return (0);
 }
 
+
+///// not print the number of child ~~~~~~~~~~~~~ 
 
 /*
 handell redirections
@@ -287,13 +300,37 @@ handel heredoc ~solved~
 
 split functions ~done~
 
-handle waitpid ~
+handle waitpid ~solved~
+-> store the pids ~ done ~
+
+void	wait_procces(int pid)
+{
+	int	st;
+	int	i;
+
+	i = 0;
+	waitpid(pid, &st, 0);
+	if (WEXITSTATUS(st))
+		MY_EXIT_STATUS = WEXITSTATUS(st);
+	if (WIFSIGNALED(st))
+	{
+		MY_EXIT_STATUS = st + 128;
+		if (MY_EXIT_STATUS == 131)
+			printf("Quit: 3\n");
+	}
+	while (wait(&st) > i)
+		i = 0;
+}
+
 
 error handling, in all functions  ~ 
 
-handle exit status ~
+handle exit status  ~
+
+exit (argument + overflow)~
 
 handle signals ~
+
 
 garbeg collectore ~
 
@@ -301,3 +338,21 @@ garbeg collectore ~
 
 
 // dprintf(STDERR_FILENO ,"pipesss[%d][0] = %d\n", i - 1, pipes[i - 1][0]);
+
+
+/*
+mouja
+
+qudam l 3alam nfarko ash ghade ndiru ila bghina 
+nmshiw moura lmouj u n3ishu 7yatna li tmnina 
+ydi ela qalbek wast ri7 u lmouj li  ghaydina
+kifash u 3lash mayhemsh ghade nmshiw bjujna f nafs sfina
+
+refrain
+
+kanshifek mn b3id
+qalbi baqi m3ak ma3raft ashnu ndir 
+ga3ma nsit kulshi , baqi f 3aqli , khalik jnbi ,
+kanmout u n3ish m3ak gha nkhali kulshi u nbqa ghir ana wyak 
+
+*/
