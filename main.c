@@ -294,10 +294,39 @@ int main(int ac, char **av, char **envp)
 
 
 /*
-handell redirections ~solved~
-
+///////////////////////
+unset $(env | cut -d= -f1)
 ( echo "$USER $PATH" > file | grep usr << limiter | wc -l < file >> out_file )
 [ < file wc -l < file > out_file ]
+//////////////////////
+
+handle exit status  ~
+    --> export should return with failure when not a valid name , but at same time should continue execution when i have many args.
+    (export 2A=1 B=1 --> error msg + exit fail 1 + B exported)
+    /////////////////////////////////////////
+    >> export 2A=22 B=22
+    bash: export: `2A=22': not a valid identifier
+    >> echo $?
+    1
+    >> export | grep B
+    declare -x B="22"
+    ///////////////////////////////////////// solution (edit GLOBAL status)
+
+    --> env with args (correct or not) should return error ?
+    (cases when env used with command ) fix it eith childs also
+
+    --> check exit status of childs proccess is return it correctly 
+
+
+
+exit (argument + overflow) ~
+
+handle signals ~
+
+garbeg collectore ~
+
+
+handell redirections ~solved~
 
 handel heredoc ~solved~
 
@@ -305,40 +334,30 @@ split functions ~done~
 
 handle waitpid ~solved~
 -> store the pids ~ done ~
-    void	wait_procces(int pid)
-    {
-        int	st;
-        int	i;
+void	wait_procces(int pid)
+{
+    int	st;
+    int	i;
 
-        i = 0;
-        waitpid(pid, &st, 0);
-        if (WEXITSTATUS(st))
-            MY_EXIT_STATUS = WEXITSTATUS(st);
-        if (WIFSIGNALED(st))
-        {
-            MY_EXIT_STATUS = st + 128;
-            if (MY_EXIT_STATUS == 131)
-                printf("Quit: 3\n");
-        }
-        while (wait(&st) > i)
-            i = 0;
+    i = 0;
+    waitpid(pid, &st, 0);
+    if (WEXITSTATUS(st))
+        MY_EXIT_STATUS = WEXITSTATUS(st);
+    if (WIFSIGNALED(st))
+    {
+        MY_EXIT_STATUS = st + 128;
+        if (MY_EXIT_STATUS == 131)
+            printf("Quit: 3\n");
     }
+    while (wait(&st) > i)
+        i = 0;
+}
 
 error handling, in all functions  ~ 
 --> handle close behave -> remove close from duplication ~done~ .
---> check envs in builtins .
+--> check envs in builtins . ~done~
 -----> env should not work with envs==NULL ~solved~
 -----> perror or strerror instead of printf ~solved~
 
-handle exit status  ~
-
-exit (argument + overflow)~
-
-handle signals ~
-
-unset $(env | cut -d= -f1)
-
-
-garbeg collectore ~
 
 */

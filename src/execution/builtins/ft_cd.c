@@ -65,7 +65,6 @@ int ft_cd(char **args, t_env *envs)
 	{
 		perror("minishell");
 		return(EXIT_FAILURE);
-
 	}
 	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
 	set_env("PWD", pwd, envs);

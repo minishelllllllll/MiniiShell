@@ -25,7 +25,7 @@ void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(tmp_cmd->full_cmd[0], 2);
 		ft_putstr_fd("\n", 2);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 }
 
@@ -78,9 +78,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 
 	//exit status
 
-	// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "$?") == 0)
-	// 	printf("my exit status = %d\n", G_EXIT_STATUS);
-	// else { ////// test exit status
+	if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "$?") == 0)
+		printf("my exit status = %d\n", G_EXIT_STATUS);
+	else { ////// test exit status
 
 
 	while (i < len_cmd) // while to execute commands
@@ -121,7 +121,8 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 		tmp_cmd = tmp_cmd->next;
 		i++;
 	}
-// } ///// test exit status 
+
+} ///// test exit status 
 
 	close_pipes(len_cmd - 1, pipes);
 

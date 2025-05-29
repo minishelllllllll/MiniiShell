@@ -2,7 +2,6 @@
 
 int ft_env(t_env *envs)
 {
-
 	while (envs)
 	{
 		if(envs->flag_exported == 1)
@@ -13,6 +12,7 @@ int ft_env(t_env *envs)
 		}
 		envs = envs->next;
 	}
-
 	return(EXIT_SUCCESS);
 }
+
+// return 127 when we have other command , aslo check that in child process.
