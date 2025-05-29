@@ -10,7 +10,7 @@ int ft_pwd(t_env *envs)
 		working_d = get_env_value("PWD", envs);
 		if(!working_d)
 		{
-			printf("%s\n", strerror(errno));
+			perror("minishell");
 			return(EXIT_FAILURE);
 		}
 	}

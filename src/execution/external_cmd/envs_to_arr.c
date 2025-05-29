@@ -39,6 +39,8 @@ char **envs_to_array(t_env *envs)
 	int		i;
 
 	i = len_list(envs);
+	if(!envs)
+		return(NULL);
 	env_arr = (char **)malloc(sizeof(char *) * (i + 1));
 	if(!env_arr)	
 		return(NULL);

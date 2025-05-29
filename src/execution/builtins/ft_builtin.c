@@ -26,12 +26,3 @@ int ft_builtin(char **command, t_env **envs)
 		return(-1);
 }
 
-int is_parent_builtin(char *cmd)
-{
-	if(ft_strcmp(cmd, "cd") == 0 ||
-		ft_strcmp(cmd, "export") == 0 ||
-		ft_strcmp(cmd, "unset") == 0 ||
-		ft_strcmp(cmd, "exit") == 0 )
-		return(0);
-	return(-1);
-}

@@ -17,6 +17,8 @@ int set_env(char *var, char *new_value, t_env *envs)
 
 char *get_env_value(char *key, t_env *envs)
 {
+	if(!key || !envs)
+		return (NULL);
     while (envs)
     {
         if (ft_strcmp(key, envs->key) == 0)
@@ -37,10 +39,9 @@ int ft_cd(char **args, t_env *envs)
 		i++;
 	if(i > 2)
 	{
-		printf("cd: too many arguments\n");
+		ft_putstr_fd("cd: too many arguments\n", 2);
 		return(EXIT_FAILURE); // exit status == 1
 	}
-	
 	oldpwd = get_env_value("PWD", envs);
 	if(oldpwd == NULL) 
 		oldpwd = getcwd(NULL, 0);
@@ -49,7 +50,7 @@ int ft_cd(char **args, t_env *envs)
 	{
 		if(chdir(get_env_value("HOME", envs)) == -1)
 		{
-			printf("cd: HOME not set\n");
+			ft_putstr_fd("cd: HOME not set\n", 2);
 			return(EXIT_FAILURE);	
 		}
 	}
@@ -62,7 +63,7 @@ int ft_cd(char **args, t_env *envs)
 	pwd = getcwd(NULL, 0);
 	if(pwd == NULL) // when getcwd failed
 	{
-		printf("%s\n",strerror(errno));
+		perror("minishell");
 		return(EXIT_FAILURE);
 
 	}
@@ -71,3 +72,4 @@ int ft_cd(char **args, t_env *envs)
 
 	return(EXIT_SUCCESS);
 }
+

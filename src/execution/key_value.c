@@ -1,6 +1,5 @@
 #include "../../includes/minishell.h"
 
-
 t_env *new_env(char *env)
 {
 	t_env	*newnode;
@@ -60,12 +59,14 @@ t_env  *list_envs(char **envp)
 
 	head_env = 0;
 	i = 0;
+	if(!envp)
+		return(NULL);
 	while (envp[i])
 	{
 		newnode = new_env(envp[i]);
 		if(!newnode)
 		{
-			free_list(&head_env);
+			free_list(&head_env); //garbeg coll
 			return(NULL);
 		}
 		add_env(newnode, &head_env);

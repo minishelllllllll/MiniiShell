@@ -66,7 +66,11 @@ int ft_export(char **args, t_env **envs)
 	while (args[i])
 	{
 		if(valide_name(args[i]) == -1)
-			printf("export: `%s': not a valid identifier\n", args[i]); //errorr handling exit 1 (modify exit status with failure)
+		{
+			ft_putstr_fd("minishell: export: '", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+		}
 		else
 		{
 			newnode = new_env(args[i]);
@@ -79,14 +83,6 @@ int ft_export(char **args, t_env **envs)
 	}
 	if(i == 1) // no args exist. 
 		print_env_list(*envs);
-
 	return(EXIT_SUCCESS);
 }
-
-
-/*
-*ZZZ
-*export ZZZ=12
-*ZZZ=12
-*/
 

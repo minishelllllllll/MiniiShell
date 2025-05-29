@@ -22,8 +22,10 @@ void	close_pipes(int nbr_pipes, int **ends)
 	i = 0;
 	while (i < nbr_pipes)
 	{
-		close(ends[i][0]);
-		close(ends[i][1]);
+		if(close(ends[i][0]) != 0 )
+			perror("close ");
+		if(close(ends[i][1]) != 0)
+			perror("close ");
 		i++;
 	}
 }
