@@ -39,28 +39,30 @@ int main(int ac, char **av, char **envp)
     while(1)
     {
         str = readline("minishellox :");
+        if(!str)
+            continue;
         head = lexer(str);
-        // t_parsing *curr = head;
+        t_parsing *curr = head;
         
-        // while(curr)
-        // {
-        //     // printf("content ==> %s\n",curr->content);
-        //     // printf("state ==> %d\n",curr->state);
-        //     // printf("type ==> %c\n",curr->type);
-        //     // printf("****************************\n");
-        //     curr = curr->next;
-        // }
+        while(curr)
+        {
+            printf("content ==> %s\n",curr->content);
+            printf("state ==> %d\n",curr->state);
+            printf("type ==> %c\n",curr->type);
+            printf("****************************\n");
+            curr = curr->next;
+        }
         if(skip_space_str(str) == 1)
             add_history(str);
         if(checker(head,envs,ft_strlen(str),&cmd) == 2)
-            return(0); 
+            continue;
         t_cmd *c = cmd;
         int i =0 ;
         while(c)
         {
             i = 0;
             while(c->full_cmd[i])
-                printf("full cmd => %s\n",c->full_cmd[i++]);
+                printf("full cmd => %s \n",c->full_cmd[i++]);
             printf("in_file => %d\n",c->in_file);
             printf("out_file => %d\n",c->out_file);
             printf("****************************\n");
@@ -73,3 +75,7 @@ int main(int ac, char **av, char **envp)
 
 //garbege collector 
 //norrrrmineeetee waaaa
+
+// export v="ls -la"
+// $v should execute
+// $v hi should seperate

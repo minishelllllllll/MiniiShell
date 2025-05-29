@@ -32,18 +32,38 @@ char *ft_charjoin(char *str,char c)
     s[i]= 0;
     return(s);
 }
-char *check_env_general(char *str,t_env *envp)
+int check_odd(char *str)
 {
     int i;
+
+    i = 0;
+    while(str[i])
+    {
+        if(str[i] != '$')
+            break;
+        i++;
+    }
+    return(i);
+}
+char *check_env_general(char *str, t_env *envp, t_var *data)
+{
+    int i;
+    int len;
     t_env *tmp;
+    (void)data;
     char *s;
 
     i = 0;
+    len = 0;
     tmp = envp;
     s = malloc(2);
     s[0] = 0;
+    len = check_odd(str);
+    if(len % 2 == 1)
+        len--;
     while(str[i] && str[i] == ' ')
         i++;
+    i += len;
     while(str[i])
     {
         if(str[i] == '$')
@@ -130,7 +150,7 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
     } 
     if(head->state == 3)
     {
-        data->s[data->l] = check_env_general(head->content,envp);
+        data->s[data->l] = check_env_general(head->content,envp,data);
         data->l++;
         if(!head->content)
             return(NULL);
