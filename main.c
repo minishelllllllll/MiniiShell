@@ -14,7 +14,7 @@
 
 int main(int ac, char **av, char **envp)
 {
-
+    //testttt
 	(void)ac;
 	(void)av;
 	t_env *envs;
