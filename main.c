@@ -12,6 +12,7 @@
 
 #include "includes/minishell.h"
 #include <readline/history.h>
+
 // ""$USER"
 // check this case
 int skip_space_str(char *str)

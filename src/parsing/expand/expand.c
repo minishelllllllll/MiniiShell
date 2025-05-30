@@ -167,7 +167,6 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
         if(ft_double(head->content,envp,data) == 2)
             return(NULL);
         data->s[data->l] = ft_strdup(data->s1);
-        printf("%s\n",data->s[data->l]);
         data->l++;
         return(head);
     }
