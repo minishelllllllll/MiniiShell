@@ -1,6 +1,8 @@
+
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
+#include "parsing.h"
 #include <limits.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -103,12 +105,11 @@ void	ft_perror(char *err_msg, int len_cmd, int **pipes);
 
 
 
-// parssing
+// parssing testtt
 int  checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd);
 t_parsing *expand(t_parsing *head,t_env *envp,t_var *data,t_cmd **cmd);
 int ft_double(char *str, t_env *envp, t_var *data);
 int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
 t_cmd *ft_send(t_var *data, t_cmd *head);
-
 
 #endif

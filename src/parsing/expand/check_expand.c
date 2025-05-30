@@ -24,8 +24,8 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
     else
         data.s = malloc(len * sizeof(char *));   
     data.l = 0;
-    data.in_file = 0;
-    data.out_file = 1;
+    data.in_file = -1;
+    data.out_file = -1;
     while(head)
     {
         head = expand(head,envp,&data,cmd);

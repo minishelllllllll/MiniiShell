@@ -6,13 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/30 13:01:51 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:33:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 #include <readline/history.h>
 
+int G_EXIT_STATUS;
 // ""$USER"
 // check this case
 int skip_space_str(char *str)
@@ -74,7 +75,6 @@ int main(int ac, char **av, char **envp)
     t_parsing *head;
     t_cmd *cmd = NULL;
 
-	t_env   *envs;
 	t_cmd   *commads_in_out;
 
     int     *arr_in_out;
@@ -84,6 +84,7 @@ int main(int ac, char **av, char **envp)
 
 	while (1)
 	{
+        // commads_in_out = NULL;
         arr_in_out = saved_stdin_out();  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
@@ -100,13 +101,24 @@ int main(int ac, char **av, char **envp)
 		}
 		// parssing command by pipe and space
         head = lexer(rdl);
-		if(skip_space_str(str) == 1)
-            add_history(str);
-        if(checker(head,envs,ft_strlen(str),&cmd) == 2)
+		if(skip_space_str(rdl) == 1)
+            add_history(rdl);
+        if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
         commads_in_out = cmd;
         
         //execution
+        // int i = 0;
+        // while(commads_in_out)
+        // {
+        //     while(commads_in_out->full_cmd)
+        //         printf("full cmd %s\n",commads_in_out->full_cmd[i++]);
+        //     printf("in_file %d\n",commads_in_out->in_file);
+        //     printf("out_file %d\n",commads_in_out->out_file);
+        //     printf("/n");
+        //     commads_in_out = commads_in_out->next;
+        // }
+        // commads_in_out = cmd;
         if(commads_in_out)
         {
             pids = execute_commands(&envs, commads_in_out);
@@ -120,51 +132,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-
-int main(int ac, char **av, char **envp)
-{
-    (void)ac;
-	t_env *envs;
-    char *str;
-    t_parsing *head;
-    t_cmd *cmd = NULL;
-
-	envs = list_envs(envp);
-    while(1)
-    {
-        str = readline("minishellox :");
-        if(!str)
-            continue;
-        head = lexer(str);
-        t_parsing *curr = head;
-        
-        while(curr)
-        {
-            printf("content ==> %s\n",curr->content);
-            printf("state ==> %d\n",curr->state);
-            printf("type ==> %c\n",curr->type);
-            printf("****************************\n");
-            curr = curr->next;
-        }
-        if(skip_space_str(str) == 1)
-            add_history(str);
-        if(checker(head,envs,ft_strlen(str),&cmd) == 2)
-            continue;
-        t_cmd *c = cmd;
-        int i =0 ;
-        while(c)
-        {
-            i = 0;
-            while(c->full_cmd[i])
-                printf("full cmd => %s \n",c->full_cmd[i++]);
-            printf("in_file => %d\n",c->in_file);
-            printf("out_file => %d\n",c->out_file);
-            printf("****************************\n");
-            c = c->next;
-        }       
-    }
-    return (0);
-}
 
 /*
 ///////////////////////
