@@ -14,8 +14,7 @@
 #include <readline/history.h>
 
 int G_EXIT_STATUS;
-// ""$USER"
-// check this case
+
 int skip_space_str(char *str)
 {
     int i;
