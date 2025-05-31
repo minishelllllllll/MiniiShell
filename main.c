@@ -70,20 +70,18 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	char    *rdl;
-	t_env *envs;
-    t_parsing *head;
-    t_cmd *cmd = NULL;
-
-	t_cmd   *commads_in_out;
-
     int     *arr_in_out;
-    t_pids  *pids; // struct of process ids 
+
+    t_cmd   *cmd;
+	t_cmd   *commads_in_out;
+	t_env   *envs;
+    // t_pids  *pids; // struct of process ids 
+    t_parsing   *head;
+
 
 	envs = list_envs(envp); //save
-
 	while (1)
 	{
-        // commads_in_out = NULL;
         arr_in_out = saved_stdin_out();  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
@@ -92,40 +90,48 @@ int main(int ac, char **av, char **envp)
             return 0;
         }
 
+        // prompt
 		rdl = readline(shell_prompt(envs));
 		if (!rdl)  // Handle Ctrl+D (EOF)
 		{
 			printf("exit\n"); // notify message
 			break;
 		}
-		// parssing command by pipe and space
+
+		// parssing 
         head = lexer(rdl);
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
+       
         commads_in_out = cmd;
         
         //execution
-        // int i = 0;
-        // while(commads_in_out)
-        // {
-        //     while(commads_in_out->full_cmd)
-        //         printf("full cmd %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file %d\n",commads_in_out->in_file);
-        //     printf("out_file %d\n",commads_in_out->out_file);
-        //     printf("/n");
-        //     commads_in_out = commads_in_out->next;
-        // }
-        // commads_in_out = cmd;
-        if(commads_in_out)
+        int i = 0;
+        while(commads_in_out)
         {
-            pids = execute_commands(&envs, commads_in_out);
-            if(!pids)
-                return(0);       
-            restore_stdin_out(arr_in_out);
-            waiting_childs(pids);
+            printf("hey\n");
+            while(commads_in_out->full_cmd[i])
+            {
+                printf("full cmd %s\n",commads_in_out->full_cmd[i]);
+                i++;
+            }
+            printf("in_file %d\n",commads_in_out->in_file);
+            printf("out_file %d\n",commads_in_out->out_file);
+            printf("/n");
+            commads_in_out = commads_in_out->next;
         }
+        // commads_in_out = cmd;
+
+        // if(commads_in_out)
+        // {
+        //     pids = execute_commands(&envs, commads_in_out);
+        //     if(!pids)
+        //         return(0);       
+        //     restore_stdin_out(arr_in_out);
+        //     waiting_childs(pids);
+        // }
 
 	}
 	return (0);
