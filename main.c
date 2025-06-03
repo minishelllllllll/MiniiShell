@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/06/03 02:57:59 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/03 03:07:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int main(int ac, char **av, char **envp)
             continue;
         commads_in_out = cmd;
                 
-        //execution
+        
         int i = 0;
         while(commads_in_out)
         {
@@ -130,6 +130,7 @@ int main(int ac, char **av, char **envp)
             commads_in_out = commads_in_out->next;
         }
 
+        //execution
         commads_in_out = cmd;
         if(commads_in_out)
         {
