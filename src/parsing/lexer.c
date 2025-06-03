@@ -42,7 +42,7 @@ t_parsing *lexer(char *str)
             while(str[i])
             {
                 c = check_token(str,i);
-                if(c == PIPE_LINE ||c == DQUOTE || c == QUOTE || c == REDIR_OUT
+                if(c == WHITE_SPACE || c == PIPE_LINE ||c == DQUOTE || c == QUOTE || c == REDIR_OUT
                     || c == REDIR_IN || c == HERE_DOC || c == DREDIR_OUT)
                     break;
                 tmp[j] = str[i];

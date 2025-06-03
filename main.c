@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/30 13:33:51 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/03 02:57:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 #include <readline/history.h>
 
-int G_EXIT_STATUS;
+int G_EXIT_STATUS = 0;
 // ""$USER"
 // check this case
 int skip_space_str(char *str)
@@ -101,24 +101,36 @@ int main(int ac, char **av, char **envp)
 		}
 		// parssing command by pipe and space
         head = lexer(rdl);
+        // t_parsing *h = head;
+        // while(h)
+        // {
+        //     printf("content => %s\n",h->content);
+        //     printf("state => %d\n",h->state);
+        //     printf("type => %d\n",h->type);
+        //     printf("********************\n");
+        //     h = h->next;
+        // }
+        
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
         commads_in_out = cmd;
-        
+                
         //execution
-        // int i = 0;
-        // while(commads_in_out)
-        // {
-        //     while(commads_in_out->full_cmd)
-        //         printf("full cmd %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file %d\n",commads_in_out->in_file);
-        //     printf("out_file %d\n",commads_in_out->out_file);
-        //     printf("/n");
-        //     commads_in_out = commads_in_out->next;
-        // }
-        // commads_in_out = cmd;
+        int i = 0;
+        while(commads_in_out)
+        {
+            i = 0;
+            while(commads_in_out->full_cmd[i])
+                printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
+            printf("in_file ==> %d\n",commads_in_out->in_file);
+            printf("out_file ==> %d\n",commads_in_out->out_file);
+            printf("********************\n");
+            commads_in_out = commads_in_out->next;
+        }
+
+        commads_in_out = cmd;
         if(commads_in_out)
         {
             pids = execute_commands(&envs, commads_in_out);
@@ -127,7 +139,7 @@ int main(int ac, char **av, char **envp)
             restore_stdin_out(arr_in_out);
             waiting_childs(pids);
         }
-
+        cmd = NULL;
 	}
 	return (0);
 }

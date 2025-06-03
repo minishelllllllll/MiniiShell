@@ -29,9 +29,9 @@ t_parsing *check_redirection(t_parsing *head)
             return(error_print("syntax error near unexpected token `newline'\n"),NULL);
         if(curr->type == '|')
             return(error_print("syntax error near unexpected token `|'\n"),NULL);
-        if(curr->type == REDIR_IN|| curr->type == HERE_DOC || curr->type == DREDIR_OUT)
+        if(curr->type == REDIR_IN || curr->type == HERE_DOC || curr->type == REDIR_OUT)
         {
-            error_print("syntax error near unexpected token `");
+            error_print("syntax error near unexpected token hello`");
             ft_putstr_fd(curr->content,2);
             return(ft_putstr_fd("'\n",2),NULL);
         }
