@@ -72,13 +72,13 @@ int main(int ac, char **av, char **envp)
 	char    *rdl;
     int     *arr_in_out;
 
-    t_cmd   *cmd;
+    t_cmd   *cmd = NULL;
 	t_cmd   *commads_in_out;
 	t_env   *envs;
-    // t_pids  *pids; // struct of process ids 
+    t_pids  *pids; // struct of process ids 
     t_parsing   *head;
 
-
+    // (void)envp;
 	envs = list_envs(envp); //save
 	while (1)
 	{
@@ -104,35 +104,39 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-       
         commads_in_out = cmd;
         
         //execution
-        int i = 0;
-        while(commads_in_out)
-        {
-            printf("hey\n");
-            while(commads_in_out->full_cmd[i])
-            {
-                printf("full cmd %s\n",commads_in_out->full_cmd[i]);
-                i++;
-            }
-            printf("in_file %d\n",commads_in_out->in_file);
-            printf("out_file %d\n",commads_in_out->out_file);
-            printf("/n");
-            commads_in_out = commads_in_out->next;
-        }
+        // int i = 0;
+        // while(commads_in_out)
+        // {
+        //     printf("hey\n");
+        //     while(commads_in_out->full_cmd[i])
+        //     {
+        //         printf("full cmd %s\n",commads_in_out->full_cmd[i]);
+        //         i++;
+        //     }
+        //     printf("##############\n");
+        //     printf("in_file %d\n",commads_in_out->in_file);
+        //     printf("out_file %d\n",commads_in_out->out_file);
+        //     printf("/n");
+        //     commads_in_out = commads_in_out->next;
+        // }
         // commads_in_out = cmd;
 
-        // if(commads_in_out)
-        // {
-        //     pids = execute_commands(&envs, commads_in_out);
-        //     if(!pids)
-        //         return(0);       
-        //     restore_stdin_out(arr_in_out);
-        //     waiting_childs(pids);
-        // }
+		// dprintf(STDERR_FILENO, "in_file %d\n",commads_in_out->in_file);
+		// dprintf(STDERR_FILENO, "out_file %d\n",commads_in_out->out_file);
 
+        if(commads_in_out)
+        {
+            pids = execute_commands(&envs, commads_in_out);
+            if(!pids)
+                return(0);       
+            restore_stdin_out(arr_in_out);
+            waiting_childs(pids);
+        }
+    
+        cmd = NULL;
 	}
 	return (0);
 }
@@ -146,39 +150,41 @@ unset $(env | cut -d= -f1)
 //////////////////////
 
 handle exit status  ~
-    --> export should return with failure when not a valid name , but at same time should continue execution when i have many args.
-    (export 2A=1 B=1 --> error msg + exit fail 1 + B exported)
-    /////////////////////////////////////////
-    >> export 2A=22 B=22
-    bash: export: `2A=22': not a valid identifier
-    >> echo $?
-    1
-    >> export | grep B
-    declare -x B="22"
-    ///////////////////////////////////////// solution (edit GLOBAL status)
-
-    --> env with args (correct or not) should return error ?
-    (cases when env used with command ) fix it eith childs also
 
     --> check exit status of childs proccess is return it correctly 
 
+///////////////////////////////////////////////////////////////////////////
+//////////////////////////////testing////////////////////////////////////// 
+// $> ABC=hola
+// echo \n hola
+// echo $ (if $ only you should send it )
+// echo $?
+// echo $?$ 
+// echo $:$= | cat -e
+// echo \$HOME >>>>>> \$HOME
+// echo my shit terminal is [$TERM4]
+// echo $9HOME >>>>>>>> HOME
+// echo $TERM$HOME
+// echo $hola*
+// testttt -----------> 134
+// 
+// a=ls -la >> $a
+// export a="ls -la"
+// 
+// 
+// 
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
-
-exit (argument + overflow) ~
+exit (argument + overflow) ~ 50% done 
 
 handle signals ~
 
 garbeg collectore ~
 
 
-handell redirections ~solved~
-
-handel heredoc ~solved~
-
-split functions ~done~
-
 handle waitpid ~solved~
--> store the pids ~ done ~
+
 void	wait_procces(int pid)
 {
     int	st;
@@ -198,11 +204,9 @@ void	wait_procces(int pid)
         i = 0;
 }
 
-error handling, in all functions  ~ 
---> handle close behave -> remove close from duplication ~done~ .
---> check envs in builtins . ~done~
------> env should not work with envs==NULL ~solved~
------> perror or strerror instead of printf ~solved~
-
-
 */
+
+//cat << "EOF"
+
+// /home/hind/Desktop/MiniiShell $> echo << eof j
+

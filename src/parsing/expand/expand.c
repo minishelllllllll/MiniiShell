@@ -138,7 +138,6 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
             return(NULL);
         if(heredoce(head->content,data) == 2)
             return(NULL);
-        head = head->next;
         return(head);
     }
     if(head->type == DREDIR_OUT || head->type == REDIR_OUT) 

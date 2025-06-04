@@ -28,6 +28,7 @@ int    heredoce(char *limiter,t_var *data)
         write(fds[1], "\n", 1);
         free(line);
     }
+    close(fds[1]);
     data->in_file = fds[0];
     return(0);
 }

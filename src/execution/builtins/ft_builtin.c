@@ -9,7 +9,7 @@ int ft_builtin(char **command, t_env **envs)
 		return(ft_pwd((*envs)), 0);
 
 	else if(ft_strcmp(command[0], "env") == 0)
-		return(ft_env((*envs)), 0);
+		return(ft_env(command ,(*envs)), 0);
 
 	else if(ft_strcmp(command[0], "exit") == 0)
 		return(ft_exit(command), 0);

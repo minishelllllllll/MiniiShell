@@ -1,7 +1,19 @@
 #include "../../../includes/minishell.h"
 
-int ft_env(t_env *envs)
+int ft_env(char **args, t_env *envs)
 {
+	if(!envs)
+	{
+		ft_putstr_fd("minishell: env: No such file or directory\n", 2);
+		return(G_EXIT_STATUS =  127);
+	}
+	if(args[1] != NULL)
+	{
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return(G_EXIT_STATUS = 127);
+	}
 	while (envs)
 	{
 		if(envs->flag_exported == 1)
@@ -12,7 +24,6 @@ int ft_env(t_env *envs)
 		}
 		envs = envs->next;
 	}
-	return(EXIT_SUCCESS);
+	return(G_EXIT_STATUS = 1);
 }
 
-// return 127 when we have other command , aslo check that in child process.

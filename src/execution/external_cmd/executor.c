@@ -22,9 +22,8 @@ void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 	env_arr = envs_to_array(envs);// no need to check NULL, because can run execve without envs
 	if(execve(exec_path, tmp_cmd->full_cmd, env_arr) == -1)
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putstr_fd(tmp_cmd->full_cmd[0], 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
 }
@@ -78,9 +77,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 
 	//exit status
 
-	if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "$?") == 0)
-		printf("my exit status = %d\n", G_EXIT_STATUS);
-	else { ////// test exit status
+	// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
+	// 	printf("my exit status = %d\n", G_EXIT_STATUS);
+	// else { ////// test exit status
 
 
 	while (i < len_cmd) // while to execute commands
@@ -88,9 +87,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 		if(len_cmd == 1) // if one command
 		{
 			duplication(i, len_cmd, pipes, tmp_cmd);
-			if(is_parent_builtin(tmp_cmd->full_cmd[0]) == 0) // without env , should run in child. 
-				ft_builtin(tmp_cmd->full_cmd, envs); // is a builtin don't fork , execute it in parent.
-			else
+			// if(is_parent_builtin(tmp_cmd->full_cmd[0]) == 0) // without env , should run in child. 
+			// 	ft_builtin(tmp_cmd->full_cmd, envs);
+			if(ft_builtin(tmp_cmd->full_cmd, envs) == -1)  // is a builtin don't fork , execute it in parent.
 			{
 				process_ids->pids[process_ids->nbr_childs] = fork();
 				if(process_ids->pids[process_ids->nbr_childs] == 0)
@@ -122,7 +121,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 		i++;
 	}
 
-} ///// test exit status 
+// } ///// test exit status 
 
 	close_pipes(len_cmd - 1, pipes);
 
