@@ -196,7 +196,7 @@ void remove_args(char **args, int start, int count)
         args[i] = args[start + count + (i - start)];
         i++;
     }
-    
+
     // Null-terminate
     args[i] = NULL;
 }
