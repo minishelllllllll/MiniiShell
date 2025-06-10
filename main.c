@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/06/10 22:49:33 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/10 22:54:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include <readline/history.h>
 
 int G_EXIT_STATUS = 0;
-// ""$USER"
-// check this case
+
 int skip_space_str(char *str)
 {
     int i;
@@ -71,20 +70,18 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	char    *rdl;
-	t_env *envs;
-    t_parsing *head;
-    t_cmd *cmd = NULL;
-
-	t_cmd   *commads_in_out;
-
     int     *arr_in_out;
+
+    t_cmd   *cmd = NULL;
+	t_cmd   *commads_in_out;
+	t_env   *envs;
     t_pids  *pids; // struct of process ids 
+    t_parsing   *head;
 
+    // (void)envp;
 	envs = list_envs(envp); //save
-
 	while (1)
 	{
-        // commads_in_out = NULL;
         arr_in_out = saved_stdin_out();  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
@@ -93,13 +90,15 @@ int main(int ac, char **av, char **envp)
             return 0;
         }
 
+        // prompt
 		rdl = readline(shell_prompt(envs));
 		if (!rdl)  // Handle Ctrl+D (EOF)
 		{
 			printf("exit\n"); // notify message
 			break;
 		}
-		// parssing command by pipe and space
+
+		// parssing 
         head = lexer(rdl);
         t_parsing *h = head;
         while(h)
@@ -162,6 +161,28 @@ int main(int ac, char **av, char **envp)
 
 //     --> check exit status of childs proccess is return it correctly 
 
+///////////////////////////////////////////////////////////////////////////
+//////////////////////////////testing////////////////////////////////////// 
+// $> ABC=hola
+// echo \n hola
+// echo $ (if $ only you should send it )
+// echo $?
+// echo $?$ 
+// echo $:$= | cat -e
+// echo \$HOME >>>>>> \$HOME
+// echo my shit terminal is [$TERM4]
+// echo $9HOME >>>>>>>> HOME
+// echo $TERM$HOME
+// echo $hola*
+// testttt -----------> 134
+// 
+// a=ls -la >> $a
+// export a="ls -la"
+// 
+// 
+// 
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 
 // exit (argument + overflow) ~

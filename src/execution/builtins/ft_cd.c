@@ -35,28 +35,37 @@ int ft_cd(char **args, t_env *envs)
 	int i;
 
 	i = 0;
-	while (args[i] != NULL)
+	while (args[i] != NULL) // len args
 		i++;
 	if(i > 2)
 	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return(EXIT_FAILURE); // exit status == 1
 	}
-	oldpwd = get_env_value("PWD", envs);
-	if(oldpwd == NULL) 
+	oldpwd = get_env_value("PWD", envs); // we do both methods , when getcwd can't retrive the pwd form kernel
+	if(oldpwd == NULL)
 		oldpwd = getcwd(NULL, 0);
 
-	if(args[1] == NULL || ft_strcmp(args[1], "~") == 0)
+	if(args[1] == NULL || ft_strcmp(args[1], "~") == 0) // go to HOME.
 	{
 		if(chdir(get_env_value("HOME", envs)) == -1)
 		{
-			ft_putstr_fd("cd: HOME not set\n", 2);
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 			return(EXIT_FAILURE);	
 		}
 	}
-	else if(chdir(args[1]) == -1) // when chdir failed
+	else if(strcmp(args[1], "-") == 0) // go to OLDPWD
 	{
-		printf("%s\n",strerror(errno));
+		if(chdir(get_env_value("OLDPWD", envs)) == -1)
+		{
+			ft_putstr_fd("minishill: cd: OLDPWD not set\n", 2);
+			return(EXIT_FAILURE);	
+		}
+	}
+	else if(chdir(args[1]) == -1) // go to path , relative or absoulot 
+	{
+		// printf("%s\n",strerror(errno));
+		perror("minishell");
 		return(EXIT_FAILURE);
 	}
 
@@ -71,4 +80,3 @@ int ft_cd(char **args, t_env *envs)
 
 	return(EXIT_SUCCESS);
 }
-

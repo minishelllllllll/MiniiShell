@@ -70,7 +70,7 @@ int ft_export(char **args, t_env **envs)
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(args[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
-			// return(EXIT_FAILURE);
+			G_EXIT_STATUS = 1;
 		}
 		else
 		{
