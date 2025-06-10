@@ -112,6 +112,23 @@ char *check_env_general(char *str, t_env *envp, t_var *data)
     return(s);
 }
 
+int ft_split_expand(char **s1, t_var *data)
+{
+    int i;
+    i = 0;
+
+    if(!s1)
+        return(0);
+    while(s1[i])
+    {
+        data->s[data->l] = ft_strdup(s1[i]);
+        if(!data->s[data->l])
+            return(0);
+        data->l++;
+        i++;
+    }
+    return(1);
+}
 
 t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
 {
@@ -121,6 +138,8 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     char *quoted_content;
     t_parsing *content_token;
     t_parsing *quote_start;
+    char **split_expand;
+    
 
     if(!head)
         return(NULL);
@@ -162,8 +181,10 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     
     if(head->state == 3)
     {
-        data->s[data->l] = check_env_general(head->content, envp, data);
-        data->l++;
+        // data->s[data->l] = check_env_general(head->content, envp, data);
+        split_expand = ft_split(check_env_general(head->content, envp, data),' ');
+        if(ft_split_expand(split_expand,data) == 0)
+            return(NULL);
         if(!head->content)
             return(NULL);
         return(head);
