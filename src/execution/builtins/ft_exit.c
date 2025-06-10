@@ -28,12 +28,12 @@ void ft_exit(char **args)
 		i++;
 	if(i == 1) // if just exit
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		exit(G_EXIT_STATUS);
 	}
 	else if(is_valid_exit(args[1]) == -1) // if not numeric 
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
@@ -41,14 +41,14 @@ void ft_exit(char **args)
 	}
 	else if(i > 2) // if many args
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		G_EXIT_STATUS = 1;
 		return;
 	}
 	else // exit with the valid number
 	{
-		printf("exit\n");
+		ft_putstr_fd("exit\n", 2);
 		G_EXIT_STATUS = ft_atoi(args[1]);
 		exit(G_EXIT_STATUS);
 	}

@@ -51,7 +51,7 @@ int ft_cd(char **args, t_env *envs)
 		if(chdir(get_env_value("HOME", envs)) == -1)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			return(EXIT_FAILURE);	
+			return(EXIT_FAILURE);
 		}
 	}
 	else if(strcmp(args[1], "-") == 0) // go to OLDPWD
@@ -61,6 +61,7 @@ int ft_cd(char **args, t_env *envs)
 			ft_putstr_fd("minishill: cd: OLDPWD not set\n", 2);
 			return(EXIT_FAILURE);	
 		}
+		printf("%s\n", get_env_value("OLDPWD", envs));
 	}
 	else if(chdir(args[1]) == -1) // go to path , relative or absoulot 
 	{

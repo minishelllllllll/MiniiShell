@@ -156,12 +156,10 @@ handle exit status  ~
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
 // $> ABC=hola
-// echo \n hola
 // echo $ (if $ only you should send it )
 // echo $?
 // echo $?$ 
 // echo $:$= | cat -e
-// echo \$HOME >>>>>> \$HOME
 // echo my shit terminal is [$TERM4]
 // echo $9HOME >>>>>>>> HOME
 // echo $TERM$HOME
@@ -170,11 +168,27 @@ handle exit status  ~
 // 
 // a=ls -la >> $a
 // export a="ls -la"
+// export $DONTEXIST >>>>> behave like export only.
+// export "" >>>> bash: export: `': not a valid identifier
+// export HOLA=$HOME >>>> shouldn't give a error
+// export HOLA=bon(jour >>>>>>> should give -> bash: syntax error near unexpected token `('
 // 
+// cd $PWD >>>>> should go to home.
+// cd $HOME >>>>> and home not set should give error >>>>>>> minishell: cd: HOME not set.
+// error handling when rm -rf a, when we are already in a/b/c
+// handle if remove pwd , and getcwd failed.
+// thats correct ->>> cd srcs >>>> minishell: No such file or directory
+// pwd -p >>>>> if should handle that >>>>>>>>>> bash: pwd: -p: invalid option
+// cd "". 
 // 
 // 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
+
+export a="ls -la"
+
+when she dont find a envs shouldnt return empty string.
+what she do when find cd "" ?
 
 exit (argument + overflow) ~ 50% done 
 
