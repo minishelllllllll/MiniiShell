@@ -69,6 +69,7 @@ char *check_env_general(char *str, t_env *envp, t_var *data)
         if(str[i] == '$')
         {
             i++;
+            tmp = envp;
             while(tmp)
             {
                 if(ft_strncmp(tmp->key,str + i,ft_strlen(tmp->key)) == 0)
@@ -112,45 +113,57 @@ char *check_env_general(char *str, t_env *envp, t_var *data)
 }
 
 
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
+t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
 {
+    char *result;
+    char quote_type;
+    char *combined;
+    char *quoted_content;
+    t_parsing *content_token;
+    t_parsing *quote_start;
+
     if(!head)
         return(NULL);
+    
     if(head->type == PIPE_LINE)
     {
-        *cmd = ft_send(data,*cmd);
+        *cmd = ft_send(data, *cmd);
         data->l = 0;
         data->in_file = -1;
         data->out_file = -1;
         return(head);
     }
+    
     if(head->type == REDIR_IN)
     {
-        if(ft_redirect_in(head,data) == 2)
+        if(ft_redirect_in(head, data) == 2)
             return(NULL);
         head = head->next;
         return(head);
     }
+    
     if(head->type == HERE_DOC)
     {
         head = head->next;
         if(!head)
             return(NULL);
-        if(heredoce(head->content,data) == 2)
+        if(heredoce(head->content, data) == 2)
             return(NULL);
         head = head->next;
         return(head);
     }
+    
     if(head->type == DREDIR_OUT || head->type == REDIR_OUT) 
     {
-        if(ft_redirect_out(head,data) == 2)
+        if(ft_redirect_out(head, data) == 2)
             return(NULL);
         head = head->next;
         return(head);
-    } 
+    }
+    
     if(head->state == 3)
     {
-        data->s[data->l] = check_env_general(head->content,envp,data);
+        data->s[data->l] = check_env_general(head->content, envp, data);
         data->l++;
         if(!head->content)
             return(NULL);
@@ -158,23 +171,235 @@ t_parsing *expand(t_parsing *head,t_env *envp,t_var *data, t_cmd **cmd )
     }
     if(head->state == 0 && head->type != DQUOTE && head->type != QUOTE)
     {
-        data->s[data->l] = ft_strdup(head->content);
-        data->l++;
+        if(head->next && (head->next->type == DQUOTE || head->next->type == QUOTE))
+        {
+            quote_type = head->next->type;
+            content_token = head->next->next;
+            if(content_token && content_token->next && content_token->next->type == quote_type)
+            {
+                if(quote_type == DQUOTE)
+                    quoted_content = check_env_general(content_token->content, envp, data);
+                else
+                    quoted_content = ft_strdup(content_token->content);
+                combined = ft_strjoin(head->content, quoted_content);
+                free(quoted_content);
+                data->s[data->l] = combined;
+                data->l++;
+                return(content_token->next);
+            }
+        }
+        if(strchr(head->content, '=') != NULL && head->next)
+        {
+            quote_start = head->next;
+            if(quote_start && (quote_start->type == DQUOTE || quote_start->type == QUOTE))
+            {
+                quote_type = quote_start->type;
+                content_token = quote_start->next;
+                
+                if(content_token && content_token->next && content_token->next->type == quote_type)
+                {
+                    if(quote_type == DQUOTE)
+                        combined = ft_strjoin(head->content, check_env_general(content_token->content, envp, data));
+                    else
+                        combined = ft_strjoin(head->content, content_token->content);
+                    data->s[data->l] = combined;
+                    data->l++;
+                    return(content_token->next);
+                }
+            }
+        }
+        
+        if(head->type != WHITE_SPACE)
+        {
+            data->s[data->l] = ft_strdup(head->content);
+            data->l++;
+        }
         return(head);
     }
+    if(head->type == DQUOTE || head->type == QUOTE)
+    {
+        head->next = head->next;
+        if(head->next && head->next->next && head->next->next->type == head->type)
+        {
+            if(head->type == DQUOTE)
+                result = check_env_general(head->next->content, envp, data);
+            else
+                result = ft_strdup(head->next->content);
+            data->s[data->l] = result;
+            data->l++;
+            return(head->next->next);
+        }
+        if(head->next && head->next->type == head->type)
+        {
+            data->s[data->l] = ft_strdup("");
+            data->l++;
+            return(head->next);
+        }
+    }
+    
     if(head->state == 2)
     {
-        if(ft_double(head->content,envp,data) == 2)
+        if(ft_double(head->content, envp, data) == 2)
             return(NULL);
         data->s[data->l] = ft_strdup(data->s1);
         data->l++;
         return(head);
     }
+    
     if(head->state == 1)
     {
         data->s[data->l] = ft_strdup(head->content);
         data->l++;
         return(head);
     }
+    
     return(head);
 }
+
+
+// t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
+// {
+//     char *result;
+//     char *combined;
+//     char *quoted_content;
+
+//     if(!head)
+//         return(NULL);
+    
+//     if(head->type == PIPE_LINE)
+//     {
+//         *cmd = ft_send(data, *cmd);
+//         data->l = 0;
+//         data->in_file = -1;
+//         data->out_file = -1;
+//         return(head);
+//     }
+    
+//     if(head->type == REDIR_IN)
+//     {
+//         if(ft_redirect_in(head, data) == 2)
+//             return(NULL);
+//         head = head->next;
+//         return(head);
+//     }
+    
+//     if(head->type == HERE_DOC)
+//     {
+//         head = head->next;
+//         if(!head)
+//             return(NULL);
+//         if(heredoce(head->content, data) == 2)
+//             return(NULL);
+//         head = head->next;
+//         return(head);
+//     }
+    
+//     if(head->type == DREDIR_OUT || head->type == REDIR_OUT) 
+//     {
+//         if(ft_redirect_out(head, data) == 2)
+//             return(NULL);
+//         head = head->next;
+//         return(head);
+//     }
+    
+//     if(head->state == 3)
+//     {
+//         data->s[data->l] = check_env_general(head->content, envp, data);
+//         printf("str 1 => %s\n",data->s[data->l]);
+//         data->l++;
+//         if(!head->content)
+//             return(NULL);
+//         return(head);
+//     }
+//     if(head->state == 0 && head->type != DQUOTE && head->type != QUOTE)
+//     {
+//         if(head->next && (head->next->type == DQUOTE || head->next->type == QUOTE))
+//         {
+//             head = head->next;
+//             if(head && head->next && head->next->type == head->type)
+//             {
+//                 if(head->type == DQUOTE)
+//                     quoted_content = check_env_general(head->content, envp, data);
+//                 else
+//                     quoted_content = ft_strdup(head->content);
+//                 combined = ft_strjoin(head->content, quoted_content);
+//                 free(quoted_content);
+//                 data->s[data->l] = combined;
+//         printf("str 2 => %s\n",data->s[data->l]);
+//                 data->l++;
+//                 return(head);
+//             }
+//         }
+//         if(strchr(head->content, '=') != NULL && head->next)
+//         {
+//             if(head->next && (head->next->type == DQUOTE || head->next->type == QUOTE))
+//             {
+//                 head = head->next;
+//                 if(head && head->next && head->next->type == head->type)
+//                 {
+//                     if(head->type == DQUOTE)
+//                         combined = ft_strjoin(head->content, check_env_general(head->content, envp, data));
+//                     else
+//                         combined = ft_strjoin(head->content, head->content);
+//                     data->s[data->l] = combined;
+//         printf("str 3 => %s\n",data->s[data->l]);
+//                     data->l++;
+//                     return(head);
+//                 }
+//             }
+//         }
+        
+//         if(head->type != WHITE_SPACE && head->type != DQUOTE && head->type != QUOTE)
+//         {
+//             data->s[data->l] = ft_strdup(head->content);
+//             printf("str 4 => %s\n",data->s[data->l]);
+//             data->l++;
+//         }
+//         return(head);
+//     }
+//     if(head->type == DQUOTE || head->type == QUOTE)
+//     {
+//         if(head->next && head->next->next && head->next->next->type == head->type)
+//         {
+//             if(head->type == DQUOTE)
+//                 result = check_env_general(head->next->content, envp, data);
+//             else
+//                 result = ft_strdup(head->next->content);
+//             data->s[data->l] = result;
+//         printf("str 5 => %s\n",data->s[data->l]);
+
+//             data->l++;
+//             return(head->next->next);
+//         }
+//         if(head->next && head->next->type == head->type)
+//         {
+//             data->s[data->l] = ft_strdup("");
+//         printf("str 6 => %s\n",data->s[data->l]);
+
+//             data->l++;
+//             return(head->next);
+//         }
+//     }
+    
+//     if(head->state == 2)
+//     {
+//         if(ft_double(head->content, envp, data) == 2)
+//             return(NULL);
+//         data->s[data->l] = ft_strdup(data->s1);
+//         printf("str 7 => %s\n",data->s[data->l]);
+
+//         data->l++;
+//         return(head);
+//     }
+    
+//     if(head->state == 1)
+//     {
+//         data->s[data->l] = ft_strdup(head->content);
+//         printf("str 8 => %s\n",data->s[data->l]);
+
+//         data->l++;
+//         return(head);
+//     }
+    
+//     return(head);
+// }
