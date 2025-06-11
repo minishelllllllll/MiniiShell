@@ -22,6 +22,8 @@ enum e_type check_token(char *str, int i)
         return(WHITE_SPACE);
     else if(str[i] == '\n')
         return(NEW_LINE);
+    else if(str[i] == '\0')
+        return(NULL_TER);
     else if(str[i] == '\\')
         return(ESCAPE);
     else if(str[i] == '$')

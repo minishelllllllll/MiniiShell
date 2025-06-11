@@ -9,6 +9,7 @@ enum e_type
    WORD = -1,
    WHITE_SPACE = ' ',
    NEW_LINE = '\n',
+   NULL_TER = '\0',
    QUOTE = '\'',
    DQUOTE = '\"',
    ESCAPE = '\\',
