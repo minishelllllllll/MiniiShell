@@ -16,6 +16,7 @@ int    heredoce(char *limiter,t_var *data, int flag)
 {
     char *line;
     int fds[2];
+    (void)flag;
     // t_parsing   *heredoce_lexer;
 
     if(pipe(fds) == -1)
