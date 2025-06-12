@@ -1,6 +1,7 @@
 #ifndef PARSING_H
 #define PARSING_H
 
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -74,7 +75,7 @@ int is_allowed(char c);
 int syntax_err(t_parsing *head);
 int ft_redirect_out(t_parsing *head,t_var *data);
 int ft_redirect_in(t_parsing *head , t_var *data);
-int    heredoce(char *limiter,t_var *data);
+int    heredoce(char *limiter,t_var *data, int flag);
 int	ft_check_env(const char *s1, const char *s2, size_t n);
 char *ft_charjoin(char *str,char c);
 int check_odd(char *str);

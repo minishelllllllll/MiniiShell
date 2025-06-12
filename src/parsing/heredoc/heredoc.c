@@ -12,16 +12,19 @@
 
 #include "../../../includes/minishell.h"
 
-int    heredoce(char *limiter,t_var *data)
+int    heredoce(char *limiter,t_var *data, int flag)
 {
     char *line;
     int fds[2];
+    // t_parsing   *heredoce_lexer;
 
     if(pipe(fds) == -1)
         return(2);
     while (1)
     {
         line = readline("> ");
+        // heredoce_lexer = lexer(line);
+
         if(!line || ft_strcmp(line, limiter) == 0)
             break;
         write(fds[1], line, ft_strlen(line));

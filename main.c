@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/06/10 23:17:05 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/12 15:54:17 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,15 @@ int main(int ac, char **av, char **envp)
 
 		// parssing 
         head = lexer(rdl);
-        // t_parsing *h = head;
-        // while(h)
-        // {
-        //     printf("content => %s\n",h->content);
-        //     printf("state => %d\n",h->state);
-        //     printf("type => %d\n",h->type);
-        //     printf("********************\n");
-        //     h = h->next;
-        // }
+        t_parsing *h = head;
+        while(h)
+        {
+            printf("content => %s\n",h->content);
+            printf("state => %d\n",h->state);
+            printf("type => %d\n",h->type);
+            printf("********************\n");
+            h = h->next;
+        }
         
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);

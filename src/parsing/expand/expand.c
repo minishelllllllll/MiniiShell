@@ -132,14 +132,13 @@ int ft_split_expand(char **s1, t_var *data)
 
 t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
 {
-    char *result;
     char quote_type;
     char *combined;
     char *quoted_content;
     t_parsing *content_token;
     t_parsing *quote_start;
     char **split_expand;
-    
+    int flag;
 
     if(!head)
         return(NULL);
@@ -163,10 +162,19 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     
     if(head->type == HERE_DOC)
     {
+        flag = 0;
         head = head->next;
         if(!head)
             return(NULL);
-        if(heredoce(head->content, data) == 2)
+        if(head->type == WHITE_SPACE)
+            head = head->next;
+        if(head->type == DQUOTE)
+            flag = 2;
+        else if(head->type == QUOTE)
+            flag = 1;
+        else
+            flag = 0;
+        if(heredoce(head->content, data ,flag) == 2)
             return(NULL);
         return(head);
     }
@@ -208,7 +216,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
                 return(content_token->next);
             }
         }
-        if(strchr(head->content, '=') != NULL && head->next)
+        if(ft_strchr(head->content, '=') != NULL && head->next)
         {
             quote_start = head->next;
             if(quote_start && (quote_start->type == DQUOTE || quote_start->type == QUOTE))
@@ -235,26 +243,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             data->l++;
         }
         return(head);
-    }
-    if(head->type == DQUOTE || head->type == QUOTE)
-    {
-        head->next = head->next;
-        if(head->next && head->next->next && head->next->next->type == head->type)
-        {
-            if(head->type == DQUOTE)
-                result = check_env_general(head->next->content, envp, data);
-            else
-                result = ft_strdup(head->next->content);
-            data->s[data->l] = result;
-            data->l++;
-            return(head->next->next);
-        }
-        if(head->next && head->next->type == head->type)
-        {
-            data->s[data->l] = ft_strdup("");
-            data->l++;
-            return(head->next);
-        }
     }
     
     if(head->state == 2)
