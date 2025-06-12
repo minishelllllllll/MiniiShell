@@ -2,7 +2,7 @@
 
 int ft_env(char **args, t_env *envs)
 {
-	if(!envs)
+	if(!envs || !get_env_value("PATH", envs))
 	{
 		ft_putstr_fd("minishell: env: No such file or directory\n", 2);
 		return(G_EXIT_STATUS =  127);
