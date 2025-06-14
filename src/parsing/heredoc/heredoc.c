@@ -106,6 +106,7 @@ int heredoce(char *limiter, t_var *data, int flag, t_env *envp)
         
         free(line);
         free(processed_line);
+        
     }
     
     close(fds[1]);
