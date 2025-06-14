@@ -33,9 +33,11 @@ int skip_space_str(char *str)
 int *saved_stdin_out(void)
 {
     int a;
+    int aa;
     int *in_out;
 
     (void)a;
+    (void)aa;
     in_out = (int *)malloc(sizeof(int) * 2);
 
     in_out[0] = dup(STDIN_FILENO);
