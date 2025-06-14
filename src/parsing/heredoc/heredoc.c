@@ -16,6 +16,7 @@ int    heredoce(char *limiter,t_var *data, int flag)
 {
     char *line;
     int fds[2];
+    (void)flag;
     // t_parsing   *heredoce_lexer;
 
     if(pipe(fds) == -1)
@@ -23,7 +24,11 @@ int    heredoce(char *limiter,t_var *data, int flag)
     while (1)
     {
         line = readline("> ");
-        // heredoce_lexer = lexer(line);
+        if(flag == 2 || flag == 0)
+        {
+            heredoce_lexer = lexer(line);
+            
+        }
 
         if(!line || ft_strcmp(line, limiter) == 0)
             break;
