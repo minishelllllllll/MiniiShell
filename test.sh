@@ -60,6 +60,8 @@ echo "=========================="
 
 # Test 1: Simple echo command
 run_test "Echo test" $'echo hello' "hello"
+run_test "expand" $'echo "1\'$asfasf\'3"' "1''3"
+
 
 # Summary
 echo "=========================="
