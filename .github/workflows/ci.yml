@@ -12,10 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: set up docker
-      run: docker/setup-buildx-action@v2
-    - name: docker build image
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
       run: docker build -t minishell:test .
-    - name : run minishell container
+
+    - name: Run tests in Docker container
       run: docker run minishell:test
