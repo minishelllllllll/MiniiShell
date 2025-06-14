@@ -168,13 +168,12 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             return(NULL);
         if(head->type == WHITE_SPACE)
             head = head->next;
-        if(head->type == DQUOTE)
-            flag = 2;
-        else if(head->type == QUOTE)
+        if(head->type == DQUOTE || head->type == QUOTE)
+        {
             flag = 1;
-        else
-            flag = 0;
-        if(heredoce(head->content, data ,flag) == 2)
+            head = head->next;
+        }   
+        if(heredoce(head->content, data ,flag,envp) == 2)
             return(NULL);
         return(head);
     }

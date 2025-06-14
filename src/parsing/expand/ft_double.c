@@ -12,21 +12,6 @@
 
 #include "../../../includes/minishell.h"
 
-// Helper function to safely append a string to the result
-char *join_string(char *dest, const char *src)
-{
-    char *result;
-    
-    if (!src)
-        return (dest);
-    if (!dest)
-        return (ft_strdup(src)); 
-    result = ft_strjoin(dest, src);
-    free(dest);
-    return (result);
-}
-
-// Helper function to safely append a character to the result
 char *join_char(char *str, char c)
 {
     char *result;
@@ -120,7 +105,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                         return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
                     data->j++;
                 }
-                data->s1 = join_string(data->s1, "0");
+                data->s1 = ft_strjoin(data->s1, "0");
                 if (!data->s1)
                     return (2);
                 data->i = data->j + 2;
@@ -139,7 +124,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                         return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
                     data->j++;
                 }
-                data->s1 = join_string(data->s1, ft_substr(str, start, data->j - start));
+                data->s1 = ft_strjoin(data->s1, ft_substr(str, start, data->j - start));
                 if (!data->s1)
                     return (2);
                 
@@ -154,25 +139,18 @@ int ft_double(char *str, t_env *envp, t_var *data)
                 len = data->j - start;
                 if (len > 0)
                 {
-                    char *var_name = ft_substr(str, start, len);
-                    if (!var_name)
-                        return (2);
                     tmp = envp;
                     while (tmp)
                     {
-                        if (ft_strcmp(tmp->key, var_name) == 0)
+                        if (ft_strcmp(tmp->key, ft_substr(str, start, len)) == 0)
                         {
-                            data->s1 = join_string(data->s1, tmp->value);
+                            data->s1 = ft_strjoin(data->s1, tmp->value);
                             if (!data->s1)
-                            {
-                                free(var_name);
                                 return (2);
-                            }
                             break;
                         }
                         tmp = tmp->next;
                     }
-                    free(var_name);
                     data->i = data->j - 1;
                 }
                 else
