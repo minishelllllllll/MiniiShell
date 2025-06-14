@@ -10,6 +10,8 @@ NC='\033[0m' # No Color
 TESTS_RUN=0
 TESTS_PASSED=0
 
+make && make clean
+
 # Function to run a test
 run_test() {
     local test_name="$1"
