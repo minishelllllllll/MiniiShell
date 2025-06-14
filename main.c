@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 15:47:30 by nahilal           #+#    #+#             */
-/*   Updated: 2025/06/10 23:17:05 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/12 18:03:28 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,15 @@ int main(int ac, char **av, char **envp)
 
 		// parssing 
         head = lexer(rdl);
-        // t_parsing *h = head;
-        // while(h)
-        // {
-        //     printf("content => %s\n",h->content);
-        //     printf("state => %d\n",h->state);
-        //     printf("type => %d\n",h->type);
-        //     printf("********************\n");
-        //     h = h->next;
-        // }
+        t_parsing *h = head;
+        while(h)
+        {
+            printf("content => %s\n",h->content);
+            printf("state => %d\n",h->state);
+            printf("type => %d\n",h->type);
+            printf("********************\n");
+            h = h->next;
+        }
         
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
@@ -164,12 +164,10 @@ int main(int ac, char **av, char **envp)
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
 // $> ABC=hola
-// echo \n hola
 // echo $ (if $ only you should send it )
 // echo $?
 // echo $?$ 
 // echo $:$= | cat -e
-// echo \$HOME >>>>>> \$HOME
 // echo my shit terminal is [$TERM4]
 // echo $9HOME >>>>>>>> HOME
 // echo $TERM$HOME
@@ -178,7 +176,18 @@ int main(int ac, char **av, char **envp)
 // 
 // a=ls -la >> $a
 // export a="ls -la"
+// export $DONTEXIST >>>>> behave like export only.
+// export "" >>>> bash: export: `': not a valid identifier
+// export HOLA=$HOME >>>> shouldn't give a error
+// export HOLA=bon(jour >>>>>>> should give -> bash: syntax error near unexpected token `('
 // 
+// cd $PWD >>>>> should go to home.
+// cd $HOME >>>>> and home not set should give error >>>>>>> minishell: cd: HOME not set.
+// error handling when rm -rf a, when we are already in a/b/c
+// handle if remove pwd , and getcwd failed.
+// thats correct ->>> cd srcs >>>> minishell: No such file or directory
+// pwd -p >>>>> if should handle that >>>>>>>>>> bash: pwd: -p: invalid option
+// cd "". 
 // 
 // 
 ///////////////////////////////////////////////////////////////////////////
