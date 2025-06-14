@@ -15,13 +15,20 @@ run_test() {
     local test_name="$1"
     local command="$2"
     local expected_output="$3"
-    
+
     echo -e "${YELLOW}Running test: $test_name${NC}"
-    
-    # Run the command and capture output
-    actual_output=$(echo "$command" | ./minishell 2>&1)
-    
-    # Compare outputs
+
+    actual_output=$(script -q -c "./minishell" /dev/null <<< "$command"$'\nexit' 2>&1)
+
+
+    actual_output=$(echo "$actual_output" | \
+        sed '/^Script/d' | \
+        sed 's/\r//g' | \
+        sed '/^$/d' | \
+        sed '/\/minishell \$>/d' | \
+        sed '/^echo hello$/d' | \
+        sed '/^exit$/d')
+
     if [ "$actual_output" = "$expected_output" ]; then
         echo -e "${GREEN}✓ PASS${NC}"
         ((TESTS_PASSED++))
@@ -29,11 +36,16 @@ run_test() {
         echo -e "${RED}✗ FAIL${NC}"
         echo "Expected: '$expected_output'"
         echo "Actual:   '$actual_output'"
+        echo "Expected (raw):"
+        echo "$expected_output" | cat -A
+        echo "Actual (raw):"
+        echo "$actual_output" | cat -A
     fi
-    
+
     ((TESTS_RUN++))
     echo ""
 }
+
 
 # Check if minishell binary exists
 if [ ! -f "./minishell" ]; then
@@ -45,7 +57,7 @@ echo "Starting minishell tests..."
 echo "=========================="
 
 # Test 1: Simple echo command
-run_test "Echo test" "echo hello" "hello"
+run_test "Echo test" $'echo hello' "hello"
 
 # Summary
 echo "=========================="
