@@ -16,28 +16,34 @@ make && make clean
 run_test() {
     local test_name="$1"
     local command="$2"
-    local expected_output="$3"
 
     echo -e "${YELLOW}Running test: $test_name${NC}"
 
+    # Expected output from bash
+    expected_output=$(bash -c "$command" 2>&1)
+
+    # Actual output from minishell (simulate terminal + auto-exit)
     actual_output=$(script -q -c "./minishell" /dev/null <<< "$command"$'\nexit' 2>&1)
 
-
+    # Clean minishell output
     actual_output=$(echo "$actual_output" | \
         sed '/^Script/d' | \
         sed 's/\r//g' | \
         sed '/^$/d' | \
         sed '/\/minishell \$>/d' | \
-        sed '/^echo hello$/d' | \
+        sed "/^$command$/d" | \
         sed '/^exit$/d')
 
+    # Compare outputs
     if [ "$actual_output" = "$expected_output" ]; then
         echo -e "${GREEN}✓ PASS${NC}"
         ((TESTS_PASSED++))
     else
         echo -e "${RED}✗ FAIL${NC}"
-        echo "Expected: '$expected_output'"
-        echo "Actual:   '$actual_output'"
+        echo "Expected (from bash):"
+        echo "$expected_output"
+        echo "Actual (from minishell):"
+        echo "$actual_output"
         echo "Expected (raw):"
         echo "$expected_output" | cat -A
         echo "Actual (raw):"
@@ -47,6 +53,7 @@ run_test() {
     ((TESTS_RUN++))
     echo ""
 }
+
 
 
 # Check if minishell binary exists
@@ -59,8 +66,8 @@ echo "Starting minishell tests..."
 echo "=========================="
 
 # Test 1: Simple echo command
-run_test "Echo test" $'echo hello' "hello"
-run_test "expand" $'echo "1\'$asfasf\'3"' "1''3"
+run_test "Echo test" $'echo hello'
+run_test "expand" $'echo "1\'$asfasf\'3"'
 
 
 # Summary
