@@ -89,7 +89,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 			duplication(i, len_cmd, pipes, tmp_cmd);
 			// if(is_parent_builtin(tmp_cmd->full_cmd[0]) == 0) // without env , should run in child. 
 			// 	ft_builtin(tmp_cmd->full_cmd, envs);
-			if(ft_builtin(tmp_cmd->full_cmd, envs) == -1)  // is a builtin don't fork , execute it in parent.
+			if(ft_builtin(tmp_cmd->full_cmd,  0, envs) == -1)  // is a builtin don't fork , execute it in parent.
 			{
 				process_ids->pids[process_ids->nbr_childs] = fork();
 				if(process_ids->pids[process_ids->nbr_childs] == 0)
@@ -110,7 +110,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 				close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
 
 				// execute the commands
-				if (ft_builtin(tmp_cmd->full_cmd, envs) == 0)
+				if (ft_builtin(tmp_cmd->full_cmd, 1, envs) == 0)
 					exit(0); // child must exit after finishing the builtin
 				else
 					ft_execve((*envs), tmp_cmd);

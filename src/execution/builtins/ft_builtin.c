@@ -1,6 +1,6 @@
 #include "../../../includes/minishell.h"
 
-int ft_builtin(char **command, t_env **envs)
+int ft_builtin(char **command, int is_child, t_env **envs)
 {
 	if(ft_strcmp(command[0], "cd") == 0)
 		return(ft_cd(command, (*envs)), 0);
@@ -12,7 +12,7 @@ int ft_builtin(char **command, t_env **envs)
 		return(ft_env(command ,(*envs)), 0);
 
 	else if(ft_strcmp(command[0], "exit") == 0)
-		return(ft_exit(command), 0);
+		return(ft_exit(command, is_child), 0);
 
 	else if(ft_strcmp(command[0], "unset") == 0)
 		return(ft_unset(command, envs), 0);

@@ -53,14 +53,14 @@ int	ft_strcmp(char *s1, char *s2);
 // builtins 
 int ft_pwd(t_env *envs);
 int ft_env(char **args, t_env *envs);
-void ft_exit(char **args);
+void ft_exit(char **args, int is_child);
 int ft_cd(char **args, t_env *envs);
 int ft_unset(char **args, t_env **envs);
 int ft_export(char **args, t_env **envs);
 int ft_echo(char **args);
 
 int check_flag_n(char *str);
-int ft_builtin(char **command, t_env **envs);
+int ft_builtin(char **command,int is_child, t_env **envs);
 int is_parent_builtin(char *cmd);
 
 
