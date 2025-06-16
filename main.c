@@ -114,15 +114,26 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-        commads_in_out = cmd;
-                
+        // printf("%s\n", rdl);
+        
+        // commads_in_out = cmd;
         
         // int i = 0;
+        // // int j;
         // while(commads_in_out)
         // {
         //     i = 0;
         //     while(commads_in_out->full_cmd[i])
-        //         printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
+        //     {
+        //         printf("full cmd ==> (%s)\n",commads_in_out->full_cmd[i]);
+        //         // j = 0;
+        //         // while (commads_in_out->full_cmd[i][j])
+        //         // {
+        //         //     printf("(%c)\n", commads_in_out->full_cmd[i][j]);
+        //         //     j++;
+        //         // }
+        //         i++;
+        //     }
         //     printf("in_file ==> %d\n",commads_in_out->in_file);
         //     printf("out_file ==> %d\n",commads_in_out->out_file);
         //     printf("********************\n");
@@ -143,23 +154,6 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
-
-// handle exit status  ~
-//     --> export should return with failure when not a valid name , but at same time should continue execution when i have many args.
-//     (export 2A=1 B=1 --> error msg + exit fail 1 + B exported)
-//     /////////////////////////////////////////
-//     >> export 2A=22 B=22
-//     bash: export: `2A=22': not a valid identifier
-//     >> echo $?
-//     1
-//     >> export | grep B
-//     declare -x B="22"
-//     ///////////////////////////////////////// solution (edit GLOBAL status)
-
-//     --> env with args (correct or not) should return error ?
-//     (cases when env used with command ) fix it eith childs also
-
-//     --> check exit status of childs proccess is return it correctly 
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
@@ -189,31 +183,35 @@ int main(int ac, char **av, char **envp)
 // pwd -p >>>>> if should handle that >>>>>>>>>> bash: pwd: -p: invalid option
 // cd "". 
 // 
+// test 414 >>> cd
 // 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
+//test it later
+    // whoami | grep $USER > /tmp/bonjour
+    // echo bonjour > $HOLA (test --> 645)
+    // echo hola > > bonjour -------->>>>>> bash: syntax error near unexpected token `>'
+    // > bonjour echo hola
+    // echo hola > hello >> hello >> hello (testing form test 656)
 
 // exit (argument + overflow) ~
+    // testing from 473
+    // is exit function handle overflow ??
+    //------------ problems --------------------
+    //  exit "666",  exit '666' 
+    // exit 6'6'66 -->> exit | 66 | 66
 
-// handle signals ~
 
-// garbeg collectore ~
+// [1]    104862 segmentation fault (core dumped)  ./minishell
+    // echo | echo
 
-
-// handell redirections ~solved~
-
-// handel heredoc ~solved~
-
-// split functions ~done~
 
 // handle waitpid ~solved~
-// -> store the pids ~ done ~
 // void	wait_procces(int pid)
 // {
 //     int	st;
 //     int	i;
-
 //     i = 0;
 //     waitpid(pid, &st, 0);
 //     if (WEXITSTATUS(st))
@@ -228,11 +226,4 @@ int main(int ac, char **av, char **envp)
 //         i = 0;
 // }
 
-// error handling, in all functions  ~ 
-// --> handle close behave -> remove close from duplication ~done~ .
-// --> check envs in builtins . ~done~
-// -----> env should not work with envs==NULL ~solved~
-// -----> perror or strerror instead of printf ~solved~
-
-
-// */
+// handle signals ~

@@ -77,9 +77,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 
 	//exit status
 
-	// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
-	// 	printf("my exit status = %d\n", G_EXIT_STATUS);
-	// else { ////// test exit status
+	if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
+		printf("my exit status = %d\n", G_EXIT_STATUS);
+	else { ////// test exit status
 
 
 	while (i < len_cmd) // while to execute commands
@@ -121,7 +121,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 		i++;
 	}
 
-// } ///// test exit status 
+} ///// test exit status 
 
 	close_pipes(len_cmd - 1, pipes);
 

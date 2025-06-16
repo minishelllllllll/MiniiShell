@@ -65,11 +65,9 @@ int ft_cd(char **args, t_env *envs)
 	}
 	else if(chdir(args[1]) == -1) // go to path , relative or absoulot 
 	{
-		// printf("%s\n",strerror(errno));
 		perror("minishell");
 		return(EXIT_FAILURE);
 	}
-
 	pwd = getcwd(NULL, 0);
 	if(pwd == NULL) // when getcwd failed
 	{

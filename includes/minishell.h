@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-
+#include <limits.h>
 
 extern int G_EXIT_STATUS;
 
