@@ -27,7 +27,7 @@ int ft_redirect_out(t_parsing *head,t_var *data)
     {
         if(head->type == WORD)
             break;
-        head = head->next;
+        head = head->next
     }
     if(!head || !head->content)
         return(2);
