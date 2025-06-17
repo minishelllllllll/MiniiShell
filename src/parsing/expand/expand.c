@@ -142,7 +142,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
 
     if(!head)
         return(NULL);
-    
     if(head->type == PIPE_LINE)
     {
         *cmd = ft_send(data, *cmd);
@@ -155,8 +154,9 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     if(head->type == REDIR_IN)
     {
         if(ft_redirect_in(head, data) == 2)
-            return(NULL);
+        return(NULL);
         head = head->next;
+        head = check_space(head);
         return(head);
     }
     
@@ -183,11 +183,14 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         if(ft_redirect_out(head, data) == 2)
             return(NULL);
         head = head->next;
+        head = check_space(head);
+        printf("head->typ %s\n",head->content);
         return(head);
     }
     
     if(head->state == 3)
     {
+        printf("state 3\n");
         // data->s[data->l] = check_env_general(head->content, envp, data);
         split_expand = ft_split(check_env_general(head->content, envp, data),' ');
         if(ft_split_expand(split_expand,data) == 0)
