@@ -100,15 +100,15 @@ int main(int ac, char **av, char **envp)
 
 		// parssing 
         head = lexer(rdl);
-        // t_parsing *h = head;
-        // while(h)
-        // {
-        //     printf("content => %s\n",h->content);
-        //     printf("state => %d\n",h->state);
-        //     printf("type => %d\n",h->type);
-        //     printf("********************\n");
-        //     h = h->next;
-        // }
+        t_parsing *h = head;
+        while(h)
+        {
+            printf("content => %s\n",h->content);
+            printf("state => %d\n",h->state);
+            printf("type => %d\n",h->type);
+            printf("********************\n");
+            h = h->next;
+        }
         
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
@@ -117,17 +117,17 @@ int main(int ac, char **av, char **envp)
         commads_in_out = cmd;
                 
         
-        // int i = 0;
-        // while(commads_in_out)
-        // {
-        //     i = 0;
-        //     while(commads_in_out->full_cmd[i])
-        //         printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file ==> %d\n",commads_in_out->in_file);
-        //     printf("out_file ==> %d\n",commads_in_out->out_file);
-        //     printf("********************\n");
-        //     commads_in_out = commads_in_out->next;
-        // }
+        int i = 0;
+        while(commads_in_out)
+        {
+            i = 0;
+            while(commads_in_out->full_cmd[i])
+                printf("full cmd ==> |%s|\n",commads_in_out->full_cmd[i++]);
+            printf("in_file ==> %d\n",commads_in_out->in_file);
+            printf("out_file ==> %d\n",commads_in_out->out_file);
+            printf("********************\n");
+            commads_in_out = commads_in_out->next;
+        }
 
         //execution
         commads_in_out = cmd;
