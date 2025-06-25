@@ -49,6 +49,16 @@ int is_parent_builtin(char *command)
 	return (-1);
 }
 
+
+void my_func_child(int sig)
+{
+    (void)sig;
+    ft_putstr_fd("he\n", 1);
+    rl_on_new_line();
+    rl_replace_line("child", 1);
+    rl_redisplay();
+}
+
 t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 {
 	int **pipes;

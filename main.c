@@ -29,7 +29,6 @@ int skip_space_str(char *str)
     return(0);
 }
 
-
 int *saved_stdin_out(void)
 {
     int *in_out;
@@ -60,9 +59,22 @@ char *shell_prompt(t_env *envs)
 
 	cwd = getcwd(NULL, 0);
 	if(!cwd)
+    {
 		cwd = get_env_value("PWD", envs);
+        if(!cwd) // in case no pwd and fail getcwd
+            cwd = ft_strdup("..");
+    }
 	prompt = ft_strjoin(cwd, " $> ");
 	return(prompt);
+}
+
+void my_handller(int sig)
+{
+    (void)sig;
+    ft_putchar_fd('\n', 1);
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
 }
 
 int main(int ac, char **av, char **envp)
@@ -78,10 +90,14 @@ int main(int ac, char **av, char **envp)
     t_pids  *pids; // struct of process ids 
     t_parsing   *head;
 
+    signal(SIGQUIT, SIG_IGN);
+    
     // (void)envp;
 	envs = list_envs(envp); //save
-	while (1)
+    while (1)
 	{
+        signal(SIGINT, my_handller); // in here doce
+
         arr_in_out = saved_stdin_out();  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
@@ -95,11 +111,12 @@ int main(int ac, char **av, char **envp)
 		if (!rdl)  // Handle Ctrl+D (EOF)
 		{
 			printf("exit\n"); // notify message
-			break;
+			exit(G_EXIT_STATUS); // need to clean up 
 		}
 
-		// parssing 
+		// parssing
         head = lexer(rdl);
+ 
         // t_parsing *h = head;
         // while(h)
         // {
@@ -114,10 +131,8 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-        // printf("%s\n", rdl);
         
-        // commads_in_out = cmd;
-        
+        // commads_in_out = cmd;        
         // int i = 0;
         // // int j;
         // while(commads_in_out)
@@ -149,6 +164,7 @@ int main(int ac, char **av, char **envp)
                 return(0);       
             restore_stdin_out(arr_in_out);
             waiting_childs(pids);
+
         }
         cmd = NULL;
 	}
@@ -194,10 +210,12 @@ int main(int ac, char **av, char **envp)
     // echo hola > > bonjour -------->>>>>> bash: syntax error near unexpected token `>'
     // > bonjour echo hola
     // echo hola > hello >> hello >> hello (testing form test 656)
+    // export cc="" ; echo "hhhh" > $cc ----->>>> bash: $cc: ambiguous redirect
+    // heredoc with ctrl D
+
 
 // exit (argument + overflow) ~
     // testing from 473
-    // is exit function handle overflow ??
     //------------ problems --------------------
     //  exit "666",  exit '666' 
     // exit 6'6'66 -->> exit | 66 | 66
@@ -207,7 +225,7 @@ int main(int ac, char **av, char **envp)
     // echo | echo
 
 
-// handle waitpid ~solved~
+// handle waitpid ~solved 50%~
 // void	wait_procces(int pid)
 // {
 //     int	st;
@@ -227,3 +245,11 @@ int main(int ac, char **av, char **envp)
 // }
 
 // handle signals ~
+/*
+-> understand the signal in child process (set signal with child_handller, and restore to my_handller)
+-> is i should to exit from childe process ?
+-> exit status with signals
+-> execute the heredoc in child process 
+*/
+
+// handle env -i bash ~

@@ -112,4 +112,9 @@ int ft_double(char *str, t_env *envp, t_var *data);
 int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
 t_cmd *ft_send(t_var *data, t_cmd *head);
 
+//singals
+void my_handller(int sig);
+void child_handller(int sig);
+
+
 #endif

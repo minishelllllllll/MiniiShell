@@ -30,21 +30,34 @@ void	close_pipes(int nbr_pipes, int **ends)
 	}
 }
 
+void child_handller(int sig)
+{
+    (void)sig;
+    ft_putstr_fd("\n", 1);
+}
+
 void	 waiting_childs(t_pids *process_ids)
 {
 	int	i;
 	int status;
 
 	i = 0;
+	signal(SIGINT, child_handller); // when we wait for child if do sigint apply child_handler.
 	while (i < process_ids->nbr_childs)
 	{
 		waitpid(process_ids->pids[i], &status, 0);
 		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
 			G_EXIT_STATUS = WEXITSTATUS(status);
-		
+		if (WIFSIGNALED(status))
+		{
+			G_EXIT_STATUS = status + 128;
+			if (G_EXIT_STATUS == 131)
+				printf("Quit: 3\n");
+		}
 		// printf("waitpid -> %d /\\ exit status -> %d\n", process_ids->pids[i], G_EXIT_STATUS);
 		i++;
 	}
+	// signal(SIGINT, my_handller); // restore the signint with my_handller.
 }
 
 int	**piping(int lines)

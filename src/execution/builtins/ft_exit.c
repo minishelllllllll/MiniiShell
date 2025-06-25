@@ -92,12 +92,3 @@ void ft_exit(char **args, int is_child)
 	}
 }
 
-
-// to handle 
-/* 
-if out of rang (llong int) error -> exit(2) ~solved~
---------------
-ls | exit 1212 -> should not print exit in terminal
-exit | ls --> same thing 
- */
-
