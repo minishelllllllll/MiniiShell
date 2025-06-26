@@ -176,6 +176,8 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             flag = 0;
         if(heredoce(head->content, data ,flag) == 2)
             return(NULL);
+        // else if(heredoce(head->content, data ,flag) == 130)
+        //     exit(G_EXIT_STATUS);
         return(head);
     }
     

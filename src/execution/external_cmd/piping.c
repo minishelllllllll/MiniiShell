@@ -38,26 +38,35 @@ void child_handller(int sig)
 
 void	 waiting_childs(t_pids *process_ids)
 {
-	int	i;
-	int status;
-
+	int	(i), (status), (is_sig);
 	i = 0;
-	signal(SIGINT, child_handller); // when we wait for child if do sigint apply child_handler.
+	is_sig = 0;
+	signal(SIGINT, SIG_IGN); // ignore SIGINT while waiting -> that only the child is affected, and the parent shell doesn’t react
 	while (i < process_ids->nbr_childs)
 	{
 		waitpid(process_ids->pids[i], &status, 0);
 		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
 			G_EXIT_STATUS = WEXITSTATUS(status);
-		if (WIFSIGNALED(status))
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		{
-			G_EXIT_STATUS = status + 128;
-			if (G_EXIT_STATUS == 131)
-				printf("Quit: 3\n");
+			if(!is_sig)
+			{
+				write(1, "\n", 1); //print new line 
+				is_sig = 1;
+			}
+			G_EXIT_STATUS = 130;
 		}
-		// printf("waitpid -> %d /\\ exit status -> %d\n", process_ids->pids[i], G_EXIT_STATUS);
+		else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+		{
+			if(!is_sig)
+			{
+				printf("Quit \n");
+				is_sig = 1;
+			}
+			G_EXIT_STATUS = 131;
+		}
 		i++;
 	}
-	// signal(SIGINT, my_handller); // restore the signint with my_handller.
 }
 
 int	**piping(int lines)

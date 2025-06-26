@@ -104,6 +104,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 				process_ids->pids[process_ids->nbr_childs] = fork();
 				if(process_ids->pids[process_ids->nbr_childs] == 0)
 				{
+					signal(SIGINT, SIG_DFL);       // default ctrl+c kills it
+					signal(SIGQUIT, SIG_DFL);       
+					
 					close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
 					ft_execve((*envs), tmp_cmd);
 				}
@@ -115,6 +118,9 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 			process_ids->pids[process_ids->nbr_childs] = fork();
 			if(process_ids->pids[process_ids->nbr_childs] == 0)
 			{
+					signal(SIGINT, SIG_DFL);       // default ctrl+c kills it
+					signal(SIGQUIT, SIG_DFL);
+
 				// duplicate and CLOSE , stdout stdin with pipes
 				duplication(i, len_cmd, pipes, tmp_cmd);
 				close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent

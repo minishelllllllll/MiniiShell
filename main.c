@@ -75,6 +75,7 @@ void my_handller(int sig)
     rl_on_new_line();
     rl_replace_line("", 1);
     rl_redisplay();
+    G_EXIT_STATUS = 130;
 }
 
 int main(int ac, char **av, char **envp)
@@ -134,26 +135,6 @@ int main(int ac, char **av, char **envp)
         
         // commads_in_out = cmd;        
         // int i = 0;
-        // // int j;
-        // while(commads_in_out)
-        // {
-        //     i = 0;
-        //     while(commads_in_out->full_cmd[i])
-        //     {
-        //         printf("full cmd ==> (%s)\n",commads_in_out->full_cmd[i]);
-        //         // j = 0;
-        //         // while (commads_in_out->full_cmd[i][j])
-        //         // {
-        //         //     printf("(%c)\n", commads_in_out->full_cmd[i][j]);
-        //         //     j++;
-        //         // }
-        //         i++;
-        //     }
-        //     printf("in_file ==> %d\n",commads_in_out->in_file);
-        //     printf("out_file ==> %d\n",commads_in_out->out_file);
-        //     printf("********************\n");
-        //     commads_in_out = commads_in_out->next;
-        // }
 
         //execution
         commads_in_out = cmd;
@@ -223,6 +204,9 @@ int main(int ac, char **av, char **envp)
 
 // [1]    104862 segmentation fault (core dumped)  ./minishell
     // echo | echo
+    // << + space
+    // /home/hind/Desktop/MiniiShell $> ^Z
+    // >>> [3]  + 21801 suspended  ./minishell
 
 
 // handle waitpid ~solved 50%~
@@ -244,12 +228,26 @@ int main(int ac, char **av, char **envp)
 //         i = 0;
 // }
 
-// handle signals ~
+
+/////////////////////////////// handle signals ~ /////////////////////////////////////////////////////
 /*
--> understand the signal in child process (set signal with child_handller, and restore to my_handller)
--> is i should to exit from childe process ?
--> exit status with signals
--> execute the heredoc in child process 
+-> understand the signal in child process (set signal with SIG_DFL, and restore to my_handller) ~done~
+-> is i should to exit from childe process ? ~done~ yes, and ignore signal in parent to dont affect it  
+-> exit status with signals ~done~ catche it with WTERMSIG or WEXITED(status)
+-> execute the heredoc in child process ~done~ 
 */
+
+
+/*
+--> check where we can need this case. ~done~ we need thia case when press ctrl+\
+if (WIFSIGNALED(status)) 
+{
+    G_EXIT_STATUS = status + 128;
+    if (G_EXIT_STATUS == 131)
+        printf("Quit: 3\n");
+}
+*/
+
+// test heredoc vary well with the file testing
 
 // handle env -i bash ~

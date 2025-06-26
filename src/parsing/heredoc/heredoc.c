@@ -12,9 +12,10 @@
 
 #include "../../../includes/minishell.h"
 
-void    signalhandler(int sig)
+void    sig_heredoc(int sig)
 {
     (void) sig;
+    ft_putchar_fd('\n', 1);
     exit(130);
 }
 
@@ -29,9 +30,17 @@ int    heredoce(char *limiter,t_var *data, int flag)
         return(2);
     
     int pid = fork();
+    if(pid == -1)
+    {
+        close(fds[0]);  // Clean up file descriptors
+        close(fds[1]);
+        return(2);
+    }
+
     if (pid == 0)
     {
-        signal(SIGINT, signalhandler);
+        signal(SIGINT, sig_heredoc);
+        close(fds[0]);
         while (1)
         {
             line = readline("> ");
@@ -49,21 +58,23 @@ int    heredoce(char *limiter,t_var *data, int flag)
             free(line);
         }
         close(fds[1]);
-        data->in_file = fds[0];
         exit(0);
     }
     else
     {
-        signal(SIGINT, SIG_IGN);        
+        signal(SIGINT, SIG_IGN); // ignore sigint while parent wait child to dont affect parent 
         waitpid(pid, &state, 0);
-        signal(SIGINT, my_handller);        
-
-        if (WIFSIGNALED(state))
-		{
-            G_EXIT_STATUS = state + 128;
-			if (G_EXIT_STATUS == 131)
-               printf("Quit: 3\n");
+        close(fds[1]);
+        if (WIFEXITED(state))
+        {
+            G_EXIT_STATUS = WEXITSTATUS(state);
+            if(G_EXIT_STATUS == 130)
+            {    
+                close(fds[0]);  // Clean up file descriptors
+                return(2);
+            }
         }
+        data->in_file = fds[0];
     }
     return(0);
 }
