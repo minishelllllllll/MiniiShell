@@ -1,11 +1,13 @@
 #include "../../includes/minishell.h"
 
-t_env *new_env(char *env)
+t_env *new_env(char *env, char **envp)
 {
-	t_env	*newnode;
-	char 	*value;
-	char 	**key;
+	static int 	is_path_exported;
+	t_env		*newnode;
+	char 		*value;
+	char 		**key;
 	
+	// is_path_exported = 0;
 	newnode = (t_env *)malloc(sizeof(t_env));
 	if(!newnode)
 		return(NULL);
@@ -16,6 +18,18 @@ t_env *new_env(char *env)
 		key = ft_split(env, '='); // split the command with (=);
 		if(!key)
 			return(NULL);
+	
+		newnode->key = ft_strdup(key[0]); //duplicate the first argument
+		newnode->value = ft_strdup(value + 1); //dup the string, +1 to skiip (=), like (=/hind/....)
+		newnode->next = 0;
+
+		if(ft_strcmp(newnode->key, "PATH") == 0 && (!envp || !envp[0]) && !is_path_exported) // flaged with 2 to not printed in (env, export)
+		{
+			newnode->flag_exported = 2;
+			is_path_exported = 1;
+		}
+		else
+			newnode->flag_exported = 1; //if has a value (true)	
 	}
 	else
 	{
@@ -23,14 +37,8 @@ t_env *new_env(char *env)
 		newnode->value = NULL; // no value. 
 		newnode->flag_exported = 0; //if just the key (false)
 		newnode->next = 0;
-		return(newnode);
 	}
-	newnode->key = ft_strdup(key[0]); //duplicate the first argument
-	newnode->value = ft_strdup(value + 1); //dup the string, +1 to skiip (=), like (=/hind/....)
-	newnode->flag_exported = 1; //if has a value (true)
-	newnode->next = 0;
 
-	free_2d(key);
 	return(newnode);
 }
 
@@ -51,19 +59,47 @@ void add_env(t_env *newnode, t_env **head_list)
 	}
 }
 
-t_env  *list_envs(char **envp)
+char *get_pwd()
+{
+	char *working_d;
+	char *complet_pwd;
+
+	working_d = getcwd(NULL, 0);
+	if(!working_d)
+	{
+		perror("minishell");
+		return(NULL);
+	}
+	complet_pwd = ft_strjoin("PWD=", working_d);
+	free(working_d);
+	return(complet_pwd);
+}
+
+char **creat_mini_envp()
+{
+	char	**minimal_envp;
+
+	minimal_envp = malloc(sizeof(char *) * 5);
+	minimal_envp[0] = ft_strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	minimal_envp[1] = ft_strdup("OLDPWD");
+	minimal_envp[2] = get_pwd();
+	minimal_envp[3] = ft_strdup("SHLVL=1");
+	minimal_envp[4] = NULL;
+
+	return(minimal_envp);
+}
+
+t_env  *build_new_envs(char **envs, char **envp)
 {
 	t_env	*head_env;
 	t_env	*newnode;
-	int		i;
+	int i;
 
 	head_env = 0;
 	i = 0;
-	if(!envp)
-		return(NULL);
-	while (envp[i])
+	while (envs[i])
 	{
-		newnode = new_env(envp[i]);
+		newnode = new_env(envs[i], envp);
 		if(!newnode)
 		{
 			free_list(&head_env); //garbeg coll
@@ -73,6 +109,21 @@ t_env  *list_envs(char **envp)
 		i++;
 	}
 	return(head_env);
+}
+
+t_env  *list_envs(char **envp)
+{
+	char	**minimal_envp;
+
+	if(!envp) // if all envps removed 
+		return(NULL);
+	else if(envp[0] == NULL) // cuz a char *envp[] = { NULL }; (start with minimal envps)
+	{
+		minimal_envp = creat_mini_envp();
+		return(build_new_envs(minimal_envp, envp));
+	}
+	else
+		return(build_new_envs(envp, envp));
 }
 
 

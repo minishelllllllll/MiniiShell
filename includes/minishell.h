@@ -67,8 +67,11 @@ int is_parent_builtin(char *cmd);
 // list envs
 void    add_env(t_env *newnode, t_env **head_list);
 t_env   *list_envs(char **envp);
-t_env   *new_env(char *env); //0 if a normal env //1 if exported (just the name) 
+t_env   *new_env(char *env, char **envp); //0 if a normal env //1 if exported (just the name) 
 char    *get_env_value(char *key, t_env *envs);
+t_env 	*build_new_envs(char **envs, char **envp);
+char	*get_pwd();
+char	**creat_mini_envp();
 
 // free memory
 void	free_list(t_env **head_env);

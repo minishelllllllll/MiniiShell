@@ -152,6 +152,21 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
+// handle env -i bash ~
+//--> /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+//--> when set path, nothing work again , but added in envs 
+//////// start with minimal envs ///////////
+        /* 
+        PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin 
+                --> flaged with 2 to dont dispaly ni env ni export
+                --> but the flaged modified when export new value of it 
+        declare -x OLDPWD
+        declare -x PWD="/home/hind/Desktop/MiniiShell"
+        declare -x SHLVL="1"
+        */
+// check OLDPWD
+
+
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
 // $> ABC=hola
@@ -195,7 +210,7 @@ int main(int ac, char **av, char **envp)
     // heredoc with ctrl D
 
 
-// exit (argument + overflow) ~
+// exit (argument + overflow) 
     // testing from 473
     //------------ problems --------------------
     //  exit "666",  exit '666' 
@@ -209,45 +224,3 @@ int main(int ac, char **av, char **envp)
     // >>> [3]  + 21801 suspended  ./minishell
 
 
-// handle waitpid ~solved 50%~
-// void	wait_procces(int pid)
-// {
-//     int	st;
-//     int	i;
-//     i = 0;
-//     waitpid(pid, &st, 0);
-//     if (WEXITSTATUS(st))
-//         MY_EXIT_STATUS = WEXITSTATUS(st);
-//     if (WIFSIGNALED(st))
-//     {
-//         MY_EXIT_STATUS = st + 128;
-//         if (MY_EXIT_STATUS == 131)
-//             printf("Quit: 3\n");
-//     }
-//     while (wait(&st) > i)
-//         i = 0;
-// }
-
-
-/////////////////////////////// handle signals ~ /////////////////////////////////////////////////////
-/*
--> understand the signal in child process (set signal with SIG_DFL, and restore to my_handller) ~done~
--> is i should to exit from childe process ? ~done~ yes, and ignore signal in parent to dont affect it  
--> exit status with signals ~done~ catche it with WTERMSIG or WEXITED(status)
--> execute the heredoc in child process ~done~ 
-*/
-
-
-/*
---> check where we can need this case. ~done~ we need thia case when press ctrl+\
-if (WIFSIGNALED(status)) 
-{
-    G_EXIT_STATUS = status + 128;
-    if (G_EXIT_STATUS == 131)
-        printf("Quit: 3\n");
-}
-*/
-
-// test heredoc vary well with the file testing
-
-// handle env -i bash ~

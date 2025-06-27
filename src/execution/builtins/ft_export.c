@@ -25,6 +25,8 @@ void	print_env_list(t_env *head)
 {
 	while (head)
 	{
+		if(head->flag_exported == 2) // in case start env -i we flaged path with
+			head = head->next;
 		if(head->flag_exported == 1)
 			printf("declare -x %s=\"%s\"\n", head->key, head->value);
 		else
@@ -74,7 +76,7 @@ int ft_export(char **args, t_env **envs)
 		}
 		else
 		{
-			newnode = new_env(args[i]);
+			newnode = new_env(args[i], NULL);
 			if(exist_env(newnode, (*envs)) == 0) //if env exit but change his value.
 				free_node(newnode);
 			else
