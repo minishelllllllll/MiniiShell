@@ -115,7 +115,6 @@ int main(int ac, char **av, char **envp)
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
         commads_in_out = cmd;
-                
         
         int i = 0;
         while(commads_in_out)
