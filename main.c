@@ -165,7 +165,7 @@ int main(int ac, char **av, char **envp)
         declare -x SHLVL="1"
         */
 
-// check OLDPWD
+// check OLDPWD ~done~
 
 
 ///////////////////////////////////////////////////////////////////////////

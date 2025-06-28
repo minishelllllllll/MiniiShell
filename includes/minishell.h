@@ -119,5 +119,7 @@ t_cmd *ft_send(t_var *data, t_cmd *head);
 void my_handller(int sig);
 void child_handller(int sig);
 
+void set_signals_dfl();
+
 
 #endif

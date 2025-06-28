@@ -1,18 +1,5 @@
 #include "../../../includes/minishell.h"
 
-int	len_list_cmd(t_cmd *temp)
-{
-	int i;
-
-	i = 0;
-	while (temp)
-	{
-		i++;
-		temp = temp->next;
-	}
-	return(i);
-}
-
 void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 {
 	char *exec_path;
@@ -28,121 +15,92 @@ void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 	}
 }
 
-int is_parent_builtin(char *command)
+void execute_one_command(t_pids **process_ids, t_cmd *tmp_cmd, int **pipes, t_env **envs)
 {
-	if (!command)
-        return (-1);
-    
-	if (ft_strcmp(command, "cd") == 0)
-		return (0);
-	if (ft_strcmp(command, "pwd") == 0)
-		return (0);
-	if (ft_strcmp(command, "export") == 0)
-		return (0);
-	if (ft_strcmp(command, "unset") == 0)
-		return (0);
-	if (ft_strcmp(command, "echo") == 0)
-		return (0);
-	if (ft_strcmp(command, "exit") == 0)
-		return (0);
-		
-	return (-1);
-}
+	int len_cmd;
 
-
-void my_func_child(int sig)
-{
-    (void)sig;
-    ft_putstr_fd("he\n", 1);
-    rl_on_new_line();
-    rl_replace_line("child", 1);
-    rl_redisplay();
-}
-
-t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
-{
-	int **pipes;
-	int (i), (len_cmd);
-
-	t_pids *process_ids;
-
-	process_ids = malloc(sizeof(t_pids)); // allocate struct
-	if(!process_ids)
-		return(NULL);
-	
-	process_ids->pids = malloc(sizeof(int) * 1024); // allocate array of ids
-	if(!process_ids->pids)
-		return(NULL);
-
-	// process_ids->nbr_childs len of linked list (how many command)
 	len_cmd = len_list_cmd(tmp_cmd);
+	if(ft_builtin(tmp_cmd->full_cmd,  0, envs) == -1)  // is a builtin don't fork , execute it in parent.
+	{
+		(*process_ids)->pids[(*process_ids)->nbr_childs] = fork();
+		if((*process_ids)->pids[(*process_ids)->nbr_childs] == 0)
+		{
+			set_signals_dfl();
+			close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
+			ft_execve((*envs), tmp_cmd);
+		}
+		(*process_ids)->nbr_childs++; //the number of childes forked
+	}
+}
 
-	// allocate 2d array of pipes
-	pipes = piping(len_cmd - 1);
-	if(!pipes)
-		return(NULL);
+void execute_many_cmnd(t_cmd *tmp_cmd, t_env **envs, int **pipes, int len_cmd)
+{
+	close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
+	if (ft_builtin(tmp_cmd->full_cmd, 1, envs) == 0)	// execute the commands
+		exit(0); // child must exit after finishing the builtin
+	else
+		ft_execve((*envs), tmp_cmd);
+}
 
-	process_ids->nbr_childs = 0;
+void run_commands(t_pids **process_ids, t_cmd *tmp_cmd, int **pipes, t_env **envs)
+{
+	int (i), (len_cmd);
 	i = 0;
-
-	//exit status
-
-	if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
-		printf("my exit status = %d\n", G_EXIT_STATUS);
-	else { ////// test exit status
-
-
+	len_cmd = len_list_cmd(tmp_cmd); // process_ids->nbr_childs len of linked list (how many command)
 	while (i < len_cmd) // while to execute commands
 	{
 		if(len_cmd == 1) // if one command
 		{
 			duplication(i, len_cmd, pipes, tmp_cmd);
-			// if(is_parent_builtin(tmp_cmd->full_cmd[0]) == 0) // without env , should run in child. 
-			// 	ft_builtin(tmp_cmd->full_cmd, envs);
-			if(ft_builtin(tmp_cmd->full_cmd,  0, envs) == -1)  // is a builtin don't fork , execute it in parent.
-			{
-				process_ids->pids[process_ids->nbr_childs] = fork();
-				if(process_ids->pids[process_ids->nbr_childs] == 0)
-				{
-					signal(SIGINT, SIG_DFL);       // default ctrl+c kills it
-					signal(SIGQUIT, SIG_DFL);       
-					
-					close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
-					ft_execve((*envs), tmp_cmd);
-				}
-				process_ids->nbr_childs++; //the number of childes forked
-			}
+			execute_one_command(process_ids, tmp_cmd, pipes, envs);
 		}
 		else //many commands 
 		{
-			process_ids->pids[process_ids->nbr_childs] = fork();
-			if(process_ids->pids[process_ids->nbr_childs] == 0)
+			(*process_ids)->pids[(*process_ids)->nbr_childs] = fork();
+			if((*process_ids)->pids[(*process_ids)->nbr_childs] == 0)
 			{
-					signal(SIGINT, SIG_DFL);       // default ctrl+c kills it
-					signal(SIGQUIT, SIG_DFL);
-
-				// duplicate and CLOSE , stdout stdin with pipes
-				duplication(i, len_cmd, pipes, tmp_cmd);
-				close_pipes(len_cmd - 1, pipes); // close pipes inherted from parent
-
-				// execute the commands
-				if (ft_builtin(tmp_cmd->full_cmd, 1, envs) == 0)
-					exit(0); // child must exit after finishing the builtin
-				else
-					ft_execve((*envs), tmp_cmd);
+				set_signals_dfl();
+				duplication(i, len_cmd, pipes, tmp_cmd); // duplicate and CLOSE , stdout stdin with pipes
+				execute_many_cmnd(tmp_cmd, envs, pipes, len_cmd);
 			}
-			process_ids->nbr_childs++; //the number of childes forked
+			(*process_ids)->nbr_childs++; //the number of childes forked
 		}
 		tmp_cmd = tmp_cmd->next;
 		i++;
-	}
+	} // add here exit status
+}
 
-} ///// test exit status 
-
+t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
+{
+	int **pipes;
+	t_pids *process_ids;
+	int len_cmd;
+	
+	process_ids = malloc(sizeof(t_pids)); // allocate struct
+	if(!process_ids)
+		return(NULL);
+	process_ids->pids = malloc(sizeof(int) * 1024); // allocate array of ids
+	if(!process_ids->pids)
+		return(NULL);
+	len_cmd = len_list_cmd(tmp_cmd); // process_ids->nbr_childs len of linked list (how many command)
+	pipes = piping(len_cmd - 1); // allocate 2d array of pipes
+	if(!pipes)
+		return(NULL);
+	process_ids->nbr_childs = 0;
+	run_commands(&process_ids, tmp_cmd, pipes, envs);
 	close_pipes(len_cmd - 1, pipes);
-
 	return(process_ids);
 }
+	// //exit status
+
+	// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
+	// 	printf("my exit status = %d\n", G_EXIT_STATUS);
+	// else { ////// test exit status
+	
+	// } ///// test exit status
+
+//////////////////////////////////////////////////////////////////////////
+
 
 void	ft_perror(char *err_msg, int len_cmd, int **pipes)
 {

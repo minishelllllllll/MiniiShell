@@ -52,8 +52,8 @@ void	 waiting_childs(t_pids *process_ids)
 			if(!is_sig)
 			{
 				write(1, "\n", 1); //print new line 
-				is_sig = 1;
-			}
+				is_sig = 1; // to dont print it few times 
+			} 
 			G_EXIT_STATUS = 130;
 		}
 		else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
@@ -89,7 +89,7 @@ int	**piping(int lines)
 		if (pipe(pip[i]) == -1)
 		{
 			free_arr_b((void **)pip);
-			error_msg("error 🥴8");
+			error_msg("error 🥴");
 		}
 		i++;
 	}
