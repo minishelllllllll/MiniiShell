@@ -5,12 +5,11 @@ int  exist_env(t_env *newnode, t_env *temp_env)
 	while (temp_env)
 	{
 		if(ft_strcmp(temp_env->key, newnode->key) == 0 && temp_env->flag_exported == 1 
-			&& newnode->value == NULL) //if exist (key=value) and (export key)
+			&& newnode->value == NULL) //if exist (key=value) and we (export  key)
 			return(0);
-
-		if(ft_strcmp(temp_env->key, newnode->key) == 0) //if exist (tem->key == newn->key)
+		if(ft_strcmp(temp_env->key, newnode->key) == 0) //if exist (tem->key == newnode->key)
 		{
-			if(temp_env->value != NULL) //if old value set it as NULL (like, ZZZ)
+			if(temp_env->value != NULL) //if old value not set it as NULL (like, ZZZ)
 				free(temp_env->value); // free old value 
 			temp_env->value = ft_strdup(newnode->value); //dup the new value or NULL
 			temp_env->flag_exported = newnode->flag_exported; //update flage
@@ -54,9 +53,15 @@ int valide_name(char *str)
 			return(-1);
 		i++;
 	}
-//	if(str[i] != '=') //check if we have just a name without '='
-// 		return(-2);
 	return(0);
+}
+
+void message_error_export(char *str)
+{
+	ft_putstr_fd("minishell: export: '", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	G_EXIT_STATUS = 1;
 }
 
 int ft_export(char **args, t_env **envs)
@@ -68,12 +73,7 @@ int ft_export(char **args, t_env **envs)
 	while (args[i])
 	{
 		if(valide_name(args[i]) == -1)
-		{
-			ft_putstr_fd("minishell: export: '", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			G_EXIT_STATUS = 1;
-		}
+			message_error_export(args[i]);
 		else
 		{
 			newnode = new_env(args[i], NULL);
@@ -88,4 +88,3 @@ int ft_export(char **args, t_env **envs)
 		print_env_list(*envs);
 	return(EXIT_SUCCESS);
 }
-

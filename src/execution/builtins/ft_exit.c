@@ -53,7 +53,7 @@ void display_exit(int is_child)
 		ft_putstr_fd("exit\n", 2);
 }
 
-void message_error(char *str, int is_child)
+void message_error_exit(char *str, int is_child)
 {
 	display_exit(is_child);
 	ft_putstr_fd("minishell: exit: ", 2);
@@ -75,7 +75,7 @@ void ft_exit(char **args, int is_child)
 		exit(G_EXIT_STATUS);
 	}
 	else if(is_valid_exit(args[1]) == -1 )// if not numeric or exceed range  
-		message_error(args[1], is_child);
+		message_error_exit(args[1], is_child);
 	else if(i > 2) // if many args
 	{
 		display_exit(is_child);
