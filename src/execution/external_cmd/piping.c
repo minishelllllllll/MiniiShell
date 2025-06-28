@@ -14,7 +14,6 @@ void	null_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-
 void	close_pipes(int nbr_pipes, int **ends)
 {
 	int	i;
@@ -34,39 +33,6 @@ void child_handller(int sig)
 {
     (void)sig;
     ft_putstr_fd("\n", 1);
-}
-
-void	 waiting_childs(t_pids *process_ids)
-{
-	int	(i), (status), (is_sig);
-	i = 0;
-	is_sig = 0;
-	signal(SIGINT, SIG_IGN); // ignore SIGINT while waiting -> that only the child is affected, and the parent shell doesn’t react
-	while (i < process_ids->nbr_childs)
-	{
-		waitpid(process_ids->pids[i], &status, 0);
-		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
-			G_EXIT_STATUS = WEXITSTATUS(status);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		{
-			if(!is_sig)
-			{
-				write(1, "\n", 1); //print new line 
-				is_sig = 1; // to dont print it few times 
-			} 
-			G_EXIT_STATUS = 130;
-		}
-		else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-		{
-			if(!is_sig)
-			{
-				printf("Quit \n");
-				is_sig = 1;
-			}
-			G_EXIT_STATUS = 131;
-		}
-		i++;
-	}
 }
 
 int	**piping(int lines)
@@ -96,3 +62,46 @@ int	**piping(int lines)
 	pip[i] = NULL;
 	return (pip);
 }
+
+void signaled(int status)
+{
+	int	is_sig;
+
+	is_sig = 0;
+	if(WTERMSIG(status) == SIGINT)
+	{
+		if(!is_sig)
+		{
+			write(1, "\n", 1); //print new line 
+			is_sig = 1; // to dont print it few times 
+		} 
+		G_EXIT_STATUS = 130;
+	}
+	else if (WTERMSIG(status) == SIGQUIT)
+	{
+		if(!is_sig)
+		{
+			printf("Quit \n");
+			is_sig = 1;
+		}
+		G_EXIT_STATUS = 131;
+	}
+}
+
+void	 waiting_childs(t_pids *process_ids)
+{
+	int	(i), (status);
+	i = 0;
+	signal(SIGINT, SIG_IGN); // ignore SIGINT while waiting -> that only the child is affected, and the parent shell doesn’t react
+	signal(SIGQUIT, SIG_IGN);
+	while (i < process_ids->nbr_childs)
+	{
+		waitpid(process_ids->pids[i], &status, 0);
+		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
+			G_EXIT_STATUS = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+			signaled(status);
+		i++;
+	}
+}
+
