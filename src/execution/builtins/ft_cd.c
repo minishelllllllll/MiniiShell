@@ -6,8 +6,10 @@ int set_env(char *var, char *new_value, t_env *envs)
 	{
 		if(ft_strcmp(var, envs->key) == 0 && new_value)
 		{
-			free(envs->value);
+			if(envs->value) // maybe no need when use gc
+				free(envs->value);
 			envs->value = ft_strdup(new_value);
+			envs->flag_exported = 1;
 			return(0);
 		}
 		envs = envs->next;

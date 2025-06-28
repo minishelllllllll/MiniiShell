@@ -152,7 +152,7 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// handle env -i bash ~
+// handle env -i bash ~done~
 //--> /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 //--> when set path, nothing work again , but added in envs 
 //////// start with minimal envs ///////////
@@ -164,6 +164,7 @@ int main(int ac, char **av, char **envp)
         declare -x PWD="/home/hind/Desktop/MiniiShell"
         declare -x SHLVL="1"
         */
+
 // check OLDPWD
 
 
