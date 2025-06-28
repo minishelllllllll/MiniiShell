@@ -1,7 +1,7 @@
 #include "../../../includes/minishell.h"
 
 void ft_execve(t_env *envs, t_cmd *tmp_cmd)
-{
+{ 
 	char *exec_path;
 	char **env_arr;
 
@@ -91,13 +91,13 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 	close_pipes(len_cmd - 1, pipes);
 	return(process_ids);
 }
-	// //exit status
+// //exit status
 
-	// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
-	// 	printf("my exit status = %d\n", G_EXIT_STATUS);
-	// else { ////// test exit status
-	
-	// } ///// test exit status
+// if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
+// 	printf("my exit status = %d\n", G_EXIT_STATUS);
+// else { ////// test exit status
+
+// } ///// test exit status
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -106,78 +106,6 @@ void	ft_perror(char *err_msg, int len_cmd, int **pipes)
 {
 	perror(err_msg);
 	close_pipes(len_cmd - 1, pipes);
+	G_EXIT_STATUS = 1;
 	exit(EXIT_FAILURE);
-}
-
-void duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd)
-{
-	if(i == 0) // first command
-	{
-		if(tmp_cmd->in_file != -1) // duplicate stdin with pipes or redirection,
-		{
-			if (dup2(tmp_cmd->in_file, STDIN_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->in_file);
-		}
-		if(tmp_cmd->out_file != -1)
-		{
-			if(dup2(tmp_cmd->out_file, STDOUT_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->out_file);
-		}
-		else if(len_cmd > 1) // that means we have pipes
-		{
-			if(dup2(pipes[i][1], STDOUT_FILENO) == -1) // diplucate the stdout to write in pipe
-				ft_perror("dup2 ", len_cmd, pipes);
-		}
-	}
-
-	else if (i < len_cmd - 1) // middle command [ .... | ..... | .... ]
-	{
-		if(tmp_cmd->in_file != -1) 
-		{
-			if (dup2(tmp_cmd->in_file, STDIN_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->in_file);
-		}
-		else
-		{
-			if(dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-		}
-
-		if(tmp_cmd->out_file != -1)
-		{
-			if(dup2(tmp_cmd->out_file, STDOUT_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->out_file);
-		}
-		else
-		{
-			if(dup2(pipes[i][1], STDOUT_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-		}
-	}
-
-	else if (i == len_cmd - 1)  // last command 
-	{
-		if(tmp_cmd->in_file != -1) 
-		{
-			if(dup2(tmp_cmd->in_file, STDIN_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->in_file);
-		}
-		else
-		{
-			if(dup2(pipes[i - 1][0], STDIN_FILENO) == -1) // diplucate the stdin to read from pipe
-				ft_perror("dup2 ", len_cmd, pipes);
-		}
-
-		if(tmp_cmd->out_file != -1)
-		{
-			if(dup2(tmp_cmd->out_file, STDOUT_FILENO) == -1)
-				ft_perror("dup2 ", len_cmd, pipes);
-			close(tmp_cmd->out_file);
-		}
-	}
 }
