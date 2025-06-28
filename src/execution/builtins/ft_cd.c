@@ -30,46 +30,45 @@ char *get_env_value(char *key, t_env *envs)
     return NULL; // not found
 }
 
+int	print_error(char *str)
+{
+	ft_putstr_fd(str, 2);
+	return(EXIT_FAILURE); // exit status == 1
+}
+
+int	go_new_dir(char *new_dir)
+{
+	if(new_dir == NULL || ft_strcmp(new_dir, "~") == 0) // go to HOME.
+	{
+		if(chdir(get_env_value("HOME", envs)) == -1)
+			return(print_error("minishell: cd: HOME not set\n"));
+	}
+	else if(strcmp(new_dir, "-") == 0) // go to OLDPWD
+	{
+		if(chdir(get_env_value("OLDPWD", envs)) == -1)
+			return(print_error("minishill: cd: OLDPWD not set\n"));
+		printf("%s\n", get_env_value("OLDPWD", envs));
+	}
+	else if(chdir(new_dir) == -1) // go to path , relative or absoulot 
+	{
+		perror("minishell");
+		return(EXIT_FAILURE);
+	}
+}
+
 int ft_cd(char **args, t_env *envs)
 {
-	char *pwd;
-	char *oldpwd;
+	char (*pwd), (*oldpwd);
 	int i;
 
 	i = 0;
 	while (args[i] != NULL) // len args
 		i++;
 	if(i > 2)
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		return(EXIT_FAILURE); // exit status == 1
-	}
+		return(print_error("minishell: cd: too many arguments\n"));
 	oldpwd = get_env_value("PWD", envs); // we do both methods , when getcwd can't retrive the pwd form kernel
 	if(oldpwd == NULL)
-		oldpwd = getcwd(NULL, 0);
-
-	if(args[1] == NULL || ft_strcmp(args[1], "~") == 0) // go to HOME.
-	{
-		if(chdir(get_env_value("HOME", envs)) == -1)
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			return(EXIT_FAILURE);
-		}
-	}
-	else if(strcmp(args[1], "-") == 0) // go to OLDPWD
-	{
-		if(chdir(get_env_value("OLDPWD", envs)) == -1)
-		{
-			ft_putstr_fd("minishill: cd: OLDPWD not set\n", 2);
-			return(EXIT_FAILURE);	
-		}
-		printf("%s\n", get_env_value("OLDPWD", envs));
-	}
-	else if(chdir(args[1]) == -1) // go to path , relative or absoulot 
-	{
-		perror("minishell");
-		return(EXIT_FAILURE);
-	}
+	go_new_dir(args[1]);
 	pwd = getcwd(NULL, 0);
 	if(pwd == NULL) // when getcwd failed
 	{
@@ -78,6 +77,5 @@ int ft_cd(char **args, t_env *envs)
 	}
 	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
 	set_env("PWD", pwd, envs);
-
 	return(EXIT_SUCCESS);
 }
