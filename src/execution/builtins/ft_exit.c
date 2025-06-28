@@ -3,10 +3,8 @@
 long double	ft_atold(const char *str)
 {
 	long double	result;
-	int	i;
-	int	sign;
-	int	check;
 
+	int	(i), (sign), (check);
 	i = 0;
 	result = 0;
 	sign = 1;
@@ -27,11 +25,10 @@ long double	ft_atold(const char *str)
 	return (result * sign);
 }
 
-
 int is_valid_exit(char *arg)
 {
-	int i;
-	long double re;
+	long double	re;
+	int			i;
 
 	i = 0;
 	if(arg[i] == '-' || arg[i] == '+')
@@ -50,43 +47,45 @@ int is_valid_exit(char *arg)
 	return(0);
 }
 
+void display_exit(int is_child)
+{
+	if(is_child != 1) // mean exit in child process or not
+		ft_putstr_fd("exit\n", 2);
+}
+
+void message_error(char *str, int is_child)
+{
+	display_exit(is_child);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	exit(2);	
+}
 
 void ft_exit(char **args, int is_child)
 {
 	int i;
 
 	i = 0;
-
 	while (args[i]) //count args
 		i++;
 	if(i == 1) // if just exit
 	{
-		if(is_child != 1)
-			ft_putstr_fd("exit\n", 2);
+		display_exit(is_child);
 		exit(G_EXIT_STATUS);
 	}
 	else if(is_valid_exit(args[1]) == -1 )// if not numeric or exceed range  
-	{
-		if(is_child != 1)
-			ft_putstr_fd("exit\n", 2);
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[1], 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-		exit(2);
-		
-	}
+		message_error(args[1], is_child);
 	else if(i > 2) // if many args
 	{
-		if(is_child != 1)
-			ft_putstr_fd("exit\n", 2);
+		display_exit(is_child);
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		G_EXIT_STATUS = 1;
 		return;
 	}
 	else // exit with the valid number
 	{
-		if(is_child != 1)
-			ft_putstr_fd("exit\n", 2);
+		display_exit(is_child);
 		G_EXIT_STATUS = ft_atoi(args[1]);
 		exit(G_EXIT_STATUS % 256); // to make sur exit correctly
 	}
