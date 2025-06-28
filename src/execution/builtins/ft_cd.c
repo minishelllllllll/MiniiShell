@@ -33,11 +33,21 @@ char *get_env_value(char *key, t_env *envs)
 int	print_error(char *str)
 {
 	ft_putstr_fd(str, 2);
+	G_EXIT_STATUS = 1;
 	return(EXIT_FAILURE); // exit status == 1
 }
 
-int	go_new_dir(char *new_dir)
+int ft_perror_cd()
 {
+	G_EXIT_STATUS = 1;
+	perror("minishell");
+	return(EXIT_FAILURE);	
+}
+
+int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
+{
+	char *pwd;
+
 	if(new_dir == NULL || ft_strcmp(new_dir, "~") == 0) // go to HOME.
 	{
 		if(chdir(get_env_value("HOME", envs)) == -1)
@@ -50,15 +60,19 @@ int	go_new_dir(char *new_dir)
 		printf("%s\n", get_env_value("OLDPWD", envs));
 	}
 	else if(chdir(new_dir) == -1) // go to path , relative or absoulot 
-	{
-		perror("minishell");
-		return(EXIT_FAILURE);
-	}
+		return(ft_perror_cd());
+	pwd = getcwd(NULL, 0);
+	if(pwd == NULL) // when getcwd failed
+		return(ft_perror_cd());
+	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
+	set_env("PWD", pwd, envs);
+	G_EXIT_STATUS = 0;
+	return(EXIT_SUCCESS);
 }
 
 int ft_cd(char **args, t_env *envs)
 {
-	char (*pwd), (*oldpwd);
+	char *oldpwd;
 	int i;
 
 	i = 0;
@@ -68,14 +82,6 @@ int ft_cd(char **args, t_env *envs)
 		return(print_error("minishell: cd: too many arguments\n"));
 	oldpwd = get_env_value("PWD", envs); // we do both methods , when getcwd can't retrive the pwd form kernel
 	if(oldpwd == NULL)
-	go_new_dir(args[1]);
-	pwd = getcwd(NULL, 0);
-	if(pwd == NULL) // when getcwd failed
-	{
-		perror("minishell");
-		return(EXIT_FAILURE);
-	}
-	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
-	set_env("PWD", pwd, envs);
-	return(EXIT_SUCCESS);
+		oldpwd = getcwd(NULL, 0);
+	return(go_new_dir(args[1], envs, oldpwd));
 }
