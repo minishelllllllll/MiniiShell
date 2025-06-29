@@ -6,6 +6,12 @@ void set_signals_dfl()
 	signal(SIGQUIT, SIG_DFL);
 }
 
+void sig_ignore()
+{
+    signal(SIGINT, SIG_IGN); // ignore sigint while parent wait child to dont affect parent 
+    signal(SIGQUIT, SIG_IGN);
+}
+
 void my_handller(int sig)
 {
     (void)sig;

@@ -117,10 +117,10 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
 t_cmd *ft_send(t_var *data, t_cmd *head);
 
 //singals
-void my_handller(int sig);
-// void child_handller(int sig);
-
-void set_signals_dfl();
+void	my_handller(int sig);
+void	set_signals_dfl();
 void    sig_heredoc(int sig);
+void	sig_ignore();
+
 
 #endif
