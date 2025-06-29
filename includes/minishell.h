@@ -104,7 +104,7 @@ int		len_list_cmd(t_cmd *temp);
 t_pids		*execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error handling. 
-void	null_error(char *str);
+// void	null_error(char *str);
 void	ft_perror(char *err_msg, int len_cmd, int **pipes);
 
 
@@ -118,9 +118,9 @@ t_cmd *ft_send(t_var *data, t_cmd *head);
 
 //singals
 void my_handller(int sig);
-void child_handller(int sig);
+// void child_handller(int sig);
 
 void set_signals_dfl();
-
+void    sig_heredoc(int sig);
 
 #endif

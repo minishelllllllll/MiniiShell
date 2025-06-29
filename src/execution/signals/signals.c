@@ -15,3 +15,12 @@ void my_handller(int sig)
     rl_redisplay();
     G_EXIT_STATUS = 130;
 }
+
+
+void    sig_heredoc(int sig)
+{
+    (void) sig;
+    ft_putchar_fd('\n', 1);
+    exit(130);
+}
+
