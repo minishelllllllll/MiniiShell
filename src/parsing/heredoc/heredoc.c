@@ -139,3 +139,4 @@ int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
     }
     return(0);
 }
+
