@@ -197,24 +197,25 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
     }
 }
 
-char *get_token_value(t_parsing *token, t_env *envp, t_var *data)
+char *get_token_value(t_parsing *head, t_env *envp, t_var *data)
 {
-    if (!token || !token->content)
+    if (!head || !head->content)
         return ft_strdup("");
-    
-    if (token->state == 3)
-        return check_env_general(token->content, envp);
-    else if (token->state == 2)
+    if (head->state == 3)
+        return check_env_general(head->content, envp);
+    else if (head->state == 2)
     {
-        if (ft_double(token->content, envp, data) == 2)
+        if (ft_double(head->content, envp, data) == 2)
             return NULL;
-        return ft_strdup(data->s1 ? data->s1 : "");
+        if(data->s1)
+            return(ft_strdup(data->s1));
+        else 
+            return(ft_strdup(""));
     }
-    else if (token->state == 1)
-        return ft_strdup(token->content);
-    else if (token->state == 0 && token->type == WORD) 
-        return ft_strdup(token->content);
-    
+    else if (head->state == 1)
+        return ft_strdup(head->content);
+    else if (head->state == 0 && head->type == WORD) 
+        return ft_strdup(head->content);
     return ft_strdup("");
 }
 
@@ -288,18 +289,18 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     {
         concatenated_value = ft_strdup("");
         current = head;
+        
         if (current->type == DQUOTE || current->type == QUOTE)
             current = current->next;
         while (current && (current->type == WORD || current->state == 1 || 
                           current->state == 2 || current->state == 3 ||
-                          current->type == DQUOTE || current->type == QUOTE))
+                          current->type == DQUOTE || current->type == QUOTE ))
         {
             if (current->type == DQUOTE || current->type == QUOTE)
             {
                 current = current->next;
                 continue;
             }
-            
             temp_value = get_token_value(current, envp, data);
             if (!temp_value)
             {
@@ -337,6 +338,14 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         else
         {
             free(concatenated_value);
+        }
+        if(current && current->type == PIPE_LINE)
+        {
+            *cmd = ft_send(data, *cmd);
+            data->l = 0;
+            data->in_file = -1;
+            data->out_file = -1;
+            return(current);
         }
         if (current)
             return current;
