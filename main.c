@@ -68,16 +68,6 @@ char *shell_prompt(t_env *envs)
 	return(prompt);
 }
 
-void my_handller(int sig)
-{
-    (void)sig;
-    ft_putchar_fd('\n', 1);
-    rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
-    G_EXIT_STATUS = 130;
-}
-
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;

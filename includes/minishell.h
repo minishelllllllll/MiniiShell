@@ -61,7 +61,8 @@ int ft_echo(char **args);
 
 int check_flag_n(char *str);
 int ft_builtin(char **command,int is_child, t_env **envs);
-int is_parent_builtin(char *cmd);
+int ft_perror_cd();
+int	print_error(char *str);
 
 
 // list envs

@@ -1,9 +1,17 @@
 #include "../../../includes/minishell.h"
 
-
 void set_signals_dfl()
 {
-	signal(SIGINT, SIG_DFL);       // default ctrl+c kills it
+	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
 
+void my_handller(int sig)
+{
+    (void)sig;
+    ft_putchar_fd('\n', 1);
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
+    G_EXIT_STATUS = 130;
+}

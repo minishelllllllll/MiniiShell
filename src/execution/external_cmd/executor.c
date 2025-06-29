@@ -91,6 +91,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 	close_pipes(len_cmd - 1, pipes);
 	return(process_ids);
 }
+
 // //exit status
 
 // if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
@@ -98,14 +99,3 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 // else { ////// test exit status
 
 // } ///// test exit status
-
-//////////////////////////////////////////////////////////////////////////
-
-
-void	ft_perror(char *err_msg, int len_cmd, int **pipes)
-{
-	perror(err_msg);
-	close_pipes(len_cmd - 1, pipes);
-	G_EXIT_STATUS = 1;
-	exit(EXIT_FAILURE);
-}

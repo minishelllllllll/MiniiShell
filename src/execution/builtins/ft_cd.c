@@ -30,19 +30,6 @@ char *get_env_value(char *key, t_env *envs)
     return NULL; // not found
 }
 
-int	print_error(char *str)
-{
-	ft_putstr_fd(str, 2);
-	G_EXIT_STATUS = 1;
-	return(EXIT_FAILURE); // exit status == 1
-}
-
-int ft_perror_cd()
-{
-	G_EXIT_STATUS = 1;
-	perror("minishell");
-	return(EXIT_FAILURE);	
-}
 
 int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 {

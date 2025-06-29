@@ -6,14 +6,6 @@ void	error_msg(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	null_error(char *str)
-{
-	write(2, "error :", 8);
-	write(2, str, ft_strlen(str));
-	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
-}
-
 void	close_pipes(int nbr_pipes, int **ends)
 {
 	int	i;
@@ -27,12 +19,6 @@ void	close_pipes(int nbr_pipes, int **ends)
 			perror("close ");
 		i++;
 	}
-}
-
-void child_handller(int sig)
-{
-    (void)sig;
-    ft_putstr_fd("\n", 1);
 }
 
 int	**piping(int lines)
