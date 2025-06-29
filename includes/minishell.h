@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-
+#include <limits.h>
 
 extern int G_EXIT_STATUS;
 
@@ -53,22 +53,26 @@ int	ft_strcmp(char *s1, char *s2);
 // builtins 
 int ft_pwd(t_env *envs);
 int ft_env(char **args, t_env *envs);
-void ft_exit(char **args);
+void ft_exit(char **args, int is_child);
 int ft_cd(char **args, t_env *envs);
 int ft_unset(char **args, t_env **envs);
 int ft_export(char **args, t_env **envs);
 int ft_echo(char **args);
 
 int check_flag_n(char *str);
-int ft_builtin(char **command, t_env **envs);
-int is_parent_builtin(char *cmd);
+int ft_builtin(char **command,int is_child, t_env **envs);
+int ft_perror_cd();
+int	print_error(char *str);
 
 
 // list envs
 void    add_env(t_env *newnode, t_env **head_list);
 t_env   *list_envs(char **envp);
-t_env   *new_env(char *env); //0 if a normal env //1 if exported (just the name) 
+t_env   *new_env(char *env, char **envp); //0 if a normal env //1 if exported (just the name) 
 char    *get_env_value(char *key, t_env *envs);
+t_env 	*build_new_envs(char **envs, char **envp);
+char	*get_pwd();
+char	**creat_mini_envp();
 
 // free memory
 void	free_list(t_env **head_env);
@@ -100,7 +104,7 @@ int		len_list_cmd(t_cmd *temp);
 t_pids		*execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error handling. 
-void	null_error(char *str);
+// void	null_error(char *str);
 void	ft_perror(char *err_msg, int len_cmd, int **pipes);
 
 
@@ -112,6 +116,13 @@ int ft_double(char *str, t_env *envp, t_var *data);
 int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
 t_cmd *ft_send(t_var *data, t_cmd *head);
 int    heredoce(char *limiter,t_var *data, int flag,t_env *envp);
+
+
+//singals
+void	my_handller(int sig);
+void	set_signals_dfl();
+void    sig_heredoc(int sig);
+void	sig_ignore();
 
 
 #endif

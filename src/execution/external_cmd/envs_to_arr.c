@@ -59,3 +59,16 @@ char **envs_to_array(t_env *envs)
 	env_arr[i] = NULL;
 	return(env_arr);
 }
+
+int	len_list_cmd(t_cmd *temp)
+{
+	int i;
+
+	i = 0;
+	while (temp)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return(i);
+}
