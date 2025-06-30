@@ -62,7 +62,7 @@ int	ft_strcmp(char *s1, char *s2);
 // builtins 
 int ft_pwd(t_env *envs);
 int ft_env(char **args, t_env *envs);
-void ft_exit(char **args, int is_child);
+void ft_exit(char **args, int is_child, t_env *envs);
 int ft_cd(char **args, t_env *envs);
 int ft_unset(char **args, t_env **envs);
 int ft_export(char **args, t_env **envs);

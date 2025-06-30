@@ -6,7 +6,7 @@ t_env *split_key_value(int is_path_exported, char *env, char **envp)
 	char 		*value;
 	char 		**key;
 
-	newnode = (t_env *)malloc(sizeof(t_env));
+	newnode = (t_env *)malloc(sizeof(t_env)); // no garbag collectore cuz , we use (free_list)
 	if(!newnode)
 		return(NULL);
 	value = ft_strchr(env, '='); // search for the fisrt (=) and return pointer to it

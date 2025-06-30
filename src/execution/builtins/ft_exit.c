@@ -53,16 +53,23 @@ void display_exit(int is_child)
 		ft_putstr_fd("exit\n", 2);
 }
 
-void message_error_exit(char *str, int is_child)
+void message_error_exit(char *str, int is_child, t_env *envs)
 {
 	display_exit(is_child);
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
-	exit(2);	
+	clean_memory(&(envs->head_gc));
+	exit(2);
 }
 
-void ft_exit(char **args, int is_child)
+void exit_and_clean(t_env *envs)
+{
+	clean_memory(&(envs->head_gc));
+	exit(G_EXIT_STATUS % 256);
+}
+
+void ft_exit(char **args, int is_child, t_env *envs)
 {
 	int i;
 
@@ -72,10 +79,11 @@ void ft_exit(char **args, int is_child)
 	if(i == 1) // if just exit
 	{
 		display_exit(is_child);
-		exit(G_EXIT_STATUS);
+		exit_and_clean(envs);
+		// exit(G_EXIT_STATUS);
 	}
 	else if(is_valid_exit(args[1]) == -1 )// if not numeric or exceed range  
-		message_error_exit(args[1], is_child);
+		message_error_exit(args[1], is_child, envs);
 	else if(i > 2) // if many args
 	{
 		display_exit(is_child);
@@ -87,7 +95,7 @@ void ft_exit(char **args, int is_child)
 	{
 		display_exit(is_child);
 		G_EXIT_STATUS = ft_atoi(args[1]);
-		exit(G_EXIT_STATUS % 256); // to make sur exit correctly
+		exit_and_clean(envs);
+		// exit(G_EXIT_STATUS % 256); // to make sur exit correctly
 	}
 }
-

@@ -90,4 +90,3 @@ void	 waiting_childs(t_pids *process_ids)
 		i++;
 	}
 }
-
