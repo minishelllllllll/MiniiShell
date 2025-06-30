@@ -70,7 +70,7 @@ static	void	free_split(char **arr, int arrlen)
 	free(arr);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c, t_env *envs)
 {
 	char	**str;
 
@@ -79,7 +79,7 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	if (!s)
 		return (NULL);
-	str = (char **)malloc((count_word(s, c) + 1) * sizeof(char *));
+	str = (char **)g_collector((count_word(s, c) + 1) * sizeof(char *), envs);
 	if (!str)
 		return (NULL);
 	while (s[i])

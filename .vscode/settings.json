@@ -4,6 +4,7 @@
 		"minishell.h": "c",
 		"limits": "c",
 		"chrono": "c",
-		"functional": "c"
+		"functional": "c",
+		"libft.h": "c"
 	}
 }

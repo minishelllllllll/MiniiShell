@@ -11,24 +11,15 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "libft.h"
 #include <errno.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h>
+#include "libft.h"
 
 extern int G_EXIT_STATUS;
 
-
 //execution
-
-// garbeg collector
-typedef struct g_collector
-{
-	void				*node;
-	struct g_collector	*next;	
-} t_gc;
-
 
 // struct for commands (list)
 typedef struct s_cmd
@@ -38,16 +29,6 @@ typedef struct s_cmd
 	char			**full_cmd;
 	struct s_cmd	*next;
 }					t_cmd;
-
-// struct for envs (list)
-typedef struct env
-{
-    char   		*key;
-    char   		*value;
-    int    		flag_exported;
-	t_gc 		*head_gc; // head of garbage collector 
-    struct env *next;
-}  t_env;
 
 // struct pids
 typedef struct process_id
@@ -136,6 +117,14 @@ void	sig_ignore();
 // garbeg collect
 void clean_memory(t_gc **head);
 void *g_collector(size_t size, t_env *envs);
+
+
+
+// // added envs
+// char	**ft_split(char const *s, char c, t_env *envs);
+// char	*ft_strdup(const char *s1, t_env *envs);
+// char	*ft_itoa(int n, t_env *envs);
+// char	*ft_strjoin(char const *s1, char const *s2, t_env *envs);
 
 
 #endif
