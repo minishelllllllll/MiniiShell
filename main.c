@@ -84,6 +84,8 @@ int main(int ac, char **av, char **envp)
     signal(SIGQUIT, SIG_IGN);
     
     // (void)envp;
+    envs = NULL;
+    
 	envs = list_envs(envp); //save
     // envs->head_gc = malloc(sizeof(t_gc));
     envs->head_gc = NULL;
