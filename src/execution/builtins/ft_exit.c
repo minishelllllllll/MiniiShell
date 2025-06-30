@@ -66,6 +66,7 @@ void message_error_exit(char *str, int is_child, t_env *envs)
 void exit_and_clean(t_env *envs)
 {
 	clean_memory(&(envs->head_gc));
+	free_list(&(envs));
 	exit(G_EXIT_STATUS % 256);
 }
 
