@@ -22,6 +22,14 @@ extern int G_EXIT_STATUS;
 
 //execution
 
+// garbeg collector
+typedef struct g_collector
+{
+	void				*node;
+	struct g_collector	*next;	
+} t_gc;
+
+
 // struct for commands (list)
 typedef struct s_cmd
 {
@@ -34,9 +42,10 @@ typedef struct s_cmd
 // struct for envs (list)
 typedef struct env
 {
-    char    *key;
-    char    *value;
-    int     flag_exported;
+    char   		*key;
+    char   		*value;
+    int    		flag_exported;
+	t_gc 		*head_gc; // head of garbage collector 
     struct env *next;
 }  t_env;
 
@@ -123,6 +132,10 @@ void	my_handller(int sig);
 void	set_signals_dfl();
 void    sig_heredoc(int sig);
 void	sig_ignore();
+
+// garbeg collect
+void clean_memory(t_gc **head);
+void *g_collector(size_t size, t_env *envs);
 
 
 #endif

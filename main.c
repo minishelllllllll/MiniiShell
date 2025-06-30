@@ -85,6 +85,7 @@ int main(int ac, char **av, char **envp)
     
     // (void)envp;
 	envs = list_envs(envp); //save
+    envs->head_gc = NULL;
     while (1)
 	{
         signal(SIGINT, my_handller); // in here doce
@@ -102,6 +103,7 @@ int main(int ac, char **av, char **envp)
 		if (!rdl)  // Handle Ctrl+D (EOF)
 		{
 			printf("exit\n"); // notify message
+            clean_memory(&(envs->head_gc));
 			exit(G_EXIT_STATUS); // need to clean up 
 		}
 
@@ -142,22 +144,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// handle env -i bash ~done~
-//--> /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-//--> when set path, nothing work again , but added in envs 
-//////// start with minimal envs ///////////
-        /* 
-        PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin 
-                --> flaged with 2 to dont dispaly ni env ni export
-                --> but the flaged modified when export new value of it 
-        declare -x OLDPWD
-        declare -x PWD="/home/hind/Desktop/MiniiShell"
-        declare -x SHLVL="1"
-        */
-
-// check OLDPWD ~done~
-
-
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
 // $> ABC=hola
@@ -166,9 +152,7 @@ int main(int ac, char **av, char **envp)
 // echo $?$ 
 // echo $:$= | cat -e
 // echo my shit terminal is [$TERM4]
-// echo $9HOME >>>>>>>> HOME
 // echo $TERM$HOME
-// echo $hola*
 // testttt -----------> 134
 // 
 // a=ls -la >> $a
@@ -178,12 +162,6 @@ int main(int ac, char **av, char **envp)
 // export HOLA=$HOME >>>> shouldn't give a error
 // export HOLA=bon(jour >>>>>>> should give -> bash: syntax error near unexpected token `('
 // 
-// cd $PWD >>>>> should go to home.
-// cd $HOME >>>>> and home not set should give error >>>>>>> minishell: cd: HOME not set.
-// error handling when rm -rf a, when we are already in a/b/c
-// handle if remove pwd , and getcwd failed.
-// thats correct ->>> cd srcs >>>> minishell: No such file or directory
-// pwd -p >>>>> if should handle that >>>>>>>>>> bash: pwd: -p: invalid option
 // cd "". 
 // 
 // test 414 >>> cd
@@ -198,20 +176,10 @@ int main(int ac, char **av, char **envp)
     // > bonjour echo hola
     // echo hola > hello >> hello >> hello (testing form test 656)
     // export cc="" ; echo "hhhh" > $cc ----->>>> bash: $cc: ambiguous redirect
-    // heredoc with ctrl D
+    // << + space --> bash: syntax error near unexpected token `newline'
 
 
 // exit (argument + overflow) 
     // testing from 473
     //------------ problems --------------------
-    //  exit "666",  exit '666' 
     // exit 6'6'66 -->> exit | 66 | 66
-
-
-// [1]    104862 segmentation fault (core dumped)  ./minishell
-    // echo | echo
-    // << + space
-    // /home/hind/Desktop/MiniiShell $> ^Z
-    // >>> [3]  + 21801 suspended  ./minishell
-
-

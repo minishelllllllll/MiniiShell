@@ -76,10 +76,10 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 	t_pids *process_ids;
 	int len_cmd;
 	
-	process_ids = malloc(sizeof(t_pids)); // allocate struct
+	process_ids = g_collector(sizeof(t_pids), (*envs)); // allocate struct
 	if(!process_ids)
 		return(NULL);
-	process_ids->pids = malloc(sizeof(int) * 1024); // allocate array of ids
+	process_ids->pids = g_collector(sizeof(int) * 1024, (*envs)); // allocate array of ids
 	if(!process_ids->pids)
 		return(NULL);
 	len_cmd = len_list_cmd(tmp_cmd); // process_ids->nbr_childs len of linked list (how many command)
