@@ -12,7 +12,7 @@ char *join_key_value(t_env *temp)
 		return(key);
 	else
 	{
-		key_value = ft_strjoin(key, temp->value);
+		key_value = ft_strjoin(key, temp->value, temp);
 		free(key);
 		if(!key_value)
 			return(NULL);

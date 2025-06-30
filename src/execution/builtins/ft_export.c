@@ -11,7 +11,7 @@ int  exist_env(t_env *newnode, t_env *temp_env)
 		{
 			if(temp_env->value != NULL) //if old value not set it as NULL (like, ZZZ)
 				free(temp_env->value); // free old value 
-			temp_env->value = ft_strdup(newnode->value); //dup the new value or NULL
+			temp_env->value = ft_strdup(newnode->value, temp_env); //dup the new value or NULL
 			temp_env->flag_exported = newnode->flag_exported; //update flage
 			return (0);
 		}

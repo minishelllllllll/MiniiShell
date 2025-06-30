@@ -83,7 +83,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 	if(!process_ids->pids)
 		return(NULL);
 	len_cmd = len_list_cmd(tmp_cmd); // process_ids->nbr_childs len of linked list (how many command)
-	pipes = piping(len_cmd - 1); // allocate 2d array of pipes
+	pipes = piping(len_cmd - 1, (*envs)); // allocate 2d array of pipes
 	if(!pipes)
 		return(NULL);
 	process_ids->nbr_childs = 0;

@@ -120,7 +120,6 @@ int main(int ac, char **av, char **envp)
         //     printf("********************\n");
         //     h = h->next;
         // }
-        
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)

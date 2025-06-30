@@ -74,16 +74,18 @@ void	free_2d(char **str);
 // find path
 char	*executable_path(char *cmd, t_env *envs);
 char	*get_path_env(t_env *envs);
-char	*build_path(char *dirc, char *cmd);
-char	*build_path(char *dirc, char *cmd);
+char	*build_path(char *dirc, char *cmd, t_env *envs);
 
-// envs to array
+// envs 
 char    **envs_to_array(t_env *envs);
 char    *join_key_value(t_env *temp);
 int     len_list(t_env *temp);
+char	*ft_strdup_env(const char *s1);
+char	*ft_strjoin_env(char const *s1, char const *s2);
+char	**ft_split_env(char const *s, char c);
 
 //pipes
-int		**piping(int lines);
+int		**piping(int lines, t_env *envs);
 void	close_pipes(int nbr_pipes, int **ends);
 void	waiting_childs(t_pids *pids);
 
@@ -91,21 +93,18 @@ void	waiting_childs(t_pids *pids);
 void	ft_execve(t_env *envs, t_cmd *tmp_cmd);
 void	duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
 int		len_list_cmd(t_cmd *temp);
-t_pids		*execute_commands(t_env **envs, t_cmd *tmp_cmd);
+t_pids	*execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error handling. 
-// void	null_error(char *str);
 void	ft_perror(char *err_msg, int len_cmd, int **pipes);
 
-
-
 // parssing testtt
-int  checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd);
-t_parsing *expand(t_parsing *head,t_env *envp,t_var *data,t_cmd **cmd);
-int ft_double(char *str, t_env *envp, t_var *data);
-int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
-t_cmd *ft_send(t_var *data, t_cmd *head);
-int    heredoce(char *limiter,t_var *data, int flag,t_env *envp);
+int 		checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd);
+t_parsing	*expand(t_parsing *head,t_env *envp,t_var *data,t_cmd **cmd);
+int			ft_double(char *str, t_env *envp, t_var *data);
+int			check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
+t_cmd		*ft_send(t_var *data, t_cmd *head);
+int			heredoce(char *limiter,t_var *data, int flag,t_env *envp);
 
 
 //singals
@@ -117,14 +116,6 @@ void	sig_ignore();
 // garbeg collect
 void clean_memory(t_gc **head);
 void *g_collector(size_t size, t_env *envs);
-
-
-
-// // added envs
-// char	**ft_split(char const *s, char c, t_env *envs);
-// char	*ft_strdup(const char *s1, t_env *envs);
-// char	*ft_itoa(int n, t_env *envs);
-// char	*ft_strjoin(char const *s1, char const *s2, t_env *envs);
 
 
 #endif

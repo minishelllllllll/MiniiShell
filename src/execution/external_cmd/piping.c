@@ -21,18 +21,18 @@ void	close_pipes(int nbr_pipes, int **ends)
 	}
 }
 
-int	**piping(int lines)
+int	**piping(int lines, t_env *envs)
 {
 	int	**pip;
 	int	i;
 
 	i = 0;
-	pip = (int **)malloc((lines + 1) * sizeof(int *));
+	pip = (int **)g_collector((lines + 1) * sizeof(int *), envs);
 	if (!pip)
 		return (NULL);
 	while (i < lines)
 	{
-		pip[i] = (int *)malloc(2 * sizeof(int));
+		pip[i] = (int *)g_collector(2 * sizeof(int), envs);
 		if (!pip[i])
 		{
 			free_arr_b((void **)pip);
