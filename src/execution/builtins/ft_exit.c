@@ -60,6 +60,7 @@ void message_error_exit(char *str, int is_child, t_env *envs)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	clean_memory(&(envs->head_gc));
+	free_list(&(envs));
 	exit(2);
 }
 
