@@ -113,9 +113,5 @@ void	set_signals_dfl();
 void    sig_heredoc(int sig);
 void	sig_ignore();
 
-// garbeg collect
-void clean_memory(t_gc **head);
-void *g_collector(size_t size, t_env *envs);
-
 
 #endif

@@ -62,9 +62,9 @@ char *shell_prompt(t_env *envs)
     {
 		cwd = get_env_value("PWD", envs);
         if(!cwd) // in case no pwd and fail getcwd
-            cwd = ft_strdup("..");
+            cwd = ft_strdup("..", envs);
     }
-	prompt = ft_strjoin(cwd, " $> ");
+	prompt = ft_strjoin(cwd, " $> ", envs);
 	return(prompt);
 }
 
@@ -143,6 +143,7 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 

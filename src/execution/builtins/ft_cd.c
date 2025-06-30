@@ -8,7 +8,7 @@ int set_env(char *var, char *new_value, t_env *envs)
 		{
 			if(envs->value) // maybe no need when use gc
 				free(envs->value);
-			envs->value = ft_strdup(new_value);
+			envs->value = ft_strdup(new_value, envs);
 			envs->flag_exported = 1;
 			return(0);
 		}
