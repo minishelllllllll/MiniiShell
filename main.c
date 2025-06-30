@@ -104,6 +104,7 @@ int main(int ac, char **av, char **envp)
 		{
 			printf("exit\n"); // notify message
             clean_memory(&(envs->head_gc));
+            free_list(&envs);
 			exit(G_EXIT_STATUS); // need to clean up 
 		}
 
