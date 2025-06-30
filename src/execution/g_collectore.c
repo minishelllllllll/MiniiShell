@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void *g_collector(size_t size, t_env **envs)
+void *g_collector(size_t size, t_env *envs)
 {
 	t_gc		*temp;
 	t_gc		*new_collect;
@@ -8,12 +8,12 @@ void *g_collector(size_t size, t_env **envs)
 
 	allocated = malloc(size);
 	if(!allocated)
-		clean_memory(&(envs->head_gc)); // call to clear_memory
+		clean_memory(&envs->head_gc); // call to clear_memory
 
 
 	new_collect = malloc(sizeof(t_gc)); // allocate the new node
 	if(!new_collect)
-		clean_memory(&(envs->head_gc));
+		clean_memory(&envs->head_gc);
 	new_collect->node = allocated;
 	new_collect->next = NULL;
 
@@ -22,7 +22,7 @@ void *g_collector(size_t size, t_env **envs)
 		envs->head_gc = new_collect;
 	else
 	{
-		temp = (*envs)->head_gc;
+		temp = envs->head_gc;
 		while (temp->next)
 			temp = temp->next;
 		temp->next = new_collect;
