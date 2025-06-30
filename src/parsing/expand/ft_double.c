@@ -105,7 +105,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                         return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
                     data->j++;
                 }
-                data->s1 = ft_strjoin(data->s1, "0");
+                data->s1 = ft_strjoin(data->s1, "0", envp);
                 if (!data->s1)
                     return (2);
                 data->i = data->j + 2;
@@ -124,7 +124,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                         return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
                     data->j++;
                 }
-                data->s1 = ft_strjoin(data->s1, ft_substr(str, start, data->j - start));
+                data->s1 = ft_strjoin(data->s1, ft_substr(str, start, data->j - start), envp);
                 if (!data->s1)
                     return (2);
                 
@@ -144,7 +144,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                     {
                         if (ft_strcmp(tmp->key, ft_substr(str, start, len)) == 0)
                         {
-                            data->s1 = ft_strjoin(data->s1, tmp->value);
+                            data->s1 = ft_strjoin(data->s1, tmp->value, envp);
                             if (!data->s1)
                                 return (2);
                             break;

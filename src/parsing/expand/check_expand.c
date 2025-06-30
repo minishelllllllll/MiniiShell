@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-void check_export(t_parsing **head)
+void check_export(t_parsing **head, t_env *envs)
 {
     t_parsing *current = *head;
     t_parsing *next_token;
@@ -45,7 +45,7 @@ void check_export(t_parsing **head)
                     current->next && current->next->type != WHITE_SPACE &&
                     current->next->type != PIPE_LINE)
                 {
-                    str = ft_strdup(current->content);
+                    str = ft_strdup(current->content, envs);
                     if (!str)
                         return;
                     
@@ -58,7 +58,7 @@ void check_export(t_parsing **head)
                     if (next_token && next_token->content)
                     {
                         // Concatenate the current token with the next token
-                        new_content = ft_strjoin(str, next_token->content);
+                        new_content = ft_strjoin(str, next_token->content, envs);
                         if (new_content)
                         {
                             // Update current token content
@@ -101,7 +101,7 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
     data.l = 0;
     data.in_file = -1;
     data.out_file = -1;
-    check_export(&head);
+    check_export(&head, envp);
     while(head)
     {
         head = expand(head,envp,&data,cmd);
@@ -111,6 +111,6 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
         }
         head = head->next;
     }
-    *cmd = ft_send(&data,*cmd);
+    *cmd = ft_send(&data,*cmd, envp);
     return(0);
 }

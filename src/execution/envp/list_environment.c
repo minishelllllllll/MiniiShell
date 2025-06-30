@@ -43,7 +43,7 @@ char	**ft_split_env(char const *s, char c)
 			i++;
 		else
 		{
-			str[j++] = ft_strdup_env((s + i), wordlen((s + i), c));
+			str[j++] = ft_stdup((s + i), wordlen((s + i), c));
 			if (!str[j - 1])
 			{
 				return (free_split(str, j - 1), NULL);

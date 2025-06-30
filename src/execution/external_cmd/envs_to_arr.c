@@ -5,7 +5,7 @@ char *join_key_value(t_env *temp)
 	char	*key;
 	char	*key_value;
 
-	key = ft_strjoin(temp->key, "=");
+	key = ft_strjoin(temp->key, "=", temp);
 	if(!key)
 		return(NULL);
 	if(!temp->value)

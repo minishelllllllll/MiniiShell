@@ -22,7 +22,7 @@ char *expand_var(char *line, t_env *envp, int i)
     
     if (!line)
         return (NULL);
-    result = ft_strdup("");
+    result = ft_strdup("", envp);
     if (!result)
         return (NULL);
     while (line[i])
@@ -41,7 +41,7 @@ char *expand_var(char *line, t_env *envp, int i)
                 {
                     if (ft_strcmp(tmp->key, ft_substr(line, start, len)) == 0)
                     {
-                        result = ft_strjoin(result, tmp->value);
+                        result = ft_strjoin(result, tmp->value, envp);
                         if(!result)
                             return(NULL);
                         break;

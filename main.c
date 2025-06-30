@@ -62,9 +62,9 @@ char *shell_prompt(t_env *envs)
     {
 		cwd = get_env_value("PWD", envs);
         if(!cwd) // in case no pwd and fail getcwd
-            cwd = ft_strdup("..");
+            cwd = ft_strdup("..", envs);
     }
-	prompt = ft_strjoin(cwd, " $> ");
+	prompt = ft_strjoin(cwd, " $> ", envs);
 	return(prompt);
 }
 
@@ -85,6 +85,7 @@ int main(int ac, char **av, char **envp)
     
     // (void)envp;
 	envs = list_envs(envp); //save
+    // envs->head_gc = malloc(sizeof(t_gc));
     envs->head_gc = NULL;
     while (1)
 	{
@@ -143,6 +144,15 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+
+// modify cd
+// add static functions from split to header file
+// modify this line in split (str[j++] = ft_strdup_env((s + i), wordlen((s + i), c));)
+// modify char *join_key_value(t_env *temp)
+// modify cwd = ft_strdup("..", envs);
+// modify prompt = ft_strjoin(cwd, " $> ", envs);
+// move // garbeg collect functions // to libft.h
+
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 

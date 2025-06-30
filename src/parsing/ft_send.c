@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-t_cmd *ft_send(t_var *data, t_cmd *head)
+t_cmd *ft_send(t_var *data, t_cmd *head, t_env *envs)
 {
     t_cmd *cmd;
     t_cmd *current = NULL;
@@ -30,7 +30,7 @@ t_cmd *ft_send(t_var *data, t_cmd *head)
     }
     while(i < data->l)
     {
-        cmd->full_cmd[i] = ft_strdup(data->s[i]);
+        cmd->full_cmd[i] = ft_strdup(data->s[i], envs);
         i++;
     }
     cmd->full_cmd[data->l] = NULL;

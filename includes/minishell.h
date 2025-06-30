@@ -103,7 +103,7 @@ int 		checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd);
 t_parsing	*expand(t_parsing *head,t_env *envp,t_var *data,t_cmd **cmd);
 int			ft_double(char *str, t_env *envp, t_var *data);
 int			check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd);
-t_cmd		*ft_send(t_var *data, t_cmd *head);
+t_cmd		*ft_send(t_var *data, t_cmd *head, t_env *envs);
 int			heredoce(char *limiter,t_var *data, int flag,t_env *envp);
 
 
@@ -112,10 +112,5 @@ void	my_handller(int sig);
 void	set_signals_dfl();
 void    sig_heredoc(int sig);
 void	sig_ignore();
-
-// garbeg collect
-void clean_memory(t_gc **head);
-void *g_collector(size_t size, t_env *envs);
-
 
 #endif
