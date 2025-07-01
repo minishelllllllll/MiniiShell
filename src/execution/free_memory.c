@@ -22,7 +22,8 @@ void	free_list(t_env **head_env)
 	while (temp != NULL)
 	{
 		next = temp->next;
-		free(temp->key);
+		if(temp->key)
+			free(temp->key);
 		if(temp->value)
 			free(temp->value);
 		free(temp);

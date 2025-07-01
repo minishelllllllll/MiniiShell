@@ -24,36 +24,6 @@ char	*ft_strjoin_env(char const *s1, char const *s2)
 	return (str);
 }
 
-
-char	**ft_split_env(char const *s, char c)
-{
-	char	**str;
-
-	int (i), (j);
-	j = 0;
-	i = 0;
-	if (!s)
-		return (NULL);
-	str = (char **)malloc((count_word(s, c) + 1) * sizeof(char *));
-	if (!str)
-		return (NULL);
-	while (s[i])
-	{
-		if (s[i] == c)
-			i++;
-		else
-		{
-			str[j++] = ft_stdup((s + i), wordlen((s + i), c));
-			if (!str[j - 1])
-			{
-				return (free_split(str, j - 1), NULL);
-			}
-			i += wordlen((s + i), c);
-		}
-	}
-	return (str[j] = NULL, str);
-}
-
 char	*ft_strdup_env(const char *s1)
 {
 	char			*str;

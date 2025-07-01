@@ -8,10 +8,10 @@ void *g_collector(size_t size, t_env *envs)
 
 	allocated = malloc(size);
 	if(!allocated)
-		clean_memory(&(envs->head_gc)); // call to clear_memory
+		return(clean_and_NULL(envs)); // call to clear_memory
 	new_collect = malloc(sizeof(t_gc)); // allocate the new node
 	if(!new_collect)
-		clean_memory(&(envs->head_gc));
+		return(clean_and_NULL(envs)); // call to clear_memory
 	new_collect->node = allocated;
 	new_collect->next = NULL;
 	if (envs->head_gc == NULL)
@@ -26,6 +26,11 @@ void *g_collector(size_t size, t_env *envs)
 	return(allocated);
 }
 
+void *clean_and_NULL(t_env *envs)
+{
+	clean_memory(&(envs->head_gc));
+	return(NULL);
+}
 
 void clean_memory(t_gc **head)
 {

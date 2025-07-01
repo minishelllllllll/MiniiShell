@@ -12,7 +12,7 @@
 
 #include "../includes/libft.h"
 
-int	count_word(char const *str, char c)
+static int	count_word(char const *str, char c)
 {
 	int	i;
 	int	count;
@@ -30,7 +30,7 @@ int	count_word(char const *str, char c)
 	return (count);
 }
 
-int	wordlen(const char *str, char c)
+static int	wordlen(const char *str, char c)
 {
 	int	start;
 
@@ -40,7 +40,7 @@ int	wordlen(const char *str, char c)
 	return (start);
 }
 
-char	*ft_stdup(const char *src, int len)
+static char	*ft_stdup(const char *src, int len, t_env *envs)
 {
 	char	*str;
 	int		i;
@@ -48,7 +48,7 @@ char	*ft_stdup(const char *src, int len)
 	i = 0;
 	if (!src)
 		return (NULL);
-	str = (char *)malloc((len + 1) * sizeof(char));
+	str = (char *)g_collector((len + 1) * sizeof(char), envs);
 	if (!str)
 		return (NULL);
 	while (i < len)
@@ -60,15 +60,6 @@ char	*ft_stdup(const char *src, int len)
 	return (str);
 }
 
-void	free_split(char **arr, int arrlen)
-{
-	while (arrlen >= 0)
-	{
-		free(arr[arrlen]);
-		arrlen--;
-	}
-	free(arr);
-}
 
 char	**ft_split(char const *s, char c, t_env *envs)
 {
@@ -88,10 +79,10 @@ char	**ft_split(char const *s, char c, t_env *envs)
 			i++;
 		else
 		{
-			str[j++] = ft_stdup((s + i), wordlen((s + i), c));
+			str[j++] = ft_stdup((s + i), wordlen((s + i), c), envs);
 			if (!str[j - 1])
 			{
-				return (free_split(str, j - 1), NULL);
+				return (NULL);
 			}
 			i += wordlen((s + i), c);
 		}
