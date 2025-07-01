@@ -85,7 +85,11 @@ int main(int ac, char **av, char **envp)
     
     // (void)envp;
 	envs = list_envs(envp); //save
-    // envs->head_gc = malloc(sizeof(t_gc));
+    if(!envs)
+    {
+        ft_putstr_fd("minishell: error initializing environment\n", 2);
+        return (1);
+    }
     envs->head_gc = NULL;
     while (1)
 	{
@@ -144,6 +148,8 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+// need to understand the neasted structs ~~~~~~~~~~~~
+// and handle the memory leaks ~~~~~~~~~~~~~~~
 
 // modify cd
 // add static functions from split to header file
@@ -193,3 +199,5 @@ int main(int ac, char **av, char **envp)
     // testing from 473
     //------------ problems --------------------
     // exit 6'6'66 -->> exit | 66 | 66
+
+    
