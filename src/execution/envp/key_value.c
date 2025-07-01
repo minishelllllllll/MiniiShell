@@ -30,6 +30,7 @@ t_env *split_key_value(int is_path_exported, char *env, char **envp)
 	newnode->key = ft_strdup_env(key[0]); //duplicate the first argument
 	newnode->value = ft_strdup_env(value + 1); //dup the string, +1 to skiip (=), like (=/hind/....)
 	newnode->next = 0;
+	newnode->head_gc = NULL;
 	if(ft_strcmp(newnode->key, "PATH") == 0 && (!envp || !envp[0]) && !is_path_exported) // flaged with 2 to not printed in (env, export)
 	{
 		newnode->flag_exported = 2;
@@ -56,6 +57,7 @@ t_env *new_env(char *env, char **envp)
 		newnode->value = NULL; // no value. 
 		newnode->flag_exported = 0; //if just the key (false)
 		newnode->next = 0;
+		newnode->head_gc = NULL;
 	}
 	return(newnode);
 }
