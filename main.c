@@ -29,11 +29,11 @@ int skip_space_str(char *str)
     return(0);
 }
 
-int *saved_stdin_out(void)
+int *saved_stdin_out(t_env *envs)
 {
     int *in_out;
 
-    in_out = (int *)malloc(sizeof(int) * 2);
+    in_out = (int *)g_collector(sizeof(int) * 2, envs);
 
     in_out[0] = dup(STDIN_FILENO);
     in_out[1] = dup(STDOUT_FILENO);
@@ -58,11 +58,18 @@ char *shell_prompt(t_env *envs)
 	char *prompt;
 
 	cwd = getcwd(NULL, 0);
-	if(!cwd)
+    if (cwd)
     {
-		cwd = get_env_value("PWD", envs);
-        if(!cwd) // in case no pwd and fail getcwd
-            cwd = ft_strdup("..", envs);
+        prompt = ft_strjoin(cwd, " $> ", envs);
+        free(cwd);    /////////////////////////////// addeeed to execution branch
+        return(prompt);
+    }
+    cwd = get_env_value("PWD", envs);
+    if(!cwd) // in case no pwd and fail getcwd
+    {
+        cwd = ft_strdup("..", envs);
+        prompt = ft_strjoin(cwd, " $> ", envs);
+        return(prompt);
     }
 	prompt = ft_strjoin(cwd, " $> ", envs);
 	return(prompt);
@@ -88,6 +95,7 @@ int main(int ac, char **av, char **envp)
     if(!envs)
     {
         ft_putstr_fd("minishell: error initializing environment\n", 2);
+        free_list(&envs);
         return (1);
     }
     envs->head_gc = NULL;
@@ -95,10 +103,9 @@ int main(int ac, char **av, char **envp)
 	{
         signal(SIGINT, my_handller); // in here doce
 
-        arr_in_out = saved_stdin_out();  //save
+        arr_in_out = saved_stdin_out(envs);  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
-            free(arr_in_out);
             free_list(&envs);
             return 0;
         }
@@ -114,7 +121,7 @@ int main(int ac, char **av, char **envp)
 		}
 
 		// parssing
-        head = lexer(rdl);
+        head = lexer(rdl, envs);
  
         // t_parsing *h = head;
         // while(h)
@@ -144,7 +151,9 @@ int main(int ac, char **av, char **envp)
             waiting_childs(pids);
 
         }
+        free(rdl);
         cmd = NULL;
+        clean_memory(&(envs->head_gc));
 	}
 	return (0);
 }

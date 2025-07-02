@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-char *ft_charjoin(char *str,char c)
+char *ft_charjoin(char *str,char c, t_env *envp)
 {
     int len;
     int i;
@@ -22,7 +22,7 @@ char *ft_charjoin(char *str,char c)
         return(NULL);
     i = 0;
     len = ft_strlen(str);
-    s = malloc(len + 2);
+    s = g_collector(len + 2, envp);
     while(str[i])
     {
         s[i] = str[i];
@@ -57,7 +57,7 @@ char *check_env_general(char *str, t_env *envp)
     i = 0;
     len = 0;
     tmp = envp;
-    s = malloc(2);
+    s = g_collector(2, envp);
     s[0] = 0;
     len = check_odd(str);
     if(len % 2 == 1)
@@ -108,7 +108,7 @@ char *check_env_general(char *str, t_env *envp)
             }
             continue;
         }
-        s = ft_charjoin(s,str[i]);
+        s = ft_charjoin(s,str[i], envp);
         i++;
     }
     return(s);
@@ -159,7 +159,7 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
         split_env = ft_split(expanded_value, ' ', envp);
         if (!split_env)
         {
-            free(expanded_value);
+            // free(expanded_value);
             return 0;
         }
         i = 0;
@@ -170,16 +170,16 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
                 data->s[data->l] = ft_strdup(split_env[i], envp);
                 if (!data->s[data->l])
                 {
-                    free_2d(split_env);
-                    free(expanded_value);
+                    // free_2d(split_env);
+                    // free(expanded_value);
                     return 0;
                 }
                 data->l++;
             }
             i++;
         }
-        free_2d(split_env);
-        free(expanded_value);
+        // free_2d(split_env);
+        // free(expanded_value);
         return(1); 
     }
     else
@@ -189,10 +189,10 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
             data->s[data->l] = expanded_value;
             data->l++;
         }
-        else
-        {
-            free(expanded_value);
-        }
+        // else
+        // {
+            // free(expanded_value);
+        // }
         return (1);
     }
 }
@@ -306,13 +306,13 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             temp_value = get_token_value(current, envp, data);
             if (!temp_value)
             {
-                free(concatenated_value);
+                // free(concatenated_value);
                 return NULL;
             }
             
             new_concat = ft_strjoin(concatenated_value, temp_value, envp);
-            free(concatenated_value);
-            free(temp_value);
+            // free(concatenated_value);
+            // free(temp_value);
             
             if (!new_concat)
                 return NULL;
@@ -337,10 +337,10 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             data->s[data->l] = concatenated_value;
             data->l++;
         }
-        else
-        {
-            free(concatenated_value);
-        }
+        // else
+        // {
+        //     free(concatenated_value);
+        // }
         if(current && current->type == PIPE_LINE)
         {
             *cmd = ft_send(data, *cmd, envp);

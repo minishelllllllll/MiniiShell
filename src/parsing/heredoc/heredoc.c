@@ -52,7 +52,7 @@ char *expand_var(char *line, t_env *envp, int i)
         }
         else
         {
-            result = join_char(result, line[i]);
+            result = join_char(result, line[i], envp);
             if (!result)
                 return (NULL);
             i++;
@@ -123,8 +123,8 @@ int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
     int pid;
 
     (void)flag;
-    (void)envp;
-    fds = malloc(2 * sizeof(int));
+    // (void)envp;
+    fds = g_collector(2 * sizeof(int), envp);
     if(pipe(fds) == -1)
         return(2);
     pid = fork();

@@ -2,7 +2,6 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-#include "parsing.h"
 #include <limits.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -16,6 +15,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include "libft.h"
+#include "parsing.h"
 
 extern int G_EXIT_STATUS;
 

@@ -62,19 +62,19 @@ void check_export(t_parsing **head, t_env *envs)
                         if (new_content)
                         {
                             // Update current token content
-                            free(current->content);
+                            // free(current->content);
                             current->content = new_content;
                             
                             // Mark the next token for skipping by setting content to NULL
-                            free(next_token->content);
+                            // free(next_token->content);
                             next_token->content = NULL;
                         }
-                        free(str);
+                        // free(str);
                     }
-                    else
-                    {
-                        free(str);
-                    }
+                    // else
+                    // {
+                    //     free(str);
+                    // }
                 }
                 
                 current = current->next;
@@ -93,11 +93,11 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
 
     if(len == 0)
     {
-        data.s = malloc(1 * sizeof(char *));
+        data.s = g_collector(1 * sizeof(char *), envp);
         data.s[0] = NULL;
     }
     else
-        data.s = malloc(len*10 * sizeof(char *));   
+        data.s = g_collector(len*10 * sizeof(char *), envp);   
     data.l = 0;
     data.in_file = -1;
     data.out_file = -1;

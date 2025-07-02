@@ -18,11 +18,11 @@ t_cmd *ft_send(t_var *data, t_cmd *head, t_env *envs)
     t_cmd *current = NULL;
     int i;
     
-    cmd = malloc(sizeof(t_cmd));
+    cmd = g_collector(sizeof(t_cmd), envs);
     i = 0;
     if (!cmd || data->s[i] == NULL || data->l == 0)
         return (NULL);
-    cmd->full_cmd = malloc((data->l + 1) * sizeof(char *));
+    cmd->full_cmd = g_collector((data->l + 1) * sizeof(char *), envs);
     if (!cmd->full_cmd)
     {
         free(cmd);
