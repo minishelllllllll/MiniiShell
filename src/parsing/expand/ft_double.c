@@ -87,14 +87,32 @@ int ft_double(char *str, t_env *envp, t_var *data)
         else if (str[data->i] == '$')
         {
             data->j = data->i + 1;
-            if (str[data->j] == '\0')
+            if(str[data->j] == '$')
+            {
+                data->s1 = ft_strjoin(data->s1,"$$");
+                data->i = data->j;
+                continue;
+            }
+            else if(str[data->j] == ' ')
+            {
+                data->s1 = join_char(data->s1,str[data->j]);
+                data->i = data->j;
+                continue;
+            }
+            else if(str[data->j] == '?')
+            {
+                data->s1 = ft_strjoin(data->s1,ft_itoa(G_EXIT_STATUS));
+                data->i = data->j;
+                continue;
+            }
+            else if (str[data->j] == '\0')
             {
                 data->s1 = join_char(data->s1, '$');
                 if (!data->s1)
                     return (2);
                 break;
             }
-            if (str[data->j] == '(' && str[data->j + 1] == '(')
+            else if (str[data->j] == '(' && str[data->j + 1] == '(')
             {
                 if(check_parth(str + data->i) == 0)
                     return (error_print("syntax error \"unclosed parentheses\"\n"), 2);
@@ -158,6 +176,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
                     data->s1 = join_char(data->s1, '$');
                     if (!data->s1)
                         return (2);
+                    continue;
                 }
             }
         }

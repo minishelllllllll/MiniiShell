@@ -33,43 +33,35 @@ char *ft_charjoin(char *str,char c)
     return(s);
 }
 
-int check_odd(char *str)
-{
-    int i;
-
-    i = 0;
-    while(str[i])
-    {
-        if(str[i] != '$')
-            break;
-        i++;
-    }
-    return(i);
-}
-
 char *check_env_general(char *str, t_env *envp)
 {
     int i;
-    int len;
     t_env *tmp;
     char *s;
 
     i = 0;
-    len = 0;
     tmp = envp;
     s = malloc(2);
     s[0] = 0;
-    len = check_odd(str);
-    if(len % 2 == 1)
-        len--;
     while(str[i] && str[i] == ' ')
         i++;
-    i += len;
+    i = 0;
     while(str[i])
     {
         if(str[i] == '$')
         {
             i++;
+            if(str[i] == '?')
+            {
+                s = ft_strjoin(s,ft_itoa(G_EXIT_STATUS));
+                i++;
+                continue;
+            }
+            else if(str[i] == '$' || (str[i - 1] == '$' && str[i] == 0))
+            {
+                s = join_char(s,'$');
+                continue;
+            }
             tmp = envp;
             while(tmp)
             {
@@ -106,6 +98,7 @@ char *check_env_general(char *str, t_env *envp)
                 while(str[i]&& str[i] == ' ')
                     i++;
             }
+
             continue;
         }
         s = ft_charjoin(s,str[i]);
@@ -150,7 +143,6 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
     char *expanded_value;
     char **split_env;
     int i;
-    
     expanded_value = check_env_general(head->content, envp);
     if (!expanded_value)
         return 0;
@@ -267,8 +259,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         }   
         if(heredoce(head->content, data ,flag,envp) == 2)
             return(NULL);
-        // else if(heredoce(head->content, data ,flag) == 130)
-        //     exit(G_EXIT_STATUS);
         return(head);
     }
     

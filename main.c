@@ -31,8 +31,12 @@ int skip_space_str(char *str)
 
 int *saved_stdin_out(void)
 {
+    int a;
+    int aa;
     int *in_out;
 
+    (void)a;
+    (void)aa;
     in_out = (int *)malloc(sizeof(int) * 2);
 
     in_out[0] = dup(STDIN_FILENO);
@@ -124,7 +128,6 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-        
         // commads_in_out = cmd;        
         // int i = 0;
 
