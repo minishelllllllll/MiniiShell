@@ -91,19 +91,19 @@ int ft_double(char *str, t_env *envp, t_var *data)
             data->j = data->i + 1;
             if(str[data->j] == '$')
             {
-                data->s1 = ft_strjoin(data->s1,"$$");
+                data->s1 = ft_strjoin(data->s1,"$$",envp);
                 data->i = data->j;
                 continue;
             }
             else if(str[data->j] == ' ')
             {
-                data->s1 = join_char(data->s1,str[data->j]);
+                data->s1 = join_char(data->s1,str[data->j],envp);
                 data->i = data->j;
                 continue;
             }
             else if(str[data->j] == '?')
             {
-                data->s1 = ft_strjoin(data->s1,ft_itoa(G_EXIT_STATUS));
+                data->s1 = ft_strjoin(data->s1,ft_itoa(G_EXIT_STATUS,envp),envp);
                 data->i = data->j;
                 continue;
             }

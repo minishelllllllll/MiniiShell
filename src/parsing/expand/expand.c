@@ -53,13 +53,13 @@ char *check_env_general(char *str, t_env *envp)
             i++;
             if(str[i] == '?')
             {
-                s = ft_strjoin(s,ft_itoa(G_EXIT_STATUS));
+                s = ft_strjoin(s,ft_itoa(G_EXIT_STATUS,envp),envp);
                 i++;
                 continue;
             }
             else if(str[i] == '$' || (str[i - 1] == '$' && str[i] == 0))
             {
-                s = join_char(s,'$');
+                s = join_char(s,'$',envp);
                 continue;
             }
             tmp = envp;
