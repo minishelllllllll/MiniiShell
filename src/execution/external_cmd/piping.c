@@ -1,8 +1,9 @@
 #include "../../../includes/minishell.h"
 
-void	error_msg(char *str)
+void	error_msg(char *str, t_env *envs)
 {
 	perror(str);
+	clean_memory(&(envs->head_gc));
 	exit(EXIT_FAILURE);
 }
 
@@ -34,15 +35,9 @@ int	**piping(int lines, t_env *envs)
 	{
 		pip[i] = (int *)g_collector(2 * sizeof(int), envs);
 		if (!pip[i])
-		{
-			// free_arr_b((void **)pip);
 			return (NULL);
-		}
 		if (pipe(pip[i]) == -1)
-		{
-			// free_arr_b((void **)pip);
-			error_msg("error 🥴");
-		}
+			error_msg("error 🥴", envs);
 		i++;
 	}
 	pip[i] = NULL;

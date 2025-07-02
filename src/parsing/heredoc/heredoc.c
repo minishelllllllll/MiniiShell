@@ -73,10 +73,10 @@ void error_msg_heredoc(char *delimiter)
     ft_putstr_fd("`)\n", 2);
 }
 
-void run_heredoc(int *fds, char *delimiter)
+void run_heredoc(int *fds, char *delimiter, t_env *envs)
 {
     char *line;
-
+    (void)envs;
     signal(SIGINT, sig_heredoc);
     close(fds[0]);
     while (1)
@@ -94,6 +94,7 @@ void run_heredoc(int *fds, char *delimiter)
         free(line);
     }
     close(fds[1]);
+    clean_memory(&(envs->head_gc));
     exit(0);
 }
 
@@ -123,7 +124,6 @@ int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
     int pid;
 
     (void)flag;
-    // (void)envp;
     fds = g_collector(2 * sizeof(int), envp);
     if(pipe(fds) == -1)
         return(2);
@@ -131,7 +131,7 @@ int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
     if(pid == -1)
         return(closing(fds), 2);
     if (pid == 0)
-        run_heredoc(fds, delimiter);
+        run_heredoc(fds, delimiter, envp);
     else
     {
         if(wait_heredoc(data, pid, fds) == 2)
