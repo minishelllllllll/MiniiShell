@@ -167,9 +167,9 @@ int main(int ac, char **av, char **envp)
 
 --> close save_stdin_stdout , in childs
 
--->
+-->minishell: warning: here-document at line delimited by end-of-file (wanted `p`) leakkkkkkkkkkkkkkkkk one  block + ctl d
 
--->
+--> eco | pwd
 
 -->
 

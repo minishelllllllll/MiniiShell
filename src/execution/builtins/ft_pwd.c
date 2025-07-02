@@ -17,6 +17,7 @@ int ft_pwd(t_env *envs)
 		}
 	}
 	printf("%s\n", working_d);
+	free(working_d);
 	G_EXIT_STATUS = 0;
 	return(EXIT_SUCCESS);
 }
