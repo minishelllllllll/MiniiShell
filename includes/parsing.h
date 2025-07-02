@@ -80,4 +80,5 @@ int	ft_check_env(const char *s1, const char *s2, size_t n);
 char *ft_charjoin(char *str,char c);
 int check_odd(char *str);
 char *join_char(char *str, char c);
+t_parsing *check_space(t_parsing *head);
 #endif

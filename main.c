@@ -29,7 +29,6 @@ int skip_space_str(char *str)
     return(0);
 }
 
-
 int *saved_stdin_out(void)
 {
     int a;
@@ -64,7 +63,11 @@ char *shell_prompt(t_env *envs)
 
 	cwd = getcwd(NULL, 0);
 	if(!cwd)
+    {
 		cwd = get_env_value("PWD", envs);
+        if(!cwd) // in case no pwd and fail getcwd
+            cwd = ft_strdup("..");
+    }
 	prompt = ft_strjoin(cwd, " $> ");
 	return(prompt);
 }
@@ -82,10 +85,14 @@ int main(int ac, char **av, char **envp)
     t_pids  *pids; // struct of process ids 
     t_parsing   *head;
 
+    signal(SIGQUIT, SIG_IGN);
+    
     // (void)envp;
 	envs = list_envs(envp); //save
-	while (1)
+    while (1)
 	{
+        signal(SIGINT, my_handller); // in here doce
+
         arr_in_out = saved_stdin_out();  //save
         if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
         {
@@ -99,11 +106,12 @@ int main(int ac, char **av, char **envp)
 		if (!rdl)  // Handle Ctrl+D (EOF)
 		{
 			printf("exit\n"); // notify message
-			break;
+			exit(G_EXIT_STATUS); // need to clean up 
 		}
 
-		// parssing 
+		// parssing
         head = lexer(rdl);
+ 
         // t_parsing *h = head;
         // while(h)
         // {
@@ -118,20 +126,8 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-        commads_in_out = cmd;
-                
-        
+        // commads_in_out = cmd;        
         // int i = 0;
-        // while(commads_in_out)
-        // {
-        //     i = 0;
-        //     while(commads_in_out->full_cmd[i])
-        //         printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file ==> %d\n",commads_in_out->in_file);
-        //     printf("out_file ==> %d\n",commads_in_out->out_file);
-        //     printf("********************\n");
-        //     commads_in_out = commads_in_out->next;
-        // }
 
         //execution
         commads_in_out = cmd;
@@ -142,28 +138,28 @@ int main(int ac, char **av, char **envp)
                 return(0);       
             restore_stdin_out(arr_in_out);
             waiting_childs(pids);
+
         }
         cmd = NULL;
 	}
 	return (0);
 }
 
-// handle exit status  ~
-//     --> export should return with failure when not a valid name , but at same time should continue execution when i have many args.
-//     (export 2A=1 B=1 --> error msg + exit fail 1 + B exported)
-//     /////////////////////////////////////////
-//     >> export 2A=22 B=22
-//     bash: export: `2A=22': not a valid identifier
-//     >> echo $?
-//     1
-//     >> export | grep B
-//     declare -x B="22"
-//     ///////////////////////////////////////// solution (edit GLOBAL status)
+// handle env -i bash ~done~
+//--> /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+//--> when set path, nothing work again , but added in envs 
+//////// start with minimal envs ///////////
+        /* 
+        PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin 
+                --> flaged with 2 to dont dispaly ni env ni export
+                --> but the flaged modified when export new value of it 
+        declare -x OLDPWD
+        declare -x PWD="/home/hind/Desktop/MiniiShell"
+        declare -x SHLVL="1"
+        */
 
-//     --> env with args (correct or not) should return error ?
-//     (cases when env used with command ) fix it eith childs also
+// check OLDPWD ~done~
 
-//     --> check exit status of childs proccess is return it correctly 
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////testing////////////////////////////////////// 
@@ -193,50 +189,32 @@ int main(int ac, char **av, char **envp)
 // pwd -p >>>>> if should handle that >>>>>>>>>> bash: pwd: -p: invalid option
 // cd "". 
 // 
+// test 414 >>> cd
 // 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-
-// exit (argument + overflow) ~
-
-// handle signals ~
-
-// garbeg collectore ~
-
-
-// handell redirections ~solved~
-
-// handel heredoc ~solved~
-
-// split functions ~done~
-
-// handle waitpid ~solved~
-// -> store the pids ~ done ~
-// void	wait_procces(int pid)
-// {
-//     int	st;
-//     int	i;
-
-//     i = 0;
-//     waitpid(pid, &st, 0);
-//     if (WEXITSTATUS(st))
-//         MY_EXIT_STATUS = WEXITSTATUS(st);
-//     if (WIFSIGNALED(st))
-//     {
-//         MY_EXIT_STATUS = st + 128;
-//         if (MY_EXIT_STATUS == 131)
-//             printf("Quit: 3\n");
-//     }
-//     while (wait(&st) > i)
-//         i = 0;
-// }
-
-// error handling, in all functions  ~ 
-// --> handle close behave -> remove close from duplication ~done~ .
-// --> check envs in builtins . ~done~
-// -----> env should not work with envs==NULL ~solved~
-// -----> perror or strerror instead of printf ~solved~
+//test it later
+    // whoami | grep $USER > /tmp/bonjour
+    // echo bonjour > $HOLA (test --> 645)
+    // echo hola > > bonjour -------->>>>>> bash: syntax error near unexpected token `>'
+    // > bonjour echo hola
+    // echo hola > hello >> hello >> hello (testing form test 656)
+    // export cc="" ; echo "hhhh" > $cc ----->>>> bash: $cc: ambiguous redirect
+    // heredoc with ctrl D
 
 
-// */
+// exit (argument + overflow) 
+    // testing from 473
+    //------------ problems --------------------
+    //  exit "666",  exit '666' 
+    // exit 6'6'66 -->> exit | 66 | 66
+
+
+// [1]    104862 segmentation fault (core dumped)  ./minishell
+    // echo | echo
+    // << + space
+    // /home/hind/Desktop/MiniiShell $> ^Z
+    // >>> [3]  + 21801 suspended  ./minishell
+
+

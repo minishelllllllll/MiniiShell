@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redirect_in.c                                   :+:      :+:    :+:   */
+/*   check_space.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 17:33:03 by marvin            #+#    #+#             */
-/*   Updated: 2025/05/23 17:33:03 by marvin           ###   ########.fr       */
+/*   Created: 2025/06/16 15:48:06 by marvin            #+#    #+#             */
+/*   Updated: 2025/06/16 15:48:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int ft_redirect_in(t_parsing *head , t_var *data)
+t_parsing *check_space(t_parsing *head)
 {
-    int fd;
-
-    head = head->next;
-    if(!head)
-        return(2);
-    head = check_space(head);
-    printf("here\n");
-    fd = open(head->content,O_RDONLY);
-    if(fd < 0)
+    while(head)
     {
-        perror("minishell");
-        return(2);
+        if(head->type != WHITE_SPACE)
+            return(head);
+        head = head->next;
     }
-    data->in_file = fd;
-    return(0);
+    return(head);
 }
