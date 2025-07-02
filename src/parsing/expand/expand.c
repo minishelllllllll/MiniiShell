@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-char *ft_charjoin(char *str,char c)
+char *ft_charjoin(char *str,char c, t_env *envp)
 {
     int len;
     int i;
@@ -22,7 +22,7 @@ char *ft_charjoin(char *str,char c)
         return(NULL);
     i = 0;
     len = ft_strlen(str);
-    s = malloc(len + 2);
+    s = g_collector(len + 2, envp);
     while(str[i])
     {
         s[i] = str[i];
@@ -57,7 +57,7 @@ char *check_env_general(char *str, t_env *envp)
     i = 0;
     len = 0;
     tmp = envp;
-    s = malloc(2);
+    s = g_collector(2, envp);
     s[0] = 0;
     len = check_odd(str);
     if(len % 2 == 1)
@@ -89,7 +89,7 @@ char *check_env_general(char *str, t_env *envp)
                             i++;
                         break;
                     }
-                    s = ft_strjoin(s,tmp->value);
+                    s = ft_strjoin(s,tmp->value, envp);
                     
                     break;
                 }
@@ -108,13 +108,13 @@ char *check_env_general(char *str, t_env *envp)
             }
             continue;
         }
-        s = ft_charjoin(s,str[i]);
+        s = ft_charjoin(s,str[i], envp);
         i++;
     }
     return(s);
 }
 
-int ft_split_expand(char **s1, t_var *data)
+int ft_split_expand(char **s1, t_var *data, t_env *envp)
 {
     int i;
     i = 0;
@@ -123,7 +123,7 @@ int ft_split_expand(char **s1, t_var *data)
         return(0);
     while(s1[i])
     {
-        data->s[data->l] = ft_strdup(s1[i]);
+        data->s[data->l] = ft_strdup(s1[i], envp);
         if(!data->s[data->l])
             return(0);
         data->l++;
@@ -156,10 +156,10 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
         return 0;
     if (ft_strchr(expanded_value, ' '))
     {
-        split_env = ft_split(expanded_value, ' ');
+        split_env = ft_split(expanded_value, ' ', envp);
         if (!split_env)
         {
-            free(expanded_value);
+            // free(expanded_value);
             return 0;
         }
         i = 0;
@@ -167,19 +167,19 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
         {
             if (ft_strlen(split_env[i]) > 0)
             {
-                data->s[data->l] = ft_strdup(split_env[i]);
+                data->s[data->l] = ft_strdup(split_env[i], envp);
                 if (!data->s[data->l])
                 {
-                    free_2d(split_env);
-                    free(expanded_value);
+                    // free_2d(split_env);
+                    // free(expanded_value);
                     return 0;
                 }
                 data->l++;
             }
             i++;
         }
-        free_2d(split_env);
-        free(expanded_value);
+        // free_2d(split_env);
+        // free(expanded_value);
         return(1); 
     }
     else
@@ -189,10 +189,10 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
             data->s[data->l] = expanded_value;
             data->l++;
         }
-        else
-        {
-            free(expanded_value);
-        }
+        // else
+        // {
+            // free(expanded_value);
+        // }
         return (1);
     }
 }
@@ -200,7 +200,7 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
 char *get_token_value(t_parsing *head, t_env *envp, t_var *data)
 {
     if (!head || !head->content)
-        return ft_strdup("");
+        return ft_strdup("", envp);
     if (head->state == 3)
         return check_env_general(head->content, envp);
     else if (head->state == 2)
@@ -208,15 +208,15 @@ char *get_token_value(t_parsing *head, t_env *envp, t_var *data)
         if (ft_double(head->content, envp, data) == 2)
             return NULL;
         if(data->s1)
-            return(ft_strdup(data->s1));
+            return(ft_strdup(data->s1, envp));
         else 
-            return(ft_strdup(""));
+            return(ft_strdup("", envp));
     }
     else if (head->state == 1)
-        return ft_strdup(head->content);
+        return ft_strdup(head->content, envp);
     else if (head->state == 0 && head->type == WORD) 
-        return ft_strdup(head->content);
-    return ft_strdup("");
+        return ft_strdup(head->content, envp);
+    return ft_strdup("", envp);
 }
 
 t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
@@ -236,7 +236,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         return(NULL);
     if(head->type == PIPE_LINE)
     {
-        *cmd = ft_send(data, *cmd);
+        *cmd = ft_send(data, *cmd, envp);
         data->l = 0;
         data->in_file = -1;
         data->out_file = -1;
@@ -289,7 +289,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     if (head->type == DQUOTE || head->type == QUOTE || 
         head->type == WORD || head->state == 2 || head->state == 3)
     {
-        concatenated_value = ft_strdup("");
+        concatenated_value = ft_strdup("", envp);
         current = head;
         
         if (current->type == DQUOTE || current->type == QUOTE)
@@ -306,13 +306,13 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             temp_value = get_token_value(current, envp, data);
             if (!temp_value)
             {
-                free(concatenated_value);
+                // free(concatenated_value);
                 return NULL;
             }
             
-            new_concat = ft_strjoin(concatenated_value, temp_value);
-            free(concatenated_value);
-            free(temp_value);
+            new_concat = ft_strjoin(concatenated_value, temp_value, envp);
+            // free(concatenated_value);
+            // free(temp_value);
             
             if (!new_concat)
                 return NULL;
@@ -337,13 +337,13 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             data->s[data->l] = concatenated_value;
             data->l++;
         }
-        else
-        {
-            free(concatenated_value);
-        }
+        // else
+        // {
+        //     free(concatenated_value);
+        // }
         if(current && current->type == PIPE_LINE)
         {
-            *cmd = ft_send(data, *cmd);
+            *cmd = ft_send(data, *cmd, envp);
             data->l = 0;
             data->in_file = -1;
             data->out_file = -1;

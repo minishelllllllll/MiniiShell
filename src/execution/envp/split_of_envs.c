@@ -1,4 +1,6 @@
+
 #include "../../../includes/minishell.h"
+
 
 static int	count_word(char const *str, char c)
 {
@@ -57,7 +59,8 @@ static void	free_split(char **arr, int arrlen)
 	}
 	free(arr);
 }
- 
+
+
 char	**ft_split_env(char const *s, char c)
 {
 	char	**str;

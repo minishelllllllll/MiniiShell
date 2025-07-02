@@ -6,7 +6,7 @@ void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 	char **env_arr;
 
 	exec_path = executable_path(tmp_cmd->full_cmd[0], envs);
-	if (!exec_path)
+	if(exec_path == NULL)
 	{
 		ft_putstr_fd(tmp_cmd->full_cmd[0], 2);
 		ft_putstr_fd(": command not found\n", 2);

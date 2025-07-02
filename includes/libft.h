@@ -36,7 +36,6 @@ typedef struct env
     struct env *next;
 }  t_env;
 
-
 typedef struct s_list
 {
 	void			*content;
@@ -44,7 +43,7 @@ typedef struct s_list
 }	t_list;
 
 // garbeg collect
-void *clean_and_NULL(t_env *envs);
+char *clean_and_NULL(t_env *envs);
 void clean_memory(t_gc **head);
 void *g_collector(size_t size, t_env *envs);
 

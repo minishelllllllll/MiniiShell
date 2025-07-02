@@ -58,11 +58,11 @@ char *shell_prompt(t_env *envs)
 	char *prompt;
 
 	cwd = getcwd(NULL, 0);
-	if(cwd)
+    if (cwd)
     {
         prompt = ft_strjoin(cwd, " $> ", envs);
-        free(cwd);
-        return(prompt);      
+        free(cwd);    /////////////////////////////// addeeed to execution branch
+        return(prompt);
     }
     cwd = get_env_value("PWD", envs);
     if(!cwd) // in case no pwd and fail getcwd
@@ -96,7 +96,7 @@ int main(int ac, char **av, char **envp)
     {
         ft_putstr_fd("minishell: error initializing environment\n", 2);
         free_list(&envs);
-        return(1);
+        return (1);
     }
     envs->head_gc = NULL;
     while (1)
@@ -121,7 +121,7 @@ int main(int ac, char **av, char **envp)
 		}
 
 		// parssing
-        head = lexer(rdl);
+        head = lexer(rdl, envs);
  
         // t_parsing *h = head;
         // while(h)
@@ -157,6 +157,8 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+// and handle the memory leaks ~~~~~~~~~~~~~~~
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -198,3 +200,5 @@ int main(int ac, char **av, char **envp)
     // testing from 473
     //------------ problems --------------------
     // exit 6'6'66 -->> exit | 66 | 66
+
+    

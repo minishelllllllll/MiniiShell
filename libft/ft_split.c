@@ -60,6 +60,15 @@ static char	*ft_stdup(const char *src, int len, t_env *envs)
 	return (str);
 }
 
+// static void	free_split(char **arr, int arrlen)
+// {
+// 	while (arrlen >= 0)
+// 	{
+// 		free(arr[arrlen]);
+// 		arrlen--;
+// 	}
+// 	free(arr);
+// }
 
 char	**ft_split(char const *s, char c, t_env *envs)
 {
@@ -82,7 +91,7 @@ char	**ft_split(char const *s, char c, t_env *envs)
 			str[j++] = ft_stdup((s + i), wordlen((s + i), c), envs);
 			if (!str[j - 1])
 			{
-				return (NULL);
+				return (/*free_split(str, j - 1), */NULL);
 			}
 			i += wordlen((s + i), c);
 		}
