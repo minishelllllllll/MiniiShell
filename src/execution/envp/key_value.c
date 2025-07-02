@@ -14,15 +14,11 @@ char **creat_mini_envp()
 	return(minimal_envp);
 }
 
-t_env *split_key_value(int is_path_exported, char *env, char **envp)
+t_env *split_key_value(int is_path_exported, char *env, t_env *newnode, char **envp)
 {
-	t_env		*newnode;
 	char 		*value;
 	char 		**key;
 
-	newnode = (t_env *)malloc(sizeof(t_env)); // no garbag collectore cuz , we use (free_list)
-	if(!newnode)
-		return(NULL);
 	value = ft_strchr(env, '='); // search for the fisrt (=) and return pointer to it
 	key = ft_split_env(env, '='); // split the command with (=);
 	if(!key)
@@ -30,6 +26,8 @@ t_env *split_key_value(int is_path_exported, char *env, char **envp)
 	newnode->key = ft_strdup_env(key[0]); //duplicate the first argument
 	newnode->value = ft_strdup_env(value + 1); //dup the string, +1 to skiip (=), like (=/hind/....)
 	newnode->next = 0;
+	newnode->head_gc = NULL; // no garbage collector
+	free_2d(key);
 	if(ft_strcmp(newnode->key, "PATH") == 0 && (!envp || !envp[0]) && !is_path_exported) // flaged with 2 to not printed in (env, export)
 	{
 		newnode->flag_exported = 2;
@@ -49,13 +47,14 @@ t_env *new_env(char *env, char **envp)
 	if(!newnode)
 		return(NULL);
 	if(ft_strchr(env, '=') != NULL)
-		newnode = split_key_value(is_path_exported, env, envp);
+		newnode = split_key_value(is_path_exported, env, newnode, envp);
 	else
 	{
 		newnode->key = ft_strdup_env(env); //duplicate env 
 		newnode->value = NULL; // no value. 
 		newnode->flag_exported = 0; //if just the key (false)
 		newnode->next = 0;
+		newnode->head_gc = NULL; // no garbage collector
 	}
 	return(newnode);
 }
