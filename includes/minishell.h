@@ -91,12 +91,12 @@ void	waiting_childs(t_pids *pids);
 
 // executore
 void	ft_execve(t_env *envs, t_cmd *tmp_cmd);
-void	duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
+int	duplication(int i, int len_cmd, int **pipes, t_cmd  *tmp_cmd);
 int		len_list_cmd(t_cmd *temp);
 t_pids	*execute_commands(t_env **envs, t_cmd *tmp_cmd);
 
 // error handling. 
-void	ft_perror(char *err_msg, int len_cmd, int **pipes);
+int	ft_perror(char *err_msg, int len_cmd, int **pipes);
 
 // parssing testtt
 int 		checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd);

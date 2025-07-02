@@ -67,7 +67,8 @@ void run_commands(t_pids **process_ids, t_cmd *tmp_cmd, int **pipes, t_env **env
 	{
 		if(len_cmd == 1) // if one command
 		{
-			duplication(i, len_cmd, pipes, tmp_cmd);
+			if(duplication(i, len_cmd, pipes, tmp_cmd) == 1)
+				clean_memory(&((*envs)->head_gc));
 			execute_one_command(process_ids, tmp_cmd, pipes, envs);
 		}
 		else //many commands 
@@ -76,7 +77,8 @@ void run_commands(t_pids **process_ids, t_cmd *tmp_cmd, int **pipes, t_env **env
 			if((*process_ids)->pids[(*process_ids)->nbr_childs] == 0)
 			{
 				set_signals_dfl();
-				duplication(i, len_cmd, pipes, tmp_cmd); // duplicate and CLOSE , stdout stdin with pipes
+				if(duplication(i, len_cmd, pipes, tmp_cmd) == 1)
+					clean_memory(&((*envs)->head_gc));
 				execute_many_cmnd(tmp_cmd, envs, pipes, len_cmd);
 			}
 			(*process_ids)->nbr_childs++; //the number of childes forked

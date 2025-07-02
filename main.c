@@ -156,7 +156,37 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
-// and handle the memory leaks ~~~~~~~~~~~~~~~
+/* 
+    errors
+--> just spaces 
+==333163== Conditional jump or move depends on uninitialised value(s)
+==333163==    at 0x109846: ft_send (ft_send.c:23)
+==333163==    by 0x10AD14: check_expand (check_expand.c:114)
+==333163==    by 0x1094D2: checker (checker.c:19)
+==333163==    by 0x10F6DD: main (main.c:137)
+
+--> close save_stdin_stdout , in childs
+
+-->
+
+-->
+
+-->
+
+
+-->
+
+
+-->
+
+
+-->
+
+
+-->
+
+-->
+*/
 
 
 
