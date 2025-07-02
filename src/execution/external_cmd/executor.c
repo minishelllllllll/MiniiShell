@@ -15,6 +15,12 @@ void ft_execve(t_env *envs, t_cmd *tmp_cmd)
 		exit(127);
 	}
 	env_arr = envs_to_array(envs);// no need to check NULL, because can run execve without envs
+	if(!exec_path)
+	{
+		ft_putstr_fd(tmp_cmd->full_cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
 	if(execve(exec_path, tmp_cmd->full_cmd, env_arr) == -1)
 	{
 		ft_putstr_fd(tmp_cmd->full_cmd[0], 2);

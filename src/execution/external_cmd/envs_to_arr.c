@@ -13,7 +13,7 @@ char *join_key_value(t_env *temp)
 	else
 	{
 		key_value = ft_strjoin(key, temp->value, temp);
-		free(key);
+		// free(key);
 		if(!key_value)
 			return(NULL);
 		return(key_value);
@@ -50,7 +50,7 @@ char **envs_to_array(t_env *envs)
 		env_arr[i] = join_key_value(envs);
 		if(!env_arr[i])
 		{
-			free_arr_b((void **)env_arr);
+			// free_arr_b((void **)env_arr);
 			return(NULL);
 		}
 		i++;
