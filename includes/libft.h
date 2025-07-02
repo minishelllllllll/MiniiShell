@@ -43,6 +43,7 @@ typedef struct s_list
 }	t_list;
 
 // garbeg collect
+char *clean_and_NULL(t_env *envs);
 void clean_memory(t_gc **head);
 void *g_collector(size_t size, t_env *envs);
 
@@ -92,11 +93,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t history_length);
 
 int		ft_tolower(int chistory_length);
 int		ft_toupper(int chistory_length);
-
-int	count_word(char const *str, char c);
-int	wordlen(const char *str, char c);
-char	*ft_stdup(const char *src, int len);
-void	free_split(char **arr, int arrlen);
 
 // added envs
 char	**ft_split(char const *s, char c, t_env *envs);

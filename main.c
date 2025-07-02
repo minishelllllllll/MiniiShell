@@ -148,16 +148,7 @@ int main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
-// need to understand the neasted structs ~~~~~~~~~~~~
 // and handle the memory leaks ~~~~~~~~~~~~~~~
-
-// modify cd
-// add static functions from split to header file
-// modify this line in split (str[j++] = ft_strdup_env((s + i), wordlen((s + i), c));)
-// modify char *join_key_value(t_env *temp)
-// modify cwd = ft_strdup("..", envs);
-// modify prompt = ft_strjoin(cwd, " $> ", envs);
-// move // garbeg collect functions // to libft.h
 
 
 ///////////////////////////////////////////////////////////////////////////
