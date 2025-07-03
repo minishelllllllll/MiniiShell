@@ -28,9 +28,9 @@ int	ft_strcmp(char *s1, char *s2)
 
 int	ft_unset(char **args, t_env **envs)
 {
-	int	i;
-
-	t_env * (temp), (prev);
+	t_env (*temp);
+	t_env (*prev);
+	int (i);
 	i = 1;
 	while (args[i])
 	{
