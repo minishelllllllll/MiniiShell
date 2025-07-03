@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:02:05 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/03 03:51:32 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/07/03 05:26:59 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,19 @@ void error_msg_heredoc(char *delimiter)
 void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
 {
     char *line;
+    char *expanded_line;
     char *delimiter;
 
-    delimiter = head->content;
+    delimiter = ft_strdup(head->content,envp);
+    head = head->next;
     while(head)
     {
+        if(head->type == PIPE_LINE || head->type == SPACE)
+            break;
         if(head->type == DQUOTE || head->type == QUOTE)
             flag = 1;
+        else
+            delimiter = ft_strjoin(delimiter,head->content,envp);
         head = head->next;
     }
     signal(SIGINT, sig_heredoc);
@@ -92,7 +98,9 @@ void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
         line = readline("> ");
         if(flag == 0)
         {
-            line = expand_var(line,envp,0);
+            expanded_line = expand_var(line, envp, 0);
+            free(line);
+            line = expanded_line;
         }
         if(!line)
         {
@@ -128,27 +136,38 @@ int wait_heredoc(t_var *data, int pid, int *fds)
     data->in_file = fds[0];
     return(0);
 }
-
-int    heredoce(t_parsing *head,t_var *data, int flag, t_env *envp)
+t_parsing *skip_delimiter(t_parsing *head)
+{
+    if(!head->next)
+        return(head);
+    head = head->next;
+    while(head)
+    {
+        if(!head->next || (head->next && head->next->type == PIPE_LINE) || head->type == PIPE_LINE || head->type == SPACE)
+            break;
+        head = head->next;
+    }
+    return(head);
+}
+t_parsing *heredoce(t_parsing *head,t_var *data, int flag, t_env *envp)
 {
     int *fds;
     int pid;
-    t_parsing *tmp;
-    
-    tmp = head;
+
     fds = g_collector(2 * sizeof(int), envp);
     if(pipe(fds) == -1)
-        return(2);
+        return(NULL);
     pid = fork();
     if(pid == -1)
-        return(closing(fds), 2);
+        return(closing(fds), NULL);
     if (pid == 0)
-        run_heredoc(fds, tmp,flag,envp);
+        run_heredoc(fds, head,flag,envp);    
     else
     {
         if(wait_heredoc(data, pid, fds) == 2)
-            return(2);
+            return(NULL);
     }
-    return(0);
+    head = skip_delimiter(head);
+    return(head);
 }
 

@@ -136,9 +136,22 @@ int main(int ac, char **av, char **envp)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
             continue;
-        // commads_in_out = cmd;        
+        commads_in_out = cmd;        
         // int i = 0;
-
+        //  commads_in_out = cmd;
+                
+        // //execution
+        int i = 0;
+        while(commads_in_out)
+        {
+            i = 0;
+            while(commads_in_out->full_cmd[i])
+                printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
+            printf("in_file ==> %d\n",commads_in_out->in_file);
+            printf("out_file ==> %d\n",commads_in_out->out_file);
+            printf("********************\n");
+            commads_in_out = commads_in_out->next;
+        }
         //execution
         commads_in_out = cmd;
         if(commads_in_out)

@@ -256,10 +256,8 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         {
             flag = 1;
             head = head->next;
-        }   
-        if(heredoce(head, data ,flag,envp) == 2)
-            return(NULL);
-        return(head);
+        } 
+        return(heredoce(head, data ,flag,envp));
     }
     
     if(head->type == DREDIR_OUT || head->type == REDIR_OUT) 
