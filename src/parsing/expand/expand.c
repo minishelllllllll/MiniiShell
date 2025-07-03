@@ -232,13 +232,15 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         data->l = 0;
         data->in_file = -1;
         data->out_file = -1;
+        if(head->next && head->next->type == PIPE_LINE)
+            return(head->next);
         return(head);
     }
     
     if(head->type == REDIR_IN)
     {
         if(ft_redirect_in(head, data) == 2)
-        return(NULL);
+            return(NULL);
         head = head->next;
         head = check_space(head);
         return(head);
@@ -308,6 +310,11 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             if (current && (current->type == DQUOTE || current->type == QUOTE))
             {
                 peek = current->next;
+                if(peek->next && (peek->type == DQUOTE || peek->type == QUOTE))
+                {
+                    current = peek->next;
+                    continue;
+                }
                 if (peek && (peek->type == WORD || peek->state == 1 || 
                            peek->state == 2 || peek->state == 3))
                     continue;

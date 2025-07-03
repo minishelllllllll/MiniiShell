@@ -120,7 +120,18 @@ int main(int ac, char **av, char **envp)
             free_list(&envs);
 			exit(G_EXIT_STATUS); // need to clean up 
 		}
-
+        int len = ft_strlen(rdl);
+		if(skip_space_str(rdl) == 1)
+        {
+            len = ft_strlen(rdl);
+            add_history(rdl);
+        }
+        else
+        {
+            len = 0;
+            free(rdl);
+            continue;
+        }
 		// parssing
         head = lexer(rdl, envs);
  
@@ -133,26 +144,28 @@ int main(int ac, char **av, char **envp)
         //     printf("********************\n");
         //     h = h->next;
         // }
-		if(skip_space_str(rdl) == 1)
-            add_history(rdl);
-        if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
+        
+        if(checker(head,envs,len,&cmd) == 2)
+        {
+            free(rdl);
             continue;
+        }
         // commads_in_out = cmd;        
         // // int i = 0;
-        // //  commads_in_out = cmd;
+         commads_in_out = cmd;
                 
-        // // //execution
-        // int i = 0;
-        // while(commads_in_out)
-        // {
-        //     i = 0;
-        //     while(commads_in_out->full_cmd[i])
-        //         printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file ==> %d\n",commads_in_out->in_file);
-        //     printf("out_file ==> %d\n",commads_in_out->out_file);
-        //     printf("********************\n");
-        //     commads_in_out = commads_in_out->next;
-        // }
+        // //execution
+        int i = 0;
+        while(commads_in_out)
+        {
+            i = 0;
+            while(commads_in_out->full_cmd[i])
+                printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
+            printf("in_file ==> %d\n",commads_in_out->in_file);
+            printf("out_file ==> %d\n",commads_in_out->out_file);
+            printf("********************\n");
+            commads_in_out = commads_in_out->next;
+        }
         commads_in_out = cmd;
         if(commads_in_out)
         {

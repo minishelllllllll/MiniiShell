@@ -5,7 +5,8 @@
     "limits": "c",
     "chrono": "c",
     "functional": "c",
-    "libft.h": "c"
+    "libft.h": "c",
+    "cstdlib": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
