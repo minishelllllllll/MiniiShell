@@ -58,14 +58,16 @@ int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 	return(EXIT_SUCCESS);
 }
 
+
 int ft_cd(char **args, t_env *envs)
 {
 	char *oldpwd;
-	char *allocated_oldpwd = NULL;
+	char *allocated_oldpwd;
 	int i;
 	int result;
 
 	i = 0;
+	allocated_oldpwd = NULL;
 	while (args[i] != NULL) // len args
 		i++;
 	if(i > 2)
@@ -77,10 +79,7 @@ int ft_cd(char **args, t_env *envs)
 		oldpwd = allocated_oldpwd;
 	}
 	result = go_new_dir(args[1], envs, oldpwd);
-	
-	// FIXED: Free allocated memory if we used getcwd
 	if(allocated_oldpwd)
-		free(allocated_oldpwd);
-	
+		free(allocated_oldpwd);	
 	return result;
 }
