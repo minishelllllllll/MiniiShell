@@ -90,4 +90,4 @@ char *get_pwd()
 	complet_pwd = ft_strjoin_env("PWD=", working_d);
 	free(working_d);
 	return(complet_pwd);
-} //////////////
+}
