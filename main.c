@@ -13,43 +13,43 @@
 #include "includes/minishell.h"
 #include <readline/history.h>
 
-int G_EXIT_STATUS = 0;
-
-int skip_space_str(char *str)
+int	G_EXIT_STATUS = 0;
+g_exit_status
+int	skip_space_str(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while(str[i])
-    {
-        if(str[i] != ' ')
-            return(1);
-        i++;
-    }
-    return(0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int *saved_stdin_out(t_env *envs)
 {
-    int *in_out;
+	int *in_out;
 
-    in_out = (int *)g_collector(sizeof(int) * 2, envs);
+	in_out = (int *)g_collector(sizeof(int) * 2, envs);
 
-    in_out[0] = dup(STDIN_FILENO);
-    in_out[1] = dup(STDOUT_FILENO);
-    if(in_out[0] == -1 || in_out[1] == -1)
-        perror("minishell");
-    return(in_out);
+	in_out[0] = dup(STDIN_FILENO);
+	in_out[1] = dup(STDOUT_FILENO);
+	if(in_out[0] == -1 || in_out[1] == -1)
+		perror("minishell");
+	return(in_out);
 }
 
 void restore_stdin_out(int *saved_in_out)
 {
-    if(dup2(saved_in_out[0], STDIN_FILENO) == -1)
-        perror("dup2 ");
-    if(dup2(saved_in_out[1], STDOUT_FILENO) == -1)
-        perror("dup2 ");
-    close(saved_in_out[0]);
-    close(saved_in_out[1]);
+	if(dup2(saved_in_out[0], STDIN_FILENO) == -1)
+		perror("dup2 ");
+	if(dup2(saved_in_out[1], STDOUT_FILENO) == -1)
+		perror("dup2 ");
+	close(saved_in_out[0]);
+	close(saved_in_out[1]);
 }
 
 char *shell_prompt(t_env *envs)
@@ -58,202 +58,139 @@ char *shell_prompt(t_env *envs)
 	char *prompt;
 
 	cwd = getcwd(NULL, 0);
-    if (cwd)
-    {
-        prompt = ft_strjoin(cwd, " $> ", envs);
-        free(cwd);    /////////////////////////////// addeeed to execution branch
-        return(prompt);
-    }
-    cwd = get_env_value("PWD", envs);
-    if(!cwd) // in case no pwd and fail getcwd
-    {
-        cwd = ft_strdup("..", envs);
-        prompt = ft_strjoin(cwd, " $> ", envs);
-        return(prompt);
-    }
+	if (cwd)
+	{
+		prompt = ft_strjoin(cwd, " $> ", envs);
+		free(cwd);    /////////////////////////////// addeeed to execution branch
+		return(prompt);
+	}
+	cwd = get_env_value("PWD", envs);
+	if(!cwd) // in case no pwd and fail getcwd
+	{
+		cwd = ft_strdup("..", envs);
+		prompt = ft_strjoin(cwd, " $> ", envs);
+		return(prompt);
+	}
 	prompt = ft_strjoin(cwd, " $> ", envs);
 	return(prompt);
 }
+int lexer_checker(char *rdl, t_env *envs, t_cmd **cmd)
+{
+	t_parsing   *head;
 
+	head = lexer(rdl, envs);
+	if(checker(head,envs,ft_strlen(rdl),cmd) == 2)
+	{
+		free(rdl);
+		return(0);
+	}
+	return(1);
+}
+int space_skip_main(char *rdl)
+{
+	int len;
+
+	if(skip_space_str(rdl) == 1)
+	{
+		len = ft_strlen(rdl);
+		add_history(rdl);
+	}
+	else
+	{
+		len = 0;
+		free(rdl);
+		return(0);
+	}
+	return(len);
+}
+char *read_line(t_env *envs, char *rdl)
+{
+
+	rdl = readline(shell_prompt(envs));
+	if (!rdl)
+	{
+		printf("exit\n");
+		clean_memory(&(envs->head_gc));
+		free_list(&envs);
+		exit(G_EXIT_STATUS);
+	}
+	return(rdl);
+}
+int *save_in_out(t_env *envs)
+{
+	int     *arr_in_out;
+
+	arr_in_out = saved_stdin_out(envs);
+	if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
+	{
+		free_list(&envs);
+		exit(G_EXIT_STATUS);
+	}
+	return(arr_in_out);
+}
+
+int send_to_execution(t_cmd *cmd, t_env *envs, int *arr_in_out,char *rdl)
+{
+	t_cmd   *commads_in_out;
+	t_pids  *pids;
+
+	commads_in_out = cmd;
+	if (commads_in_out)
+	{
+		pids = execute_commands(&envs, commads_in_out);
+		if (!pids)
+			return (0);       
+		restore_stdin_out(arr_in_out);
+		waiting_childs(pids);
+
+	}
+	free(rdl);
+	cmd = NULL;
+	clean_memory(&(envs->head_gc));
+	return (1);
+}
+int main_loop(t_env *envs)
+{
+	int     *arr_in_out;
+	char    *rdl;
+	t_cmd   *cmd;
+
+	cmd = NULL;
+	rdl = NULL;
+	arr_in_out = save_in_out(envs);
+	rdl = read_line(envs , rdl);
+	if(space_skip_main(rdl) == 0)
+		return(1);
+	if(lexer_checker(rdl,envs,&cmd) == 0)
+		return(1);
+	if(send_to_execution(cmd, envs, arr_in_out,rdl) == 0)
+		return(0);
+	return (2);
+}
 int main(int ac, char **av, char **envp)
 {
+	t_env   *envs;
+	int i;
+
 	(void)ac;
 	(void)av;
-	char    *rdl;
-    int     *arr_in_out;
-
-    t_cmd   *cmd = NULL;
-	t_cmd   *commads_in_out;
-	t_env   *envs;
-    t_pids  *pids; // struct of process ids 
-    t_parsing   *head;
-
-    signal(SIGQUIT, SIG_IGN);
-    
-    // (void)envp;
-	envs = list_envs(envp); //save
-    
-    if(!envs)
-    {
-        ft_putstr_fd("minishell: error initializing environment\n", 2);
-        free_list(&envs);
-        return (1);
-    }
-    envs->head_gc = NULL;
-    while (1)
+	signal(SIGQUIT, SIG_IGN);
+	envs = list_envs(envp);
+	if(!envs)
 	{
-        signal(SIGINT, my_handller); // in here doce
-
-        arr_in_out = saved_stdin_out(envs);  //save
-        if(arr_in_out[0] == -1 || arr_in_out[1] == -1)
-        {
-            free_list(&envs);
-            return 0;
-        }
-
-        // prompt
-		rdl = readline(shell_prompt(envs));
-		if (!rdl)  // Handle Ctrl+D (EOF)
-		{
-			printf("exit\n"); // notify message
-            clean_memory(&(envs->head_gc));
-            free_list(&envs);
-			exit(G_EXIT_STATUS); // need to clean up 
-		}
-        int len = ft_strlen(rdl);
-		if(skip_space_str(rdl) == 1)
-        {
-            len = ft_strlen(rdl);
-            add_history(rdl);
-        }
-        else
-        {
-            len = 0;
-            free(rdl);
-            continue;
-        }
-		// parssing
-        head = lexer(rdl, envs);
- 
-        // t_parsing *h = head;
-        // while(h)
-        // {
-        //     printf("content => %s\n",h->content);
-        //     printf("state => %d\n",h->state);
-        //     printf("type => %d\n",h->type);
-        //     printf("********************\n");
-        //     h = h->next;
-        // }
-        
-        if(checker(head,envs,len,&cmd) == 2)
-        {
-            free(rdl);
-            continue;
-        }
-        // commads_in_out = cmd;        
-        // // int i = 0;
-         commads_in_out = cmd;
-                
-        // //execution
-        int i = 0;
-        while(commads_in_out)
-        {
-            i = 0;
-            while(commads_in_out->full_cmd[i])
-                printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
-            printf("in_file ==> %d\n",commads_in_out->in_file);
-            printf("out_file ==> %d\n",commads_in_out->out_file);
-            printf("********************\n");
-            commads_in_out = commads_in_out->next;
-        }
-        commads_in_out = cmd;
-        if(commads_in_out)
-        {
-            pids = execute_commands(&envs, commads_in_out);
-            if(!pids)
-                return(0);       
-            restore_stdin_out(arr_in_out);
-            waiting_childs(pids);
-
-        }
-        free(rdl);
-        cmd = NULL;
-        clean_memory(&(envs->head_gc));
+		ft_putstr_fd("minishell: error initializing environment\n", 2);
+		free_list(&envs);
+		return (1);
+	}
+	envs->head_gc = NULL;
+	while (1)
+	{
+		signal(SIGINT, my_handller);
+		i = main_loop(envs);
+		if(i == 1)
+			continue;
+		if(i == 0)
+			return(0);
 	}
 	return (0);
 }
-/* 
-    errors
---> just spaces 
-==333163== Conditional jump or move depends on uninitialised value(s)
-==333163==    at 0x109846: ft_send (ft_send.c:23)
-==333163==    by 0x10AD14: check_expand (check_expand.c:114)
-==333163==    by 0x1094D2: checker (checker.c:19)
-==333163==    by 0x10F6DD: main (main.c:137)
-
---> close save_stdin_stdout , in childs
-
--->minishell: warning: here-document at line delimited by end-of-file (wanted `p`) leakkkkkkkkkkkkkkkkk one  block + ctl d
-
---> eco | pwd
-
--->
-
-
--->
-
-
--->
-
-
--->
-
-
--->
-
--->
-*/
-
-
-
-///////////////////////////////////////////////////////////////////////////
-//////////////////////////////testing////////////////////////////////////// 
-// $> ABC=hola
-// echo $ (if $ only you should send it )
-// echo $?
-// echo $?$ 
-// echo $:$= | cat -e
-// echo my shit terminal is [$TERM4]
-// echo $TERM$HOME
-// testttt -----------> 134
-// 
-// a=ls -la >> $a
-// export a="ls -la"
-// export $DONTEXIST >>>>> behave like export only.
-// export "" >>>> bash: export: `': not a valid identifier
-// export HOLA=$HOME >>>> shouldn't give a error
-// export HOLA=bon(jour >>>>>>> should give -> bash: syntax error near unexpected token `('
-// 
-// cd "". 
-// 
-// test 414 >>> cd
-// 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-
-//test it later
-    // whoami | grep $USER > /tmp/bonjour
-    // echo bonjour > $HOLA (test --> 645)
-    // echo hola > > bonjour -------->>>>>> bash: syntax error near unexpected token `>'
-    // > bonjour echo hola
-    // echo hola > hello >> hello >> hello (testing form test 656)
-    // export cc="" ; echo "hhhh" > $cc ----->>>> bash: $cc: ambiguous redirect
-    // << + space --> bash: syntax error near unexpected token `newline'
-
-
-// exit (argument + overflow) 
-    // testing from 473
-    //------------ problems --------------------
-    // exit 6'6'66 -->> exit | 66 | 66
-
-    
