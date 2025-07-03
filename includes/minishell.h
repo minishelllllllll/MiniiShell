@@ -112,5 +112,5 @@ void	my_handller(int sig);
 void	set_signals_dfl();
 void    sig_heredoc(int sig);
 void	sig_ignore();
-
+char *expand_var(char *line, t_env *envp, int i);
 #endif

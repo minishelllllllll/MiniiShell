@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: himousta <himousta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:02:05 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/29 19:20:19 by himousta         ###   ########.fr       */
+/*   Updated: 2025/07/03 03:26:11 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,27 @@ void error_msg_heredoc(char *delimiter)
     ft_putstr_fd("`)\n", 2);
 }
 
-void run_heredoc(int *fds, char *delimiter)
+void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
 {
     char *line;
+    char *delimiter;
 
+    delimiter = head->content;
+    while(head)
+    {
+        if(head->type == DQUOTE || head->type == QUOTE)
+            flag = 1;
+        head->next;
+    }
     signal(SIGINT, sig_heredoc);
     close(fds[0]);
     while (1)
     {
         line = readline("> ");
+        if(flag == 0)
+        {
+            line = expand_var(line,envp,0);
+        }
         if(!line)
         {
             error_msg_heredoc(delimiter);
@@ -117,13 +129,11 @@ int wait_heredoc(t_var *data, int pid, int *fds)
     return(0);
 }
 
-int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
+int    heredoce(t_parsing *head,t_var *data, int flag, t_env *envp)
 {
     int *fds;
     int pid;
 
-    (void)flag;
-    // (void)envp;
     fds = g_collector(2 * sizeof(int), envp);
     if(pipe(fds) == -1)
         return(2);
@@ -131,7 +141,7 @@ int    heredoce(char *delimiter,t_var *data, int flag, t_env *envp)
     if(pid == -1)
         return(closing(fds), 2);
     if (pid == 0)
-        run_heredoc(fds, delimiter);
+        run_heredoc(fds, head,flag,envp);
     else
     {
         if(wait_heredoc(data, pid, fds) == 2)
