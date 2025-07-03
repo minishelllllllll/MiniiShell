@@ -120,26 +120,39 @@ int main(int ac, char **av, char **envp)
             free_list(&envs);
 			exit(G_EXIT_STATUS); // need to clean up 
 		}
-
+        int len = ft_strlen(rdl);
+		if(skip_space_str(rdl) == 1)
+        {
+            len = ft_strlen(rdl);
+            add_history(rdl);
+        }
+        else
+        {
+            len = 0;
+            free(rdl);
+            continue;
+        }
 		// parssing
         head = lexer(rdl, envs);
  
-        t_parsing *h = head;
-        while(h)
+        // t_parsing *h = head;
+        // while(h)
+        // {
+        //     printf("content => %s\n",h->content);
+        //     printf("state => %d\n",h->state);
+        //     printf("type => %d\n",h->type);
+        //     printf("********************\n");
+        //     h = h->next;
+        // }
+        
+        if(checker(head,envs,len,&cmd) == 2)
         {
-            printf("content => %s\n",h->content);
-            printf("state => %d\n",h->state);
-            printf("type => %d\n",h->type);
-            printf("********************\n");
-            h = h->next;
-        }
-		if(skip_space_str(rdl) == 1)
-            add_history(rdl);
-        if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
+            free(rdl);
             continue;
-        commads_in_out = cmd;        
-        // int i = 0;
-        //  commads_in_out = cmd;
+        }
+        // commads_in_out = cmd;        
+        // // int i = 0;
+         commads_in_out = cmd;
                 
         // //execution
         int i = 0;
@@ -153,7 +166,6 @@ int main(int ac, char **av, char **envp)
             printf("********************\n");
             commads_in_out = commads_in_out->next;
         }
-        //execution
         commads_in_out = cmd;
         if(commads_in_out)
         {
