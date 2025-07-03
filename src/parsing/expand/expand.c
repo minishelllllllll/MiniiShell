@@ -257,7 +257,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             flag = 1;
             head = head->next;
         }   
-        if(heredoce(head->content, data ,flag,envp) == 2)
+        if(heredoce(head, data ,flag,envp) == 2)
             return(NULL);
         return(head);
     }

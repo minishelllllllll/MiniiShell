@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:02:05 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/03 03:26:11 by marvin           ###   ########.fr       */
+/*   Updated: 2025/07/03 03:51:32 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
     {
         if(head->type == DQUOTE || head->type == QUOTE)
             flag = 1;
-        head->next;
+        head = head->next;
     }
     signal(SIGINT, sig_heredoc);
     close(fds[0]);
@@ -133,7 +133,9 @@ int    heredoce(t_parsing *head,t_var *data, int flag, t_env *envp)
 {
     int *fds;
     int pid;
-
+    t_parsing *tmp;
+    
+    tmp = head;
     fds = g_collector(2 * sizeof(int), envp);
     if(pipe(fds) == -1)
         return(2);
@@ -141,7 +143,7 @@ int    heredoce(t_parsing *head,t_var *data, int flag, t_env *envp)
     if(pid == -1)
         return(closing(fds), 2);
     if (pid == 0)
-        run_heredoc(fds, head,flag,envp);
+        run_heredoc(fds, tmp,flag,envp);
     else
     {
         if(wait_heredoc(data, pid, fds) == 2)
