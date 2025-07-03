@@ -19,8 +19,19 @@
 
 extern int g_exit_status;
 
-//execution
 
+//norm struct
+
+typedef struct s_helpe
+{
+	enum e_state state;
+    enum e_type c;
+    char *tmp;
+	int i;
+    int j;
+    int t;
+    int len;
+}t_help;
 // struct for commands (list)
 typedef struct s_cmd
 {

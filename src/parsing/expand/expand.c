@@ -310,7 +310,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             if (current && (current->type == DQUOTE || current->type == QUOTE))
             {
                 peek = current->next;
-                if(peek->next && (peek->type == DQUOTE || peek->type == QUOTE))
+                if(peek && peek->next && (peek->type == DQUOTE || peek->type == QUOTE))
                 {
                     current = peek->next;
                     continue;

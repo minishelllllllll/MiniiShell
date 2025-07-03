@@ -7,7 +7,8 @@
     "functional": "c",
     "libft.h": "c",
     "cstdlib": "c",
-    "parsing.h": "c"
+    "parsing.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
