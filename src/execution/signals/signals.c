@@ -27,6 +27,7 @@ void    sig_heredoc(int sig)
 {
     (void) sig;
     ft_putchar_fd('\n', 1);
-    exit(130);
+    // clean_memory(&(envs->head_gc));
+    exit(130); /////////////////////// check that in heredoc 
 }
 

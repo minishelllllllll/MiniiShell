@@ -1,6 +1,5 @@
 #include "../../../includes/minishell.h"
 
-
 int	print_error(char *str)
 {
 	ft_putstr_fd(str, 2);
@@ -16,10 +15,11 @@ int ft_perror_cd()
 }
 
 
-void	ft_perror(char *err_msg, int len_cmd, int **pipes)
+int	ft_perror(char *err_msg, int len_cmd, int **pipes)
 {
 	perror(err_msg);
 	close_pipes(len_cmd - 1, pipes);
 	G_EXIT_STATUS = 1;
-	exit(EXIT_FAILURE);
+	return(G_EXIT_STATUS);
+	// exit(EXIT_FAILURE);
 }
