@@ -56,14 +56,13 @@ t_env  *list_envs(char **envp)
 	else if(envp[0] == NULL) // cuz a char *envp[] = { NULL }; (start with minimal envps)
 	{
 		minimal_envp = creat_mini_envp();
-		return(build_new_envs(minimal_envp, envp));
+		return(build_new_envs(minimal_envp, envp, 'm'));
 	}
 	else
-		return(build_new_envs(envp, envp));
+		return(build_new_envs(envp, envp, 'o'));
 }
 
-
-t_env  *build_new_envs(char **envs, char **envp)
+t_env  *build_new_envs(char **envs, char **envp, char flag)
 {
 	t_env	*head_env;
 	t_env	*newnode;
@@ -82,6 +81,8 @@ t_env  *build_new_envs(char **envs, char **envp)
 		add_env(newnode, &head_env);
 		i++;
 	}
+	if(flag == 'm')
+		free_2d(envs);
 	return(head_env);
 }
 

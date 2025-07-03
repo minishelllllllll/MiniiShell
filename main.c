@@ -92,7 +92,6 @@ int main(int ac, char **av, char **envp)
     
     // (void)envp;
 	envs = list_envs(envp); //save
-    
     if(!envs)
     {
         ft_putstr_fd("minishell: error initializing environment\n", 2);
@@ -123,7 +122,7 @@ int main(int ac, char **av, char **envp)
 
 		// parssing
         head = lexer(rdl, envs);
- 
+
         // t_parsing *h = head;
         // while(h)
         // {
@@ -133,13 +132,16 @@ int main(int ac, char **av, char **envp)
         //     printf("********************\n");
         //     h = h->next;
         // }
+
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
+        {
+            free(rdl);
             continue;
-        // commads_in_out = cmd;        
+        }
         // // int i = 0;
-        // //  commads_in_out = cmd;
+        // commads_in_out = cmd;
                 
         // // //execution
         // int i = 0;
@@ -147,12 +149,13 @@ int main(int ac, char **av, char **envp)
         // {
         //     i = 0;
         //     while(commads_in_out->full_cmd[i])
-        //         printf("full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
-        //     printf("in_file ==> %d\n",commads_in_out->in_file);
-        //     printf("out_file ==> %d\n",commads_in_out->out_file);
-        //     printf("********************\n");
+        //         dprintf(2, "full cmd ==> %s\n",commads_in_out->full_cmd[i++]);
+        //     dprintf(2, "in_file ==> %d\n",commads_in_out->in_file);
+        //     dprintf(2, "out_file ==> %d\n",commads_in_out->out_file);
+        //     dprintf(2, "********************\n");
         //     commads_in_out = commads_in_out->next;
         // }
+
         commads_in_out = cmd;
         if(commads_in_out)
         {
@@ -180,17 +183,9 @@ int main(int ac, char **av, char **envp)
 
 --> close save_stdin_stdout , in childs
 
--->minishell: warning: here-document at line delimited by end-of-file (wanted `p`) leakkkkkkkkkkkkkkkkk one  block + ctl d
+--> env -i ./mini, then unset all, do export --> that make it seg
 
---> eco | pwd
-
--->
-
-
--->
-
-
--->
+-->  << hh erferfgerf --> leak 
 
 
 -->

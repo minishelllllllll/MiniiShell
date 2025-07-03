@@ -25,13 +25,18 @@ void	print_env_list(t_env *head)
 	while (head)
 	{
 		if(head->flag_exported == 2) // in case start env -i we flaged path with
+		{
+			if(!head->next)
+				return;
 			head = head->next;
+		}
 		if(head->flag_exported == 1)
 			printf("declare -x %s=\"%s\"\n", head->key, head->value);
 		else
 			printf("declare -x %s\n", head->key);
 		head = head->next;
 	}
+	return;
 }
 
 int valide_name(char *str)

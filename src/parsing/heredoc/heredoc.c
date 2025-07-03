@@ -98,6 +98,11 @@ void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
     while (1)
     {
         line = readline("> ");
+        if(!line)
+        {
+            error_msg_heredoc(delimiter);
+            break;
+        }
         if(ft_strcmp(line, delimiter) == 0)
             break;
         if(flag == 0)
@@ -105,11 +110,6 @@ void run_heredoc(int *fds, t_parsing *head, int flag, t_env *envp)
             expanded_line = expand_var(line, envp, 0);
             free(line);
             line = expanded_line;
-        }
-        if(!line)
-        {
-            error_msg_heredoc(delimiter);
-            break;
         }
         write(fds[1], line, ft_strlen(line));
         write(fds[1], "\n", 1);

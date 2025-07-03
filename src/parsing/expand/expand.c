@@ -238,12 +238,12 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
     if(head->type == REDIR_IN)
     {
         if(ft_redirect_in(head, data) == 2)
-        return(NULL);
+            return(NULL);
         head = head->next;
         head = check_space(head);
         return(head);
     }
-    
+
     if(head->type == HERE_DOC)
     {
         int flag = 0;
