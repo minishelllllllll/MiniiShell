@@ -6,7 +6,8 @@
     "chrono": "c",
     "functional": "c",
     "libft.h": "c",
-    "cstdlib": "c"
+    "cstdlib": "c",
+    "parsing.h": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",

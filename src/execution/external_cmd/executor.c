@@ -107,7 +107,7 @@ t_pids *execute_commands(t_env **envs, t_cmd *tmp_cmd)
 // //exit status
 
 // if(ft_strcmp(tmp_cmd->full_cmd[0], "echo") == 0 && ft_strcmp(tmp_cmd->full_cmd[1], "?") == 0)
-// 	printf("my exit status = %d\n", G_EXIT_STATUS);
+// 	printf("my exit status = %d\n", g_exit_status);
 // else { ////// test exit status
 
 // } ///// test exit status

@@ -53,7 +53,7 @@ char *check_env_general(char *str, t_env *envp)
             i++;
             if(str[i] == '?')
             {
-                s = ft_strjoin(s,ft_itoa(G_EXIT_STATUS,envp),envp);
+                s = ft_strjoin(s,ft_itoa(g_exit_status,envp),envp);
                 i++;
                 continue;
             }

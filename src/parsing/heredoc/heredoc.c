@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 17:02:05 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/03 16:00:44 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/07/03 22:26:09 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ int wait_heredoc(t_var *data, int pid, int *fds)
     close(fds[1]);
     if (WIFEXITED(state))
     {
-        G_EXIT_STATUS = WEXITSTATUS(state);
-        if(G_EXIT_STATUS == 130)
+        g_exit_status = WEXITSTATUS(state);
+        if(g_exit_status == 130)
         {
             close(fds[0]);  // Clean up file descriptors
             return(2);

@@ -54,7 +54,7 @@ int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 	set_env("OLDPWD", oldpwd, envs); //not check oldpwd ,if not exist
 	set_env("PWD", pwd, envs);
 	free(pwd); // FIXED: Free the memory allocated by getcwd
-	G_EXIT_STATUS = 0;
+	g_exit_status = 0;
 	return(EXIT_SUCCESS);
 }
 

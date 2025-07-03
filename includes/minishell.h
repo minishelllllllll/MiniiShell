@@ -17,7 +17,7 @@
 #include "libft.h"
 #include "parsing.h"
 
-extern int G_EXIT_STATUS;
+extern int g_exit_status;
 
 //execution
 
@@ -113,4 +113,19 @@ void	set_signals_dfl();
 void    sig_heredoc(int sig);
 void	sig_ignore();
 char *expand_var(char *line, t_env *envp, int i);
+
+
+
+//execution
+int	*save_in_out(t_env *envs);
+int	*saved_stdin_out(t_env *envs);
+void	restore_stdin_out(int *saved_in_out);
+int	space_skip_main(char *rdl);
+int	skip_space_str(char *str);
+char	*shell_prompt(t_env *envs);
+int	lexer_checker(char *rdl, t_env *envs, t_cmd **cmd);
+char	*read_line(t_env *envs, char *rdl);
+int	send_to_execution(t_cmd *cmd, t_env *envs, int *arr_in_out, char *rdl);
+int	main_loop(t_env *envs);
+
 #endif

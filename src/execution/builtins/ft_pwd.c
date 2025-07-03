@@ -26,6 +26,6 @@ int ft_pwd(t_env *envs)
 	if(should_free)
 		free(working_d);
 	
-	G_EXIT_STATUS = 0;
+	g_exit_status = 0;
 	return(EXIT_SUCCESS);
 }

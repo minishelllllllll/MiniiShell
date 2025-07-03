@@ -103,7 +103,7 @@ int ft_double(char *str, t_env *envp, t_var *data)
             }
             else if(str[data->j] == '?')
             {
-                data->s1 = ft_strjoin(data->s1,ft_itoa(G_EXIT_STATUS,envp),envp);
+                data->s1 = ft_strjoin(data->s1,ft_itoa(g_exit_status,envp),envp);
                 data->i = data->j;
                 continue;
             }
