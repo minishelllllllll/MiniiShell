@@ -294,7 +294,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             temp_value = get_token_value(current, envp, data);
             if (!temp_value)
             {
-                // free(concatenated_value);
                 return NULL;
             }
             
@@ -304,7 +303,8 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             concatenated_value = new_concat;
             if(!current->next)
                 break;
-            current = current->next;            
+            current = current->next;    
+    
             if (current && (current->type == DQUOTE || current->type == QUOTE))
             {
                 peek = current->next;
@@ -335,8 +335,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         if (current)
             return current;
         else
-            return head;
+            return (head);
     }
-    
     return(head);
 }
