@@ -299,12 +299,11 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             }
             
             new_concat = ft_strjoin(concatenated_value, temp_value, envp);
-            // free(concatenated_value);
-            // free(temp_value);
-            
             if (!new_concat)
                 return NULL;
             concatenated_value = new_concat;
+            if(!current->next)
+                break;
             current = current->next;            
             if (current && (current->type == DQUOTE || current->type == QUOTE))
             {
@@ -315,7 +314,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
                 else
                     break;
             }
-            if (current && (current->type == WHITE_SPACE || current->type == PIPE_LINE ||
+            if (current && (current->type == WHITE_SPACE ||current->type == PIPE_LINE ||
                           current->type == REDIR_IN || current->type == REDIR_OUT ||
                           current->type == HERE_DOC || current->type == DREDIR_OUT))
                 break;
@@ -325,10 +324,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             data->s[data->l] = concatenated_value;
             data->l++;
         }
-        // else
-        // {
-        //     free(concatenated_value);
-        // }
         if(current && current->type == PIPE_LINE)
         {
             *cmd = ft_send(data, *cmd, envp);

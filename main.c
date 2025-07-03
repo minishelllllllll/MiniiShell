@@ -124,15 +124,15 @@ int main(int ac, char **av, char **envp)
 		// parssing
         head = lexer(rdl, envs);
  
-        // t_parsing *h = head;
-        // while(h)
-        // {
-        //     printf("content => %s\n",h->content);
-        //     printf("state => %d\n",h->state);
-        //     printf("type => %d\n",h->type);
-        //     printf("********************\n");
-        //     h = h->next;
-        // }
+        t_parsing *h = head;
+        while(h)
+        {
+            printf("content => %s\n",h->content);
+            printf("state => %d\n",h->state);
+            printf("type => %d\n",h->type);
+            printf("********************\n");
+            h = h->next;
+        }
 		if(skip_space_str(rdl) == 1)
             add_history(rdl);
         if(checker(head,envs,ft_strlen(rdl),&cmd) == 2)
