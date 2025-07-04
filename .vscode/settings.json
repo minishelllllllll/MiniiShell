@@ -8,7 +8,12 @@
     "libft.h": "c",
     "cstdlib": "c",
     "parsing.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "random": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "span": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",

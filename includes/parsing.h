@@ -31,12 +31,12 @@ enum e_state
     ENV_STRING = 3
 };
 
-typedef struct s_lexer
-{
-    char *str;
-    int len;
-    int index;
-}t_lexer;
+// typedef struct s_lexer
+// {
+//     char *str;
+//     int len;
+//     int index;
+// }t_lexer;
 
 
 typedef struct s_parsing

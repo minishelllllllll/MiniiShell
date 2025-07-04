@@ -232,8 +232,6 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         data->l = 0;
         data->in_file = -1;
         data->out_file = -1;
-        if(head->next && head->next->type == PIPE_LINE)
-            return(head->next);
         return(head);
     }
     
@@ -245,7 +243,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         head = check_space(head);
         return(head);
     }
-    
+
     if(head->type == HERE_DOC)
     {
         int flag = 0;
@@ -296,6 +294,7 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             temp_value = get_token_value(current, envp, data);
             if (!temp_value)
             {
+                // free(concatenated_value);
                 return NULL;
             }
             
@@ -305,16 +304,10 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
             concatenated_value = new_concat;
             if(!current->next)
                 break;
-            current = current->next;    
-    
+            current = current->next;            
             if (current && (current->type == DQUOTE || current->type == QUOTE))
             {
                 peek = current->next;
-                if(peek && peek->next && (peek->type == DQUOTE || peek->type == QUOTE))
-                {
-                    current = peek->next;
-                    continue;
-                }
                 if (peek && (peek->type == WORD || peek->state == 1 || 
                            peek->state == 2 || peek->state == 3))
                     continue;
@@ -342,7 +335,8 @@ t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
         if (current)
             return current;
         else
-            return (head);
+            return head;
     }
+    
     return(head);
 }

@@ -19,11 +19,28 @@
 
 extern int g_exit_status;
 
+typedef struct s_lexer
+{
+    char *str;
+    int len;
+    int index;
+}t_lexer;
+
+typedef struct s_lexer_data
+{
+    char *str;
+    int i;
+    int len;
+    enum e_state state;
+    enum e_type quote_type;
+    enum e_type redirect_type;
+}t_lexer_data;
 
 //norm struct
 
 typedef struct s_helpe
 {
+	t_env *envs;
 	enum e_state state;
     enum e_type c;
     char *tmp;

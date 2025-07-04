@@ -12,6 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
+
 void check_export(t_parsing **head, t_env *envs)
 {
     t_parsing *current = *head;
@@ -91,7 +92,13 @@ int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
 {
     t_var data;
 
-    data.s = g_collector(len*10 * sizeof(char *), envp);   
+    if(len == 0)
+    {
+        data.s = g_collector(1 * sizeof(char *), envp);
+        data.s[0] = NULL;
+    }
+    else
+        data.s = g_collector(len*10 * sizeof(char *), envp);   
     data.l = 0;
     data.in_file = -1;
     data.out_file = -1;
