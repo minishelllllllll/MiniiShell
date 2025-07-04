@@ -6,54 +6,53 @@
 /*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:11 by hind              #+#    #+#             */
-/*   Updated: 2025/07/04 02:39:52 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 02:54:43 by hind             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <limits.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <errno.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <limits.h>
-#include "libft.h"
-#include "parsing.h"
+# include <limits.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <errno.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <limits.h>
+# include "libft.h"
+# include "parsing.h"
 
-extern int g_exit_status;
-
+extern int	g_exit_status;
 
 typedef struct s_lexer_data
 {
-    char *str;
-    int i;
-    int len;
-    enum e_state state;
-    enum e_type quote_type;
-    enum e_type redirect_type;
-}t_lexer_data;
+	char			*str;
+	int				i;
+	int				len;
+	enum e_state	state;
+	enum e_type		quote_type;
+	enum e_type		redirect_type;
+}	t_lexer_data;
 
 //norm struct
-
 typedef struct s_helpe
 {
-	t_env *envs;
-	enum e_state state;
-    enum e_type c;
-    char *tmp;
-	int i;
-    int j;
-    int t;
-    int len;
-}t_help;
+	t_env			*envs;
+	enum e_state	state;
+	enum e_type		c;
+	char			*tmp;
+	int				i;
+	int				j;
+	int				t;
+	int				len;
+}	t_help;
+
 // struct for commands (list)
 typedef struct s_cmd
 {
@@ -69,8 +68,6 @@ typedef struct process_id
 	int	*pids;
 	int	nbr_childs;
 }	t_pids;
-
-extern int G_EXIT_STATUS;
 
 //builtins
 int			ft_strcmp(char	*s1, char	*s2);
@@ -140,28 +137,27 @@ int			checker(t_parsing *head, t_env *envp, int len, t_cmd **cmd);
 int			ft_double(char *str, t_env *envp, t_var *data);
 
 //singals
-void	my_handller(int sig);
-void	set_signals_dfl();
-void    sig_heredoc(int sig);
-void	sig_ignore();
-char *expand_var(char *line, t_env *envp, int i);
-
-
+void		my_handller(int sig);
+void		set_signals_dfl(void);
+void		sig_heredoc(int sig);
+void		sig_ignore(void);
+char		*expand_var(char *line, t_env *envp, int i);
 
 //execution
-int	*save_in_out(t_env *envs);
-int	*saved_stdin_out(t_env *envs);
-void	restore_stdin_out(int *saved_in_out);
-int	space_skip_main(char *rdl);
-int	skip_space_str(char *str);
-char	*shell_prompt(t_env *envs);
-int	lexer_checker(char *rdl, t_env *envs, t_cmd **cmd);
-char	*read_line(t_env *envs, char *rdl);
-int	send_to_execution(t_cmd *cmd, t_env *envs, int *arr_in_out, char *rdl);
-int	main_loop(t_env *envs);
-t_parsing	*handle_word_token(t_lexer_data *data, t_parsing *head, t_env *envs);
-t_parsing	*handle_quote_token(t_lexer_data *data, t_parsing *head, t_env *envs);
-t_parsing	*handle_word_space(t_lexer_data *data, t_parsing *head, t_env *envs);
-t_parsing	*process_quote_content(t_lexer_data *data, t_parsing *head, t_env *envs);
-t_parsing	*handle_quote_space(t_lexer_data *data, t_parsing *head, t_env *envs);
+int			*save_in_out(t_env *envs);
+int			*saved_stdin_out(t_env *envs);
+void		restore_stdin_out(int *saved_in_out);
+int			space_skip_main(char *rdl);
+int			skip_space_str(char *str);
+char		*shell_prompt(t_env *envs);
+int			lexer_checker(char *rdl, t_env *envs, t_cmd **cmd);
+char		*read_line(t_env *envs, char *rdl);
+int			send_to_execution(t_cmd *cmd, t_env *envs, int *in_out, char *rdl);
+int			main_loop(t_env *envs);
+t_parsing	*handle_word_token(t_lexer_data *da, t_parsing *he, t_env *envs);
+t_parsing	*handle_quote_token(t_lexer_data *da, t_parsing *he, t_env *envs);
+t_parsing	*handle_word_space(t_lexer_data *da, t_parsing *he, t_env *envs);
+t_parsing	*process_quote_content(t_lexer_data *da, t_parsing *he, t_env *env);
+t_parsing	*handle_quote_space(t_lexer_data *da, t_parsing *he, t_env *envs);
+
 #endif
