@@ -32,7 +32,7 @@ typedef struct env
 	char		*key;
 	char		*value;
 	int			flag_exported;
-	t_gc		*head_gc; 
+	t_gc		*head_gc;
 	struct env	*next;
 }	t_env;
 
@@ -43,7 +43,7 @@ typedef struct s_list
 }	t_list;
 
 // garbeg collect
-char	*clean_and_NULL(t_env *envs);
+char	*clean_and_null(t_env *envs);
 void	clean_memory(t_gc **head);
 void	*g_collector(size_t size, t_env *envs);
 
