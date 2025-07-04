@@ -6,7 +6,7 @@
 /*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:55:20 by hind              #+#    #+#             */
-/*   Updated: 2025/07/04 02:44:36 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 02:44:58 by hind             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	ft_perror_env(char *str, int exit_stat)
 {
 	ft_putstr_fd(str, 2);
-	G_EXIT_STATUS =  exit_stat;
-	return(G_EXIT_STATUS);
+	g_exit_status =  exit_stat;
+	return(g_exit_status);
 }
 
 int	ft_env(char **args, t_env *envs)
@@ -31,7 +31,7 @@ int	ft_env(char **args, t_env *envs)
 		ft_putstr_fd("env: ", 2);
 		ft_putstr_fd(args[1], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		return(G_EXIT_STATUS = 127);
+		return(g_exit_status = 127);
 	}
 	while (envs)
 	{
@@ -43,5 +43,5 @@ int	ft_env(char **args, t_env *envs)
 		}
 		envs = envs->next;
 	}
-	return(G_EXIT_STATUS = 0);
+	return(g_exit_status = 0);
 }
