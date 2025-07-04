@@ -154,4 +154,30 @@ t_parsing	*handle_quote_token(t_lexer_data *data, t_parsing *head, t_env *envs);
 t_parsing	*handle_word_space(t_lexer_data *data, t_parsing *head, t_env *envs);
 t_parsing	*process_quote_content(t_lexer_data *data, t_parsing *head, t_env *envs);
 t_parsing	*handle_quote_space(t_lexer_data *data, t_parsing *head, t_env *envs);
+
+
+
+
+
+
+char	*check_env_general(char *str, t_env *envp);
+char	*process_dollar_env(char *str, int *i, char *s, t_env *envp);
+char	*find_env_match(char *str, int *i, char *s, t_env *tmp);
+void	skip_env_chars(char *str, int *i);
+int		ft_split_expand(char **s1, t_var *data, t_env *envp);
+int		is_standalone_env_var(t_parsing *head);
+int		handle_env_split(t_parsing *head, t_env *envp, t_var *data);
+int		process_split_array(char **split_env, t_var *data, t_env *envp);
+char	*get_token_value(t_parsing *head, t_env *envp, t_var *data);
+t_parsing	*check_redin_expand(t_parsing *head, t_var *data);
+t_parsing	*check_pipe_expand(t_parsing *head, t_var *data, t_cmd **cmd, t_env *envp);
+t_parsing	*check_herdoc_expand(t_parsing *head, t_var *data, t_env *envp);
+t_parsing	*check_redout_expand(t_parsing *head, t_var *data);
+t_parsing	*check_env_expand(t_parsing *head, t_var *data, t_env *envp);
+t_parsing	*expand_help_process(t_parsing *current, t_env *envp, t_var *data, char **temp_value);
+int		check_quote_continuation(t_parsing *current);
+int		check_quote_break(t_parsing *current);
+t_parsing	*handle_quote_end(t_parsing *current, t_var *data, char *concatenated_value, t_cmd **cmd, t_env *envp);
+t_parsing	*check_quote_expand(t_parsing *head, t_var *data, t_cmd **cmd, t_env *envp);
+t_parsing	*process_quote_loop(t_parsing *current, char **concatenated_value, t_env *envp, t_var *data);
 #endif
