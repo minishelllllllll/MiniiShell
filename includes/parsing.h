@@ -56,7 +56,6 @@ typedef struct s_var
     int l;
 }t_var;
 
-t_parsing *ft_save(char *av,t_parsing *head,enum e_type type,char c,enum e_state state, t_env *envp);
 t_parsing *lexer(char *st, t_env *envs);
 enum e_type check_token(char *str, int i);
 void    error_print(char *str);
