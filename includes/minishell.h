@@ -19,12 +19,6 @@
 
 extern int g_exit_status;
 
-typedef struct s_lexer
-{
-    char *str;
-    int len;
-    int index;
-}t_lexer;
 
 typedef struct s_lexer_data
 {
@@ -155,5 +149,9 @@ int	lexer_checker(char *rdl, t_env *envs, t_cmd **cmd);
 char	*read_line(t_env *envs, char *rdl);
 int	send_to_execution(t_cmd *cmd, t_env *envs, int *arr_in_out, char *rdl);
 int	main_loop(t_env *envs);
-
+t_parsing	*handle_word_token(t_lexer_data *data, t_parsing *head, t_env *envs);
+t_parsing	*handle_quote_token(t_lexer_data *data, t_parsing *head, t_env *envs);
+t_parsing	*handle_word_space(t_lexer_data *data, t_parsing *head, t_env *envs);
+t_parsing	*process_quote_content(t_lexer_data *data, t_parsing *head, t_env *envs);
+t_parsing	*handle_quote_space(t_lexer_data *data, t_parsing *head, t_env *envs);
 #endif
