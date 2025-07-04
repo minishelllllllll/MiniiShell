@@ -87,30 +87,28 @@ void check_export(t_parsing **head, t_env *envs)
     }
 }
 
-int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
+int	check_expand(t_parsing *head, t_env *envp, int len, t_cmd **cmd)
 {
-    t_var data;
+	t_var	data;
 
-    if(len == 0)
-    {
-        data.s = g_collector(1 * sizeof(char *), envp);
-        data.s[0] = NULL;
-    }
-    else
-        data.s = g_collector(len*10 * sizeof(char *), envp);   
-    data.l = 0;
-    data.in_file = -1;
-    data.out_file = -1;
-    check_export(&head, envp);
-    while(head)
-    {
-        head = expand(head,envp,&data,cmd);
-        if(!head)
-        {
-            return(2);
-        }
-        head = head->next;
-    }
-    *cmd = ft_send(&data,*cmd, envp);
-    return(0);
+	if (len == 0)
+	{
+		data.s = g_collector(1 * sizeof(char *), envp);
+		data.s[0] = NULL;
+	}
+	else
+		data.s = g_collector(len * 10 * sizeof(char *), envp);
+	data.l = 0;
+	data.in_file = -1;
+	data.out_file = -1;
+	check_export(&head, envp);
+	while (head)
+	{
+		head = expand(head, envp, &data, cmd);
+		if (!head)
+			return (2);
+		head = head->next;
+	}
+	*cmd = ft_send(&data,*cmd, envp);
+	return (0);
 }

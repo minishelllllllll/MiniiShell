@@ -6,7 +6,7 @@
 /*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:11 by hind              #+#    #+#             */
-/*   Updated: 2025/07/03 23:20:36 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 02:08:15 by hind             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 # include "libft.h"
 # include "parsing.h"
 
-extern int	G_EXIT_STATUS;
-
 // struct for commands (list)
 typedef struct s_cmd
 {
@@ -45,6 +43,8 @@ typedef struct process_id
 	int	*pids;
 	int	nbr_childs;
 }	t_pids;
+
+extern int		G_EXIT_STATUS;
 
 //builtins
 int			ft_strcmp(char	*s1, char	*s2);

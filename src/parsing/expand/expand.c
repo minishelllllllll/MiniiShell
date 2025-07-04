@@ -12,25 +12,25 @@
 
 #include "../../../includes/minishell.h"
 
-char *ft_charjoin(char *str,char c, t_env *envp)
+char	*ft_charjoin(char *str, char c, t_env *envp)
 {
-    int len;
-    int i;
-    char *s;
+	int		len;
+	int		i;
+	char	*s;
 
-    if(!str)
-        return(NULL);
-    i = 0;
-    len = ft_strlen(str);
-    s = g_collector(len + 2, envp);
-    while(str[i])
-    {
-        s[i] = str[i];
-        i++;
-    }
-    s[i++] = c;
-    s[i]= 0;
-    return(s);
+	if (!str)
+		return (NULL);
+	i = 0;
+	len = ft_strlen(str);
+	s = g_collector(len + 2, envp);
+	while (str[i])
+	{
+		s[i] = str[i];
+		i++;
+	}
+	s[i++] = c;
+	s[i] = 0;
+	return (s);
 }
 
 char *check_env_general(char *str, t_env *envp)
@@ -107,40 +107,39 @@ char *check_env_general(char *str, t_env *envp)
     return(s);
 }
 
-int ft_split_expand(char **s1, t_var *data, t_env *envp)
+int	ft_split_expand(char **s1, t_var *data, t_env *envp)
 {
-    int i;
-    i = 0;
+	int	i;
 
-    if(!s1)
-        return(0);
-    while(s1[i])
-    {
-        data->s[data->l] = ft_strdup(s1[i], envp);
-        if(!data->s[data->l])
-            return(0);
-        data->l++;
-        i++;
-    }
-    return(1);
+	i = 0;
+	if (!s1)
+		return (0);
+	while (s1[i])
+	{
+		data->s[data->l] = ft_strdup(s1[i], envp);
+		if (!data->s[data->l])
+			return (0);
+		data->l++;
+		i++;
+	}
+	return (1);
 }
 
-int is_standalone_env_var(t_parsing *head)
+int	is_standalone_env_var(t_parsing *head)
 {
-    if (!head || head->state != 3)
-        return 0;
-    if (!head->next || head->next->type == WHITE_SPACE || 
-        head->next->type == PIPE_LINE || head->next->type == REDIR_IN ||
-        head->next->type == REDIR_OUT || head->next->type == HERE_DOC ||
-        head->next->type == DREDIR_OUT)
-        return 1;
-    
-    return 0;
+	if (!head || head->state != 3)
+		return (0);
+	if (!head->next || head->next->type == WHITE_SPACE
+		|| head->next->type == PIPE_LINE || head->next->type == REDIR_IN
+		|| head->next->type == REDIR_OUT || head->next->type == HERE_DOC
+		|| head->next->type == DREDIR_OUT)
+		return (1);
+	return (0);
 }
 
 int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
 {
-    char *expanded_value;
+	char *expanded_value;
     char **split_env;
     int i;
     expanded_value = check_env_general(head->content, envp);
@@ -189,26 +188,26 @@ int handle_env_split(t_parsing *head, t_env *envp, t_var *data)
     }
 }
 
-char *get_token_value(t_parsing *head, t_env *envp, t_var *data)
+char	*get_token_value(t_parsing *head, t_env *envp, t_var *data)
 {
-    if (!head || !head->content)
-        return ft_strdup("", envp);
-    if (head->state == 3)
-        return check_env_general(head->content, envp);
-    else if (head->state == 2)
-    {
-        if (ft_double(head->content, envp, data) == 2)
-            return NULL;
-        if(data->s1)
-            return(ft_strdup(data->s1, envp));
-        else 
-            return(ft_strdup("", envp));
-    }
-    else if (head->state == 1)
-        return ft_strdup(head->content, envp);
-    else if (head->state == 0 && head->type == WORD) 
-        return ft_strdup(head->content, envp);
-    return ft_strdup("", envp);
+	if (!head || !head->content)
+		return ft_strdup("", envp);
+	if (head->state == 3)
+		return check_env_general(head->content, envp);
+	else if (head->state == 2)
+	{
+		if (ft_double(head->content, envp, data) == 2)
+			return NULL;
+		if(data->s1)
+			return(ft_strdup(data->s1, envp));
+		else 
+			return(ft_strdup("", envp));
+	}
+	else if (head->state == 1)
+		return ft_strdup(head->content, envp);
+	else if (head->state == 0 && head->type == WORD) 
+		return ft_strdup(head->content, envp);
+	return ft_strdup("", envp);
 }
 
 t_parsing *expand(t_parsing *head, t_env *envp, t_var *data, t_cmd **cmd)
