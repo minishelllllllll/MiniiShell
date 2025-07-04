@@ -6,7 +6,7 @@
 /*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:11 by hind              #+#    #+#             */
-/*   Updated: 2025/07/04 02:08:15 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 02:36:18 by hind             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct process_id
 	int	nbr_childs;
 }	t_pids;
 
-extern int		G_EXIT_STATUS;
+extern int G_EXIT_STATUS;
 
 //builtins
 int			ft_strcmp(char	*s1, char	*s2);
