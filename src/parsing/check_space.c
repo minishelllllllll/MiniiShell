@@ -12,13 +12,13 @@
 
 #include "../../includes/minishell.h"
 
-t_parsing *check_space(t_parsing *head)
+t_parsing	*check_space(t_parsing *head)
 {
-    while(head)
-    {
-        if(head->type != WHITE_SPACE)
-            return(head);
-        head = head->next;
-    }
-    return(head);
+	while (head)
+	{
+		if (head->type != WHITE_SPACE)
+			return (head);
+		head = head->next;
+	}
+	return (head);
 }

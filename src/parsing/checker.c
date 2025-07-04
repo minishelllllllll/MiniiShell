@@ -12,11 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-int  checker(t_parsing *head,t_env *envp, int len,t_cmd **cmd)
+int checker(t_parsing *head, t_env *envp, int len, t_cmd **cmd)
 {
-    if(syntax_err(head) == 2)
-        return(2);
-    if(check_expand(head,envp,len,cmd) == 2)
-        return(2);    
-    return(1);
+	if (syntax_err(head) == 2)
+		return (2);
+	if (check_expand(head, envp, len, cmd) == 2)
+		return (2);
+	return (1);
 }

@@ -12,11 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-t_parsing *skip_space(t_parsing *head)
+t_parsing	*skip_space(t_parsing *head)
 {
-    if(!head)
-        return(NULL);
-    while(head->type == ' ' && head)
-        head = head->next;
-    return(head);
+	if (!head)
+		return (NULL);
+	while (head->type == ' ' && head)
+		head = head->next;
+	return (head);
 }

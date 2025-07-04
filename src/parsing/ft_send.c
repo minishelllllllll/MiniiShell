@@ -12,36 +12,36 @@
 
 #include "../../includes/minishell.h"
 
-t_cmd *ft_send(t_var *data, t_cmd *head, t_env *envs)
+t_cmd	*ft_send(t_var *data, t_cmd *head, t_env *envs)
 {
-    t_cmd *cmd;
-    t_cmd *current = NULL;
-    int i;
-    
-    cmd = g_collector(sizeof(t_cmd), envs);
-    i = 0;
-    if (!cmd || data->s[i] == NULL || data->l == 0)
-        return (NULL);
-    cmd->full_cmd = g_collector((data->l + 1) * sizeof(char *), envs);
-    if (!cmd->full_cmd)
-    {
-        free(cmd);
-        return (NULL);
-    }
-    while(i < data->l)
-    {
-        cmd->full_cmd[i] = ft_strdup(data->s[i], envs);
-        i++;
-    }
-    cmd->full_cmd[data->l] = NULL;
-    cmd->out_file = data->out_file;
-    cmd->in_file = data->in_file;
-    cmd->next = NULL;
-    if (!head)
-        return (cmd);
-    current = head;
-    while (current->next)
-        current = current->next;
-    current->next = cmd;
-    return (head);
+	t_cmd	*cmd;
+	t_cmd	*current = NULL;
+	int		i;
+
+	cmd = g_collector(sizeof(t_cmd), envs);
+	i = 0;
+	if (!cmd || data->s[i] == NULL || data->l == 0)
+		return (NULL);
+	cmd->full_cmd = g_collector((data->l + 1) * sizeof(char *), envs);
+	if (!cmd->full_cmd)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	while (i < data->l)
+	{
+		cmd->full_cmd[i] = ft_strdup(data->s[i], envs);
+		i++;
+	}
+	cmd->full_cmd[data->l] = NULL;
+	cmd->out_file = data->out_file;
+	cmd->in_file = data->in_file;
+	cmd->next = NULL;
+	if (!head)
+		return (cmd);
+	current = head;
+	while (current->next)
+		current = current->next;
+	current->next = cmd;
+	return (head);
 }

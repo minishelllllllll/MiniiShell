@@ -23,12 +23,11 @@ int	ft_check_env(const char *s1, const char *s2, size_t n)
 	{
 		if ((unsigned char)s1[i] != (unsigned char)s2[i] || i >= (n - 1))
 		{
-			if((s2[i] == ' ' || !ft_isalnum(s2[i])) && i == n -1 )
-				break;
+			if ((s2[i] == ' ' || !ft_isalnum(s2[i])) && i == n - 1)
+				break ;
 			return (1);
 		}
 		i++;
 	}
-	
 	return (0);
 }

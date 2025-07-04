@@ -12,58 +12,53 @@
 
 #include "../../../includes/minishell.h"
 
-char *join_char(char *str, char c, t_env *envs)
+char	*join_char(char *str, char c, t_env *envs)
 {
-    char *result;
-    size_t len;
-    
-    if (!str)
-    {
-        result = g_collector(2, envs);
-        if (!result)
-            return (NULL);
-        result[0] = c;
-        result[1] = '\0';
-        return (result);
-    }
-    
-    len = ft_strlen(str);
-    result = g_collector(len + 2, envs);
-    if (!result)
-    {
-        // free(str);
-        return (NULL);
-    }
-    ft_strlcpy(result, str, len + 1);
-    result[len] = c;
-    result[len + 1] = '\0';
-    
-    // free(str);
-    return (result);
-}
-int check_parth(char *str)
-{
-    int i;
-    int len;
+	char	*result;
+	size_t	len;
 
-    i = 0;
-    len = 0;
-    while(str[i])
-    {
-        if(str[i] == '(')
-            len++;
-        i++;
-    }
-    i = 0;
-    while(str[i] && len >= 0)
-    {
-        if(str[i] == ')')
-            len--;
-        i++;
-    }
-    if(len != 0)
-        return(0);
-    return (2);
+	if (!str)
+	{
+		result = g_collector(2, envs);
+		if (!result)
+			return (NULL);
+		result[0] = c;
+		result[1] = '\0';
+		return (result);
+	}
+	len = ft_strlen(str);
+	result = g_collector(len + 2, envs);
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, str, len + 1);
+	result[len] = c;
+	result[len + 1] = '\0';
+	return (result);
+}
+
+int	check_parth(char *str)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = 0;
+	while (str[i])
+	{
+		if (str[i] == '(')
+			len++;
+		i++;
+	}
+	i = 0;
+	while (str[i] && len >= 0)
+	{
+		if (str[i] == ')')
+			len--;
+		i++;
+	}
+	if (len != 0)
+		return (0);
+	return (2);
 }
 
 

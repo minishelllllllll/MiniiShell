@@ -12,9 +12,9 @@
 
 #include "../../../includes/minishell.h"
 
-int is_allowed(char c)
+int	is_allowed(char c)
 {
-    if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
+	if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
 		return (1);
 	return (0);
 }
