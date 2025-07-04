@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_msgs.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/22 14:46:23 by himousta          #+#    #+#             */
+/*   Updated: 2025/07/04 02:41:45 by hind             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../includes/minishell.h"
 
 int	print_error(char *str)
@@ -7,13 +19,12 @@ int	print_error(char *str)
 	return(EXIT_FAILURE); // exit status == 1
 }
 
-int ft_perror_cd()
+int	ft_perror_cd(void)
 {
 	g_exit_status = 1;
 	perror("minishell");
-	return(EXIT_FAILURE);	
+	return (EXIT_FAILURE);
 }
-
 
 int	ft_perror(char *err_msg, int len_cmd, int **pipes)
 {
@@ -21,5 +32,15 @@ int	ft_perror(char *err_msg, int len_cmd, int **pipes)
 	close_pipes(len_cmd - 1, pipes);
 	g_exit_status = 1;
 	return(g_exit_status);
-	// exit(EXIT_FAILURE);
+}
+
+void	message_error_exit(char *str, int is_child, t_env *envs)
+{
+	display_exit(is_child);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	clean_memory(&(envs->head_gc));
+	free_list(&(envs));
+	exit(2);
 }

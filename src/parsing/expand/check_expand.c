@@ -63,9 +63,9 @@ void check_export(t_parsing **head, t_env *envs)
     }
 }
 
-int check_expand(t_parsing *head,t_env *envp,int len,t_cmd **cmd)
+int	check_expand(t_parsing *head, t_env *envp, int len, t_cmd **cmd)
 {
-    t_var data;
+	t_var	data;
 
     if(len == 0)
     {
