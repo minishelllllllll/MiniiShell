@@ -6,7 +6,7 @@
 /*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:13:40 by hind              #+#    #+#             */
-/*   Updated: 2025/07/04 02:45:44 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 03:03:32 by hind             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	ft_pwd(t_env *envs)
 	printf("%s\n", working_d);
 	if (should_free == 1)
 		free(working_d);
-	
 	g_exit_status = 0;
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

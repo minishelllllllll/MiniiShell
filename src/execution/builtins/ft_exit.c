@@ -83,7 +83,6 @@ void	ft_exit(char **args, int is_child, t_env *envs)
 	{
 		display_exit(is_child);
 		exit_and_clean(envs);
-		// exit(g_exit_status);
 	}
 	else if (is_valid_exit(args[1]) == -1)
 		message_error_exit(args[1], is_child, envs);
@@ -92,13 +91,12 @@ void	ft_exit(char **args, int is_child, t_env *envs)
 		display_exit(is_child);
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_exit_status = 1;
-		return;
+		return ;
 	}
 	else
 	{
 		display_exit(is_child);
 		g_exit_status = ft_atoi(args[1]);
 		exit_and_clean(envs);
-		// exit(g_exit_status % 256); // to make sur exit correctly
 	}
 }

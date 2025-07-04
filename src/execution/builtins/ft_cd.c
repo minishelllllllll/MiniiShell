@@ -64,9 +64,9 @@ int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 		return (ft_perror_cd());
 	set_env("OLDPWD", oldpwd, envs);
 	set_env("PWD", pwd, envs);
-	free(pwd); // FIXED: Free the memory allocated by getcwd
+	free(pwd);
 	g_exit_status = 0;
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	ft_cd(char **args, t_env *envs)

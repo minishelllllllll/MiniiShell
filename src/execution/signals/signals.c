@@ -26,12 +26,12 @@ void	sig_ignore(void)
 
 void	my_handller(int sig)
 {
-    (void)sig;
-    ft_putchar_fd('\n', 1);
-    rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
-    g_exit_status = 130;
+	(void)sig;
+	ft_putchar_fd('\n', 1);
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
+	g_exit_status = 130;
 }
 
 void	sig_heredoc(int sig)

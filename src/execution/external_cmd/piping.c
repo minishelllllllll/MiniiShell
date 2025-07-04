@@ -65,9 +65,9 @@ void	signaled(int status)
 	{
 		if (!is_sig)
 		{
-			write(1, "\n", 1); //print new line 
-			is_sig = 1; // to dont print it few times 
-		} 
+			write(1, "\n", 1);
+			is_sig = 1;
+		}
 		g_exit_status = 130;
 	}
 	else if (WTERMSIG(status) == SIGQUIT)
@@ -90,7 +90,7 @@ void	waiting_childs(t_pids *process_ids)
 	while (i < process_ids->nbr_childs)
 	{
 		waitpid(process_ids->pids[i], &status, 0);
-		if(WIFEXITED(status)) // if the program exited , extract the real exit status 
+		if (WIFEXITED(status))
 			g_exit_status = WEXITSTATUS(status);
 		if (WIFSIGNALED(status))
 			signaled(status);
