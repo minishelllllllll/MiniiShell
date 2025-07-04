@@ -18,18 +18,8 @@ int	g_exit_status = 0;
 int	lexer_checker(char *rdl, t_env *envs, t_cmd **cmd)
 {
 	t_parsing	*head;
-	t_parsing	*h;
 
 	head = lexer(rdl, envs);
-	h = head;
-	while (h)
-	{
-		printf("content => %s\n", h->content);
-		printf("state => %d\n", h->state);
-		printf("type => %d\n", h->type);
-		printf("********************\n");
-		h = h->next;
-	}
 	if (checker(head, envs, ft_strlen(rdl), cmd) == 2)
 	{
 		free(rdl);

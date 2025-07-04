@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   helper_fun.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hind <hind@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:37:10 by nahilal           #+#    #+#             */
-/*   Updated: 2025/07/04 03:38:57 by hind             ###   ########.fr       */
+/*   Updated: 2025/07/04 18:36:21 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 int	space_skip_main(char *rdl)
 {

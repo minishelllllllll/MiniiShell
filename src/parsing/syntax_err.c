@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 18:24:29 by nahilal           #+#    #+#             */
-/*   Updated: 2025/05/08 18:24:29 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/07/04 18:35:16 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_parsing	*check_quote(t_parsing *curr)
 		while (curr && curr->type != c)
 		{
 			if (!curr)
-				return (error_print("syntax error \"unclosed \
-					quotes\"\n"), NULL);
+				return (error_print("syntax error \"unclosed quotes\"\n"),
+					NULL);
 			curr = curr->next;
 		}
 	}
@@ -36,21 +36,21 @@ t_parsing	*check_quote(t_parsing *curr)
 t_parsing	*check_pipe(t_parsing *curr, int len)
 {
 	if (curr->type == '|' && len == 0)
-		return (error_print("syntax error near unexpected token '|'\n"), NULL);
+		return (error_print("syntax error '|'\n"), NULL);
 	else if (curr->type == '|')
 	{
 		curr = curr->next;
 		len++;
 		if (!curr)
-			return (error_print("syntax error near unexpected token '|'\n"), NULL);	
-		if (curr->type == '|')
+			return (error_print("syntax error '|'\n"), NULL);
+		while (curr)
 		{
+			if (curr->type != ' ')
+				break ;
 			curr = curr->next;
-			if (!curr)
-				return (error_print("syntax error near unexpected token '|'\n"), NULL);
-			if (curr->type == '|')
-				return (error_print("syntax error near unexpected token '||'\n"), NULL);
 		}
+		if (curr->type == '|')
+			return (error_print("syntax error '||'\n"), NULL);
 		while (curr)
 		{
 			if (curr->type != ' ')
