@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:11 by hind              #+#    #+#             */
-/*   Updated: 2025/07/04 18:39:51 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/07/05 19:34:16 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ t_parsing			*heredoce(t_parsing *head, t_var *data, int flag,
 						t_env *envp);
 t_cmd				*ft_send(t_var *data, t_cmd *head, t_env *envs);
 int					checker(t_parsing *head, t_env *envp, int len, t_cmd **cmd);
-int					ft_double(char *str, t_env *envp, t_var *data);
+int					ft_double(t_parsing **head, t_env *envp, t_var *data);
 
 // singals
 void				my_handller(int sig);
@@ -158,7 +158,7 @@ int					lexer_checker(char *rdl, t_env *envs, t_cmd **cmd);
 char				*read_line(t_env *envs, char *rdl);
 int					send_to_execution(t_cmd *cmd, t_env *envs, int *arr_in_out,
 						char *rdl);
-int					main_loop(t_env *envs);
+int					main_loop(t_env *envs, char *rdl);
 t_parsing			*handle_word_token(t_lexer_data *data, t_parsing *head,
 						t_env *envs);
 t_parsing			*handle_quote_token(t_lexer_data *data, t_parsing *head,
@@ -176,7 +176,6 @@ char				*check_env_general(char *str, t_env *envp);
 int					ft_split_expand(char **s1, t_var *data, t_env *envp);
 int					is_standalone_env_var(t_parsing *head);
 int					handle_env_split(t_parsing *head, t_env *envp, t_var *data);
-char				*get_token_value(t_parsing *head, t_env *envp, t_var *data);
 t_parsing			*check_redin_expand(t_parsing *head, t_var *data);
 t_parsing			*check_pipe_expand(t_parsing *head, t_var *data,
 						t_cmd **cmd, t_env *envp);
@@ -186,12 +185,13 @@ t_parsing			*check_redout_expand(t_parsing *head, t_var *data);
 t_parsing			*check_env_expand(t_parsing *head, t_var *data,
 						t_env *envp);
 int					handle_env_split(t_parsing *head, t_env *envp, t_var *data);
-char				*get_token_value(t_parsing *head, t_env *envp, t_var *data);
+char				*get_token_value(t_parsing **head, t_env *envp,
+						t_var *data);
 t_parsing			*handle_heredoc(t_parsing *head, t_var *data, t_env *envp);
 t_parsing			*handle_redirect_out(t_parsing *head, t_var *data);
 t_parsing			*check_redir_herdoc(t_parsing *head, t_var *data,
 						t_env *envp);
-t_parsing			*help_concat(char **concatenated_value, t_parsing *current,
+t_parsing			*help_concat(char **concatenated_value, t_parsing **current,
 						t_env *envp, t_var *data);
 int					check_state_exp(t_parsing *current);
 int					if_helper(t_parsing **current);
@@ -229,7 +229,8 @@ int					handle_env_variable_1(char *str, t_var *data, t_env *envp);
 int					handle_invalid_var(t_var *data, t_env *envp);
 int					handle_valid_var(t_var *data, char *var_value, t_env *envp);
 char				*find_env_value(char *var_name, t_env *envp);
-int					extract_var_name(char *str, t_var *data, char **var_name);
+int					extract_var_name(char *str, t_var *data, char **var_name,
+						t_env *envp);
 char				*init_result_string(t_env *envp);
 int					extract_var_name_length(char *line, int *i);
 char				*find_env_var_value(char *line, int start, int len,
@@ -258,4 +259,9 @@ void				merge_export_tokens(t_parsing *current, t_env *envs);
 t_parsing			*save_quote_content(t_lexer_data *data, t_parsing *head,
 						char *tmp, t_env *envs);
 char				*build_word_content(t_lexer_data *data, t_env *envs);
+int					process_dollar_sign(char *str, t_var *data, t_env *envp);
+int					init_data_string(t_var *data, t_env *envp);
+int					process_regular_char(char *str, t_var *data, t_env *envp);
+int					handle_dollar_sign_1(char *str, t_var *data, t_env *envp);
+int					env_main(t_env **envs, char **envp);
 #endif
