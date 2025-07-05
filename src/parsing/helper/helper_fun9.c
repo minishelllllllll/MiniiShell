@@ -6,7 +6,7 @@
 /*   By: nahilal <nahilal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:14:28 by nahilal           #+#    #+#             */
-/*   Updated: 2025/07/05 19:44:49 by nahilal          ###   ########.fr       */
+/*   Updated: 2025/07/05 19:49:29 by nahilal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	handle_env_variable_1(char *str, t_var *data, t_env *envp)
 			result = handle_valid_var(data, var_value, envp);
 		else
 			result = handle_valid_var(data, "", envp);
-		free(var_name);
 		return (result);
 	}
 	else
