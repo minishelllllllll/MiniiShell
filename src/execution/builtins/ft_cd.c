@@ -44,8 +44,8 @@ char	*get_env_value(char *key, t_env *envs)
 
 int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 {
-	char	*pwd;
-
+	char	(*pwd);
+	char	(*check_old);
 	if (new_dir == NULL || ft_strcmp(new_dir, "~") == 0)
 	{
 		if (chdir(get_env_value("HOME", envs)) == -1)
@@ -53,8 +53,10 @@ int	go_new_dir(char *new_dir, t_env *envs, char *oldpwd)
 	}
 	else if (strcmp(new_dir, "-") == 0)
 	{
-		if (chdir(get_env_value("OLDPWD", envs)) == -1)
+		check_old = get_env_value("OLDPWD", envs);
+		if(!check_old)
 			return (print_error("minishill: cd: OLDPWD not set\n"));
+		chdir(check_old);
 		printf("%s\n", get_env_value("OLDPWD", envs));
 	}
 	else if (chdir(new_dir) == -1)
