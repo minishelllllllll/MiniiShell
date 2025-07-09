@@ -74,7 +74,6 @@ void	run_commands(t_pids **pcss_ids, t_cmd *tm_cmd, int **pipes, t_env **env)
 		if (duplication(i, len_cmd, pipes, tm_cmd) == 1)
 			clean_memory(&((*env)->head_gc));
 		exec_one_cmd(pcss_ids, tm_cmd, pipes, env);
-		(*pcss_ids)->nbr_childs++ ;
 		return ;
 	}
 	while (i < len_cmd)

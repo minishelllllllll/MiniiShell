@@ -16,14 +16,14 @@ int	print_error(char *str)
 {
 	ft_putstr_fd(str, 2);
 	g_exit_status = 1;
-	return (EXIT_FAILURE);
+	return (g_exit_status);
 }
 
 int	ft_perror_cd(void)
 {
 	g_exit_status = 1;
 	perror("minishell");
-	return (EXIT_FAILURE);
+	return (g_exit_status);
 }
 
 int	ft_perror(char *err_msg, int len_cmd, int **pipes)
