@@ -1,5 +1,8 @@
 ""
 ''
-echo "$USER"""""""
-echo "$$"
-echo "$$$&$USER"
+
+leaks in export multiple times replace old one
+export USER="hey" => double free here
+
+echo "$USER" after we rename the USER
+expand in a=$b
