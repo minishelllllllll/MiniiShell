@@ -1,8 +1,0 @@
-""
-''
-
-leaks in export multiple times replace old one , solved
-export USER="hey" => double free here
-
-echo "$USER" after we rename the USER
-expand in a=$b
