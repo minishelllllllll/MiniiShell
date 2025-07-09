@@ -12,18 +12,20 @@
 
 #include "../../../includes/minishell.h"
 
-int	exist_env(t_env *newnode, t_env *temp_env)
+int exist_env(t_env *newnode, t_env *temp_env)
 {
 	while (temp_env)
 	{
-		if (ft_strcmp(temp_env->key, newnode->key) == 0
-			&& temp_env->flag_exported == 1 && newnode->value == NULL)
+		if (ft_strcmp(temp_env->key, newnode->key) == 0 && temp_env->flag_exported == 1 && newnode->value == NULL)
 			return (0);
 		if (ft_strcmp(temp_env->key, newnode->key) == 0)
 		{
-			if (temp_env->value != NULL)
+			if (temp_env->value)
+			{
 				free(temp_env->value);
-			temp_env->value = ft_strdup(newnode->value, temp_env);
+				temp_env->value = NULL;
+			}
+			temp_env->value = ft_strdup_env(newnode->value);
 			temp_env->flag_exported = newnode->flag_exported;
 			return (0);
 		}
@@ -32,14 +34,14 @@ int	exist_env(t_env *newnode, t_env *temp_env)
 	return (1);
 }
 
-void	print_env_list(t_env *head)
+void print_env_list(t_env *head)
 {
 	while (head)
 	{
 		if (head->flag_exported == 2)
 		{
 			if (!head->next)
-				return ;
+				return;
 			head = head->next;
 		}
 		if (head->flag_exported == 1)
@@ -48,32 +50,27 @@ void	print_env_list(t_env *head)
 			printf("declare -x %s\n", head->key);
 		head = head->next;
 	}
-	return ;
+	return;
 }
 
-int	valide_name(char *str)
+int valide_name(char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	if ((str[i] < 'a' || str[i] > 'z')
-		&& (str[i] < 'A' || str[i] > 'Z')
-		&& str[i] != '_')
+	if ((str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z') && str[i] != '_')
 		return (-1);
 	i++;
 	while (str[i] && str[i] != '=')
 	{
-		if ((str[i] < 'a' || str[i] > 'z')
-			&& (str[i] < 'A' || str[i] > 'Z')
-			&& (str[i] < '0' || str[i] > '9')
-			&& str[i] != '_')
+		if ((str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z') && (str[i] < '0' || str[i] > '9') && str[i] != '_')
 			return (-1);
 		i++;
 	}
 	return (0);
 }
 
-void	message_error_export(char *str)
+void message_error_export(char *str)
 {
 	ft_putstr_fd("minishell: export: '", 2);
 	ft_putstr_fd(str, 2);
@@ -81,10 +78,10 @@ void	message_error_export(char *str)
 	g_exit_status = 1;
 }
 
-int	ft_export(char **args, t_env **envs)
+int ft_export(char **args, t_env **envs)
 {
-	t_env	*newnode;
-	int		i;
+	t_env *newnode;
+	int i;
 
 	i = 1;
 	while (args[i])
